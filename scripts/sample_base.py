@@ -56,9 +56,6 @@ class WiiConnect:
  
 
 def main():
-    led = 0
-    led4 = 0
-    ledv = 0
     wiic = WiiConnect() 
     wii = wiic.connect()
  
@@ -110,65 +107,40 @@ def main():
 #-- end main loop
 
 def onPlus():
-    print 'volume led  plus'
-    ledv *= 2%8
-    wii.led = ledv
-    time.sleep(button_delay)
+   print 'Plus Button pressed'
+   time.sleep(button_delay)
    
 def onMin():
-    print 'volume led minus'
-    ledv /= 2%8
-    wii.led = ledv
-    time.sleep(button_delay)
+   print 'Minus Button pressed'
+   time.sleep(button_delay)
 
 def onB():
-    print '4 leds'
-    led4 *= 2%8
-    wii.led = led4
-    time.sleep(button_delay)
+   print 'Button B pressed'
+   time.sleep(button_delay)
    
 def onDown():
-    for i in range(16):
-        wii.led = i
-        wii.rumble = 1-i%2
-        time.sleep(.2)
-    print 'Down pressed'      
-    time.sleep(button_delay)  
+   print 'Down pressed'
+   time.sleep(button_delay)
    
 def onUp():
-    for i in range(16):
-        wii.led = i
-        time.sleep(.5)
-    print 'Up pressed'        
-    time.sleep(button_delay)   
+   print 'Up pressed'
+   time.sleep(button_delay)   
 
 def onLeft():
    print Left pressed'
    time.sleep(button_delay)
 
 def onRight():
-    kled = 1
-    wii.led = kled
-    for i in range(4): 
-	    kled *= 2%8
-	    wii.led = kled
-	    time.sleep(.001)
-    kled = 8
-    for i in range(4): 
-	    kled /= 2%8
-	    wii.led = kled
-	    time.sleep(.001)
-    print 'Right pressed'
-    time.sleep(button_delay)     
+   print 'Right pressed'
+   time.sleep(button_delay)   
    
 def onA():
-    print 'Binary show'
-    led += 1%16
-    wii.led = led
-    time.sleep(button_delay)
+   print 'Button A pressed'
+   time.sleep(button_delay)
    
 def on1():
-   wiic.battery() 
+   print 'Button 1 pressed'
+   time.sleep(button_delay)   
    
 def on2():
    print 'Button 2 pressed'
