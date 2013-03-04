@@ -8,76 +8,34 @@
 import cwiid
 import time
 import os
-
+from wiiConnect import WiiConnect
  
-class WiiConnect:
-    def __init__(self):
-	    wii = None
-        attempts = 1
-        global button_delay = 0.1
-		global doloops = true
-    def connect(self):
-		while not wii:
-            os.system("clear")
-            print 'Press 1 + 2 on your Wii Remote now ...'
-            print "Waiting for Wii Remote to Connect..."
-            # Connect to the Wii Remote. If it times out
-            # then quit.
-            try:
-                wii=cwiid.Wiimote()
-			
-			    print 'Wii Remote connected...\n'
-                print 'Press some buttons!\n'
-                print 'Press PLUS and MINUS together to disconnect and quit.\n'
-		        wii.rpt_mode = cwiid.RPT_BTN
-		        wii.led = 1
-		        doloops = true
-			    return wii
-            except RuntimeError:
-		        if attempts > 5:
-                    print "Error opening wiimote connection"
-                    quit()	
-            attempts += 1
-    def deconnect(self):
-        print '\nClosing connection ...'
-		doloops = flase
-        wii.rumble = 1
-        time.sleep(1)
-        wii.rumble = 0
-        exit(self.wii) 
-    def battery(self):
-        state = wiimote.state
-        bat = int(100.0 * state['battery'] / cwiid.BATTERY_MAX)
-        print 'battery status : '+bat
-    def buttons(self):
-        state = wiimote.state
-        return wii.state['buttons']
- 
- 
+button_delay = 0.1
 
 def main():
-    wiic = WiiConnect() 
-    wii = wiic.connect()
- 
-    while doloops:
+     global wiic
+     global wii
+     wiic = WiiConnect() 
+     wii = wiic.connect()
+     while wiic.doloops:
 
-        buttons = wiic.buttons()
+         buttons = wiic.buttons()
 
-        # If Plus and Minus buttons pressed
-        # together then rumble and quit.
-        if (buttons - cwiid.BTN_PLUS - cwiid.BTN_MINUS == 0):  
+         # If Plus and Minus buttons pressed
+         # together then rumble and quit.
+         if (buttons - cwiid.BTN_PLUS - cwiid.BTN_MINUS == 0):  
              wiic.deconnect(); 
   
-        # Check if other buttons are pressed by
-        # doing a bitwise AND of the buttons number
-        # and the predefined constant for that button.
-        if (buttons & cwiid.BTN_LEFT):
+         # Check if other buttons are pressed by
+         # doing a bitwise AND of the buttons number
+         # and the predefined constant for that button.
+         if (buttons & cwiid.BTN_LEFT):
              onLeft()         
 
-        if(buttons & cwiid.BTN_RIGHT):
+         if(buttons & cwiid.BTN_RIGHT):
              onRight()          
 
-        if (buttons & cwiid.BTN_UP):
+         if (buttons & cwiid.BTN_UP):
              onUp()          
     
          if (buttons & cwiid.BTN_DOWN):
@@ -103,50 +61,53 @@ def main():
     
          if (buttons & cwiid.BTN_PLUS):
              onPlus()
-			 
+    
 #-- end main loop
 
 def onPlus():
-   print 'Plus Button pressed'
-   time.sleep(button_delay)
+     print 'Plus Button pressed'
+     time.sleep(button_delay)
    
 def onMin():
-   print 'Minus Button pressed'
-   time.sleep(button_delay)
+     print 'Minus Button pressed'
+     time.sleep(button_delay)
 
 def onB():
-   print 'Button B pressed'
-   time.sleep(button_delay)
+     print 'Button B pressed'
+     time.sleep(button_delay)
    
 def onDown():
-   print 'Down pressed'
-   time.sleep(button_delay)
+     print 'Down pressed'
+     time.sleep(button_delay)
    
 def onUp():
-   print 'Up pressed'
-   time.sleep(button_delay)   
+     print 'Up pressed'
+     time.sleep(button_delay)   
 
 def onLeft():
-   print Left pressed'
-   time.sleep(button_delay)
+     print 'Left pressed'
+     time.sleep(button_delay)
 
 def onRight():
-   print 'Right pressed'
-   time.sleep(button_delay)   
+     print 'Right pressed'
+     time.sleep(button_delay)   
    
 def onA():
-   print 'Button A pressed'
-   time.sleep(button_delay)
+     print 'Button A pressed'
+     time.sleep(button_delay)
    
 def on1():
-   print 'Button 1 pressed'
-   time.sleep(button_delay)   
+     print 'Button 1 pressed'
+     time.sleep(button_delay)   
    
 def on2():
-   print 'Button 2 pressed'
-   time.sleep(button_delay) 
+     print 'Button 2 pressed'
+     time.sleep(button_delay) 
    
 def onHome():
-   print wii.state
-   print 'Minus Button pressed'
-   time.sleep(button_delay)
+     wiic.print_state()
+     time.sleep(button_delay)
+     
+     
+     
+main()
