@@ -9,6 +9,7 @@ import time
 import os
 import datetime
 import sys
+from lib.spell import Voice
 
 
 def main(argv):
@@ -20,15 +21,13 @@ def main(argv):
       sys.exit(2)
    for opt, arg in opts:
       if opt == '-s':
-         os.system('flite "'+stringText+'" -voice slt -o temp.wav')
-         os.system('aplay temp.wav')
-         sys.exit()
+          voice = Voice()
+          voice.spell(stringText)
+          sys.exit()
       elif opt in ("-t", "--time"):
-         now = datetime.datetime.now()
-		 # TODO format heure
-         os.system('flite "'+now.strftime("%H %M")+'" -voice slt -o temp.wav')
-         os.system('aplay temp.wav')
-         sys.exit()
+          voice = Voice()
+          voice.time()
+          sys.exit()
 
 if __name__ == "__main__":
    main(sys.argv[1:])

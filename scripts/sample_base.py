@@ -8,7 +8,7 @@
 import cwiid
 import time
 import os
-from wiiConnect import WiiConnect
+from lib.wiiConnect import WiiConnect
  
 button_delay = 0.1
 
