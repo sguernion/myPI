@@ -8,9 +8,15 @@
 import cwiid
 import time
 import os
-from lib.wiiConnect import WiiConnect
- 
+from utils.wiiConnect import WiiConnect
+
 button_delay = 0.1
+ 
+
+
+led = 0
+led4 = 1
+ledv = 1
 
 def main():
      global wiic
@@ -18,70 +24,86 @@ def main():
      wiic = WiiConnect() 
      wii = wiic.connect()
      while wiic.doloops:
-
          buttons = wiic.buttons()
-
          # If Plus and Minus buttons pressed
          # together then rumble and quit.
          if (buttons - cwiid.BTN_PLUS - cwiid.BTN_MINUS == 0):  
              wiic.deconnect(); 
-  
          # Check if other buttons are pressed by
          # doing a bitwise AND of the buttons number
          # and the predefined constant for that button.
+         
          if (buttons & cwiid.BTN_LEFT):
-             onLeft()         
-
+             onLeft()
+         
          if(buttons & cwiid.BTN_RIGHT):
-             onRight()          
-
+             onRight()
+             
          if (buttons & cwiid.BTN_UP):
-             onUp()          
-    
+             onUp()
+          
          if (buttons & cwiid.BTN_DOWN):
-             onDown() 
-    
+             onDown()
+         
          if (buttons & cwiid.BTN_1):
-             on1()          
-
+             on1()
+        
          if (buttons & cwiid.BTN_2):
-             on2()          
-
+             on2()
+         
          if (buttons & cwiid.BTN_A):
-             onA()          
-
+             onA()
+          
          if (buttons & cwiid.BTN_B):
-             onB()          
-
+             onB()
+         
          if (buttons & cwiid.BTN_HOME):
-             onHome()           
-    
+             onHome()
+           
          if (buttons & cwiid.BTN_MINUS):
-             onMin()  
-    
+             onMin()
+           
          if (buttons & cwiid.BTN_PLUS):
              onPlus()
-    
+        
 #-- end main loop
 
 def onPlus():
-     print 'Plus Button pressed'
+     global ledv
+     print 'volume led  plus'
+     if ( ledv < 16):
+         ledv *= 2%8
+     wii.led = ledv
      time.sleep(button_delay)
    
 def onMin():
-     print 'Minus Button pressed'
+     global ledv
+     print 'volume led minus'
+     if( ledv > 0 ): 
+        ledv /= 2%8
+     wii.led = ledv
      time.sleep(button_delay)
 
 def onB():
-     print 'Button B pressed'
+     global led4
+     print '4 leds'
+     led4 += led4%16
+     wii.led = led4
      time.sleep(button_delay)
    
 def onDown():
-     print 'Down pressed'
-     time.sleep(button_delay)
+     for i in range(16):
+         wii.led = i
+         wii.rumble = 1-i%2
+         time.sleep(.2)
+     print 'Down pressed'      
+     time.sleep(button_delay)  
    
 def onUp():
-     print 'Up pressed'
+     for i in range(16):
+         wii.led = i
+         time.sleep(.5)
+     print 'Up pressed'        
      time.sleep(button_delay)   
 
 def onLeft():
@@ -89,25 +111,40 @@ def onLeft():
      time.sleep(button_delay)
 
 def onRight():
+     kled = 1
+     wii.led = kled
+     for i in range(4): 
+         kled *= 2%8
+         wii.led = kled
+         time.sleep(.01)
+     kled = 8
+     for i in range(4): 
+         kled /= 2%8
+         wii.led = kled
+         time.sleep(.01)
      print 'Right pressed'
-     time.sleep(button_delay)   
+     time.sleep(button_delay)     
    
 def onA():
-     print 'Button A pressed'
+     global led
+     print 'Binary show'
+     led += 1%16
+     wii.led = led
      time.sleep(button_delay)
    
 def on1():
-     print 'Button 1 pressed'
-     time.sleep(button_delay)   
+     print 'Battery:',wiic.battery() 
    
 def on2():
-     print 'Button 2 pressed'
+     print 'Button 2 pressed ',button_delay
      time.sleep(button_delay) 
    
 def onHome():
      wiic.print_state()
      time.sleep(button_delay)
-     
-     
-     
+
+
+
+
+
 main()
