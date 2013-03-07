@@ -9,7 +9,7 @@ import time
 import os
 import datetime
 import sys
-from lib.spell import Voice
+from utils.spell import Voice
 
 
 def main(argv):

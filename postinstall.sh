@@ -34,6 +34,10 @@ sudo apt-get install alsa-utils mpg321
 #sudo amixer cset numid=3 1
 #amixer cset numid=3 -- 70%
 
+
+#sudo initctl start xbmc
+#sudo initctl stop xbmc
+
 echo "Installation...done"
 
 # wget scripts

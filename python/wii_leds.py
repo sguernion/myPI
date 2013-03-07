@@ -10,7 +10,7 @@ import time
 import os
 from utils.wiiConnect import WiiConnect
 
-button_delay = 0.1
+button_delay = 0.3
  
 
 
@@ -70,24 +70,24 @@ def main():
 
 def onPlus():
      global ledv
-     print 'volume led  plus'
-     if ( ledv < 16):
-         ledv *= 2%8
+     if ( ledv == 8):
+         ledv=4 
+     ledv *= 2%8
      wii.led = ledv
      time.sleep(button_delay)
    
 def onMin():
      global ledv
-     print 'volume led minus'
-     if( ledv > 0 ): 
-        ledv /= 2%8
+     if( ledv == 0 ):
+         ledv =2  
+     ledv /= 2%8
      wii.led = ledv
      time.sleep(button_delay)
 
 def onB():
      global led4
      print '4 leds'
-     led4 += led4%16
+     led4 += led4%8
      wii.led = led4
      time.sleep(button_delay)
    
@@ -95,15 +95,13 @@ def onDown():
      for i in range(16):
          wii.led = i
          wii.rumble = 1-i%2
-         time.sleep(.2)
-     print 'Down pressed'      
+         time.sleep(.2)    
      time.sleep(button_delay)  
    
 def onUp():
      for i in range(16):
          wii.led = i
-         time.sleep(.5)
-     print 'Up pressed'        
+         time.sleep(.5)      
      time.sleep(button_delay)   
 
 def onLeft():
@@ -133,10 +131,11 @@ def onA():
      time.sleep(button_delay)
    
 def on1():
-     print 'Battery:',wiic.battery() 
+     print 'Battery:',wiic.battery()
+     time.sleep(button_delay)
    
 def on2():
-     print 'Button 2 pressed ',button_delay
+     print 'Button 2 pressed '
      time.sleep(button_delay) 
    
 def onHome():

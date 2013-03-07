@@ -89,21 +89,21 @@ class WiiConnect:
                  else:
                      print
                      
-          self.ext_state()           
+         self.ext_state()           
                      
-      def ext_state(self):
+     def ext_state(self):
           state = self.wii.state 
-         if state['ext_type'] == cwiid.EXT_NONE:
-             print 'No extension'
-         elif state['ext_type'] == cwiid.EXT_UNKNOWN:
+          if state['ext_type'] == cwiid.EXT_NONE:
+              print 'No extension'
+          elif state['ext_type'] == cwiid.EXT_UNKNOWN:
              print 'Unknown extension attached'
-         elif state['ext_type'] == cwiid.EXT_NUNCHUK:
+          elif state['ext_type'] == cwiid.EXT_NUNCHUK:
              print 'Nunchuk: btns=%.2X stick=%r acc.x=%d acc.y=%d acc.z=%d' % \
                  (state['nunchuk']['buttons'], state['nunchuk']['stick'],
                   state['nunchuk']['acc'][cwiid.X],
                   state['nunchuk']['acc'][cwiid.Y],
                   state['nunchuk']['acc'][cwiid.Z])
-         elif state['ext_type'] == cwiid.EXT_CLASSIC:
+          elif state['ext_type'] == cwiid.EXT_CLASSIC:
              print 'Classic: btns=%.4X l_stick=%r r_stick=%r l=%d r=%d' % \
                 (state['classic']['buttons'],
                  state['classic']['l_stick'], state['classic']['r_stick'],
