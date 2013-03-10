@@ -1,11 +1,40 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="raspberry" ng-controller="RootController" sessionhandler>
   <head>
-    <script src="/static/lib/angular/angular.js"></script>
+    <meta charset="utf-8">
+    <title>myPI Serveur</title>
+	<script src="/static/lib/bootstrap.js"></script>
+	
+	<link rel="stylesheet" media="screen" href="/static/css/bootstrap.min.css">
   </head>
   <body>
-    <div>
-		Hello !!
-    </div>
+  <div class="navbar navbar-inverse">
+	  <div class="navbar-inner">
+			<ul class="nav">
+				<li>
+					<a href="#bluetooth" >Bluetooth</a>
+				</li>
+				<li>
+					<a href="#voice" >Voice</a>
+				</li>
+			
+				<li ng-controller="RootController" ng-repeat="redirection in redirections['redirections']">
+					<a href="/redirect/{{redirection.path}}" target="_blank">{{redirection.name}}</a>
+				</li>
+			</ul>
+			</div>
+		</div>
+    <div class="container" ng-view></div>
+	
+	
+	<script src="/static/lib/angular/angular.js"></script>
+    <script src="/static/lib/angular/angular-resource.js"></script>
+    <script src="/static/lib/angular/angular-cookies.js"></script>
+	
+	<script src="/static/js/app.js"></script>
+    <script src="/static/js/services.js"></script>
+    <script src="/static/js/controllers.js"></script>
+    <script src="/static/js/filters.js"></script>
+    <script src="/static/js/directives.js"></script>
   </body>
 </html>
