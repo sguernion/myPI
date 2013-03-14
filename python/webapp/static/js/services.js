@@ -11,13 +11,13 @@ Services.factory('VoiceService', ['$http', '$log', '$location', '$cookieStore', 
           
 
             // Fonction de speak
-            this.speak = function() {
+            this.speak = function(phrase) {
 
                 logger.info("Appel speak (/voice)");
 
                 http({
                     method: 'POST',
-                    url: '/voice'
+                    url: '/voice/'+phrase
                 }).success(function(data, status, headers, config) {
 
                    
@@ -48,18 +48,31 @@ Services.factory('RootService', function( $resource) {
         return new RootService($resource);
     });
 	
-Services.factory('BluetoothService', function( $resource) {
+Services.factory('BluetoothService',['$http','$resource', function(http, $resource) {
 
        
-        function BluetoothService($resource) {
+        function BluetoothService(http,$resource) {
          
             // Fonction de scan
             this.scan = function() {
                //logger.info("Appel speak (/scan)");
                return $resource('/scan').get();
             };
-		};
+			
+			this.scanServices = function(mac) {
+
+               // logger.info("Appel speak (/scanServices)");
+
+                http({
+                    method: 'GET',
+                    url: '/scanServices/04:18:0F:0D:25:F6'
+                }).success(function(data, status, headers, config) {
+					return data;
+                }).error(function(data, status, headers, config) {});
+			
+			};
+			};
 
         // instanciation du service
-        return new BluetoothService($resource);
-    });
+        return new BluetoothService(http,$resource);
+    }]);
