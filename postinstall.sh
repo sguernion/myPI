@@ -6,23 +6,39 @@
 #------------
 
 echo "Mise a jour de la liste des depots"
-apt-get update
+sudo apt-get update
 
-echo "Mise a jour du systeme"
-apt-get upgrade
+#echo "Mise a jour du systeme"
+#sudo apt-get upgrade
 
 
 echo "Installation..."
 
-apt-get install git
+sudo apt-get install git
 
 # bluetooth
-apt-get install bluetooth bluez
+sudo apt-get install bluetooth bluez
 sudo service bluetooth start
 #hcitool scan
 
+# Python
+sudo apt-get install python-dev python-setuptools
+wget http://python-distribute.org/distribute_setup.py
+python distribute_setup.py
+wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+sudo python get-pip.py
+rm ./get-pip.py
+rm ./distribute_setup.py
+pip install rpi.gpio
+
+# Pytomation
+git clone https://github.com/zonyl/pytomation.git
+cd pytomation
+sudo chmod +x install.sh
+sudo install.sh
+
 # Python Wiimote
-apt-get install python-cwiid
+sudo apt-get install python-cwiid
 
 # synthese vocal
 sudo apt-get install festival flite
