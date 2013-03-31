@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from piui import PiUi
  
 ui = PiUi()

@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/python
+
 import SimpleHTTPServer
 import SocketServer
 import time
