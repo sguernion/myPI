@@ -34,6 +34,7 @@ pip install rpi.gpio
 # Pytomation
 git clone https://github.com/zonyl/pytomation.git
 cd pytomation
+pip install -r requirements.txt
 sudo chmod +x install.sh
 sudo install.sh
 
