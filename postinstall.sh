@@ -48,7 +48,11 @@ sudo apt-get install festival flite
 sudo apt-get install alsa-utils mpg321
 
 #sudo modprobe snd-bcm2835
+#sortie jack 
 #sudo amixer cset numid=3 1
+#sortie hdmi 
+#sudo amixer cset numid=3 2
+#volume
 #amixer cset numid=3 -- 70%
 
 
