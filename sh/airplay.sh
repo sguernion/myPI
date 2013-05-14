@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 sudo apt-get install  libao-dev libssl-dev libcrypt-openssl-rsa-perl libio-socket-inet6-perl libwww-perl avahi-utils
 
