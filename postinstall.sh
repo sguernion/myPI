@@ -20,13 +20,16 @@ apt-get update
 
 echo "Installation..."
 
+echo "            - git"
 apt-get -y install git
 
+echo "            - bluetooth"
 # bluetooth
 apt-get -y install bluetooth bluez
 service bluetooth start
 #hcitool scan
 
+echo "            - Python"
 # Python
 apt-get -y install python-dev python-setuptools
 wget http://python-distribute.org/distribute_setup.py
@@ -36,20 +39,41 @@ python get-pip.py
 rm ./get-pip.py
 rm ./distribute_setup.py
 pip install rpi.gpio
+pip install feedparser
 
+
+# berryClip
+# http://www.raspberrypi-spy.co.uk/2013/05/raspberry-pi-cpu-usage-monitoring-with-a-berryclip/
+# disable buzzer sound of berryClip
+
+cd python/gpio
+sudo cp berryclipInit.py /usr/local/bin/berryclipInit.py
+cd ../../
+cd sh
+sudo cp berryclipInit.sh /etc/init.d/berryclipInit
+sudo chmod +x /etc/init.d/berryclipInit
+sudo update-rc.d berryclipInit start 1 2 3 4 5
+
+
+echo "            - Python Wiimote"
+# Python Wiimote
+apt-get -y install python-cwiid
+
+
+echo "            - Pytomation"
 # Pytomation
+# TODO mkdir "applis" cd appli --> add appli in .gitignore
 git clone https://github.com/zonyl/pytomation.git
 cd pytomation
 pip install -r requirements.txt
 chmod +x install.sh
 install.sh
 
-# Python Wiimote
-apt-get -y install python-cwiid
-
+echo "            - synthese vocal"
 # synthese vocal
 apt-get -y install festival flite
 
+echo "            - sound utils"
 # sons
 apt-get -y install alsa-utils mpg321
 
@@ -65,11 +89,5 @@ apt-get -y install alsa-utils mpg321
 #initctl start xbmc
 #initctl stop xbmc
 
-#http://www.raspberrypi-spy.co.uk/2013/05/raspberry-pi-cpu-usage-monitoring-with-a-berryclip/
-cd sh
-wget http://www.raspberrypi-spy.co.uk/berryclip/6_led/berryclip_cpu_01.sh
-chmod +x berryclip_cpu_01.sh
-
 echo "Installation...done"
 
-# wget scripts
