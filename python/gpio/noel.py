@@ -1,5 +1,15 @@
 ﻿#!/usr/bin/python
 
+#--------------------------------------   
+#     flash leds off berryclip card
+#
+# Author : sguernion
+# Date   : 20/05/2013
+#
+# https://github.com/sguernion/myPI
+#
+#--------------------------------------
+
 # Import required libraries
 import RPi.GPIO as GPIO
 import time

@@ -1,5 +1,15 @@
 #!/usr/bin/python
 
+#--------------------------------------   
+#     gmail notifier
+#
+# Author : sguernion
+# Date   : 20/05/2013
+#
+# https://github.com/sguernion/myPI
+#
+#--------------------------------------
+
 # Import required libraries
 import RPi.GPIO as GPIO, feedparser
 import time
