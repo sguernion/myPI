@@ -21,5 +21,20 @@ TODO
 ### Wiimote
 TODO
 
+## Xbmc
+### Backup
+sudo /home/pi/xbmc_backup.sh
+
+
 ## Domotique
+### Backup
+Sinon pour declencher ça à 6H du matin, un petit
+
+sudo crontab -e
+
+puis coller
+
+0 6 * * * sudo /home/pi/domoticz/scripts/domoticz_backup.sh
+
+### Scripts
 TODO
