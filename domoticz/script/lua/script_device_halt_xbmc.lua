@@ -1,14 +1,18 @@
 commandArray = {}
 
+package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
+require 'utils_functions'
 
-user="user"
-pw="password"
-port="80"
-host="192.168.0.10"
+
+properties = read_file ("/home/pi/domoticz/scripts/lua/config.properties")
+user= properties['xbmc.user']
+pw= properties['xbmc.password']
+port= properties['xbmc.port']
+host= properties['xbmc.host']
 
 if (devicechanged['Xbmc'] == 'Off') then
         print('Turning off XBMC')
-        commandArray['OpenURL']='http://'.. user .. ':'.. pw ..'@'.. host ..':'.. port ..'/jsonrpc?request={"jsonrpc":"2.0","method":"System.Shutdown","id":1}?'
+		send_xbmc_cmd (user,pw,host,port,'{"jsonrpc":"2.0","method":"System.Shutdown","id":1}')
         commandArray['Multimedia']='Off After 150'
 end
 

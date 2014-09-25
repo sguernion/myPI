@@ -34,3 +34,8 @@ nosetests.xml
 .project
 .pydevproject
 .idea
+
+
+# domoticz script
+config.properties
+script_device_halt_raspbox.lua
