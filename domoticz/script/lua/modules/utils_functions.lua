@@ -2,12 +2,23 @@
 -- 
 -- Envoie d'un sms sur un mobile Free
 function send_sms (user,key,message)
-	commandArray['OpenURL']='https://smsapi.free-mobile.fr/sendmsg?user='.. user ..'&pass='.. key ..'&msg='.. message
+	commandArray['OpenURL']='https://smsapi.free-mobile.fr/sendmsg?user='..user..'&pass='..key..'&msg='..message
 end
 
 
+function send_vocal (message)
+	os.execute('./speak.sh ' .. message)
+	os.execute('wait 10 ')
+end
+
 function send_xbmc_cmd (user,pw,host,port,request)
-	commandArray['OpenURL']='http://'.. user .. ':'.. pw ..'@'.. host ..':'.. port ..'/jsonrpc?request='.. request
+	commandArray['OpenURL']='http://'..user.. ':'.. pw ..'@'.. host ..':'.. port ..'/jsonrpc?request='.. request
+end
+
+
+
+function trim(s)
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 -- calcul du temps en seconde depuis la derniere mise a jour du capteur
@@ -79,4 +90,16 @@ function split (s, pattern, maxsplit)
     end
   end
   return t
+end
+
+
+
+
+function xbmc_notification (message)
+	properties = read_file ("/home/pi/domoticz/scripts/lua/config.properties")
+	user=trim(properties['xbmc.user'])
+	pw=trim(properties['xbmc.password'])
+	port=trim(properties['xbmc.port'])
+	host=trim(properties['xbmc.host'])
+	send_xbmc_cmd (user,pw,host,port,'{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"domoticz","message":"'..message..'","image":"","displaytime":15000},"id":1}')
 end
