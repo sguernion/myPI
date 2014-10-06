@@ -14,7 +14,7 @@ if (devicechanged['Xbmc'] == 'Off') then
 		port=trim(properties['xbmc.port'])
 		host=trim(properties['xbmc.host'])
 		xbmc = Xbmc.create(host,port,user,pw)
-		xbmc.halt()
+		xbmc:halt()
         commandArray['Multimedia']='Off After 150'
 end
 

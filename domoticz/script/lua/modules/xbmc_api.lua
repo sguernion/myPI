@@ -14,18 +14,18 @@ end
 
 
 -- 
-function Xbmc.call_api (request)
-	commandArray['OpenURL']='http://'..self.user.. ':'.. self.pw ..'@'.. self.host ..':'.. self.port ..'/jsonrpc?request='.. request
+function Xbmc:call_api(request)
+	commandArray['OpenURL']='http://'..self.user.. ':'.. self.pw ..'@'.. self.server ..':'.. self.port ..'/jsonrpc?request='.. request
 end
 
 -- TODO init image, title
-function Xbmc.notification(message)
-	self.call_api('{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"domoticz","message":"'..message..'","image":"","displaytime":15000},"id":1}' )
+function Xbmc:notification(message)
+	self:call_api('{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"domoticz","message":"'..message..'","image":"","displaytime":15000},"id":1}' )
 end
 
-function Xbmc.halt(message)
-	self.notification('shutdown')
-	self.call_api('{"jsonrpc":"2.0","method":"System.Shutdown","id":1}');
+function Xbmc:halt()
+	self:notification('shutdown')
+	self:call_api('{"jsonrpc":"2.0","method":"System.Shutdown","id":1}')
 end
 
 
