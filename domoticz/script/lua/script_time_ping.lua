@@ -16,7 +16,7 @@ require 'utils_functions'
 --	server.Device2.ip=192.168.0.2
 --
 
-properties = read_file ("/home/pi/domoticz/scripts/lua/config.properties")
+properties = read_file (uservariables["config_file"])
 
 servers = properties['servers.ping.device']
 serversArray = split(servers, ',')
@@ -27,8 +27,5 @@ for i,server in pairs(serversArray) do
 		ping_alive(server,properties['server.' .. server .. '.ip'])
 	end
 end
-
-
-
 
 return commandArray

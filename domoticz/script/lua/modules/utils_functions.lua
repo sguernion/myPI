@@ -1,4 +1,7 @@
 
+package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
+require 'xbmc_api'
+
 -- 
 -- Envoie d'un sms sur un mobile Free
 function send_sms (user,key,message)
@@ -101,5 +104,7 @@ function xbmc_notification (message)
 	pw=trim(properties['xbmc.password'])
 	port=trim(properties['xbmc.port'])
 	host=trim(properties['xbmc.host'])
-	send_xbmc_cmd (user,pw,host,port,'{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"domoticz","message":"'..message..'","image":"","displaytime":15000},"id":1}')
+	xbmc = Xbmc.create(host,port,user,pw)
+    xbmc.notification(message)
+	--send_xbmc_cmd (user,pw,host,port,'{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"domoticz","message":"'..message..'","image":"","displaytime":15000},"id":1}')
 end
