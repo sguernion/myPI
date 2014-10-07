@@ -9,8 +9,6 @@ import ElemenTree as etree
 server = '192.168.0.11'
 port = '80'
 
-#local caches
-
 
 # Variables
 
