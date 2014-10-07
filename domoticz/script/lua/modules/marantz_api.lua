@@ -11,9 +11,16 @@ function Marantz.create(server,port,zone)
    return mrt
 end
 
+function Marantz.createFromConf(config)
+   local mrt = {}             -- our new object
+   setmetatable(mrt,Marantz)  -- make Marantz handle lookup
+   properties = Properties.create(config)
+   mrt.server = properties:get('marantz.host')
+   mrt.port = properties:get('marantz.port')
+   mrt.zone = properties:get('marantz.zone')
+   return mrt
+end
 
--- Domitcz,Xbmc,TV,wii
---sources = {'DVD', 'MPLAY', 'TV', 'SAT/CBL'}
 
 -- 
 function Marantz:call_api(text)
