@@ -39,8 +39,21 @@ a:hover { text-decoration: none; color: #003366; }
 	margin: 0px ;
 }
 
-#ihi, #ilow, #ohi, #ihum, #astat, #astatw, #otemp, #crte,
-#ohi, #rain, #ohum, #ocld, #otxt, #ctime, #cycb, #ctemp, #cyce, 
+#sep {
+	font-family: Orbitron, serif;
+	font-weight: bold;
+	width: 945px;
+	padding: 5px;
+	border: 1px solid #666;
+	height: 50px;	
+	line-height: 110px; 
+	font-size: 110px;	
+	color: darkorange;
+	margin: 0px ;
+}
+
+#ihi,#iccha, #ilow, #ohi,#ihum, #astat, #astatw, #otemp, #crte,
+#ohi, #rain, #ohum, #ocld, #otxt, #ctime, #cycb,#cycb2, #ctemp, #cyce, 
 #tmpb, #tmpe, #tmpc, #crte, #ctme, #wind, #state, 
 #ctmep, #sgas, #mode, #estate {
 	font-family: Orbitron, serif;
@@ -54,7 +67,7 @@ a:hover { text-decoration: none; color: #003366; }
 	color: #999;
 }
 
-#ctime, #cycb, #cyce, #tmpb, #tmpe, #tmpc, #crte, #ctme, #ohi, 
+#ctime,#cycb, #ihum, #cyce,#cycb2, #tmpb, #tmpe, #tmpc, #crte, #ctme, #ohi, 
 #rain, #ohum, #ocld, #otxt, #otemp, #wind, #astat, #awatt, 
 #astatw, #state, #estate, #ctmep, #sgas, #mode {
 	height: 65px;
@@ -62,7 +75,7 @@ a:hover { text-decoration: none; color: #003366; }
 	color: #999;
 }
 
-#state, #estate, #crte, #wind { 
+#state,#cycb2, #estate, #crte, #wind { 
 	width: 184px; 
 }
 
@@ -85,69 +98,49 @@ a:hover { text-decoration: none; color: #003366; }
 		<div>
 			<div>
 				<div id="frame">
-					<div id="ihum" style="color:lightblue;font-size:50px;">--</div>
-					<div id="label_lg">Humidity (%)</div>
+					<div id="iccha" style="font-size:35px;">--</div>
+					<div id="label_lg">Consigne Chauffage</div>
 					<div id="ilow" style="font-size:35px;">--</div>
-					<div id="label_lg">Lamp State</div>
+					<div id="label_lg">Chaudière</div>
 				</div>
 				<div id="frame">
 					<div id="itemp">--</div>
-					<div id="label_lg" style="font-size:25px;margin-top:-30px;">Livingroom Temp (º<span class="degsign">C</span>)</div>
+					<div id="label_lg" style="font-size:25px;margin-top:-30px;">Temp (º<span class="degsign">C</span>)</div>
 				</div>
 				<div id="frame">
 					<div id="ihi" style="color:teal;font-size:50px;">--</div>
-					<div id="label_lg">Temp Set (º<span class="degsign">C</span>)</div>
+					<div id="label_lg">Temp Consigne (º<span class="degsign">C</span>)</div>
 					<div id="ctemp" style="color:#6666FF;font-size:50px;">--</div>
-					<div id="label_lg">Temp Cellar (º<span class="degsign">C</span>)</div>
+					<div id="label_lg">Temp min (º<span class="degsign">C</span>)</div>
 					</div>
 				</div>
 
 				<div>
 					<div id="frame">
 						<div id="cycb" style="font-size:40px;">--</div>
-						<div id="label_lg">Temp Floorheat In</div>
+						<div id="label_lg">Temp Chambre</div>
 					</div>
 					<div id="frame">
 						<div id="cyce" style="font-size:40px;">--</div>
-						<div id="label_lg">Temp Floorheat Out</div>
+						<div id="label_lg">Temp Salon</div>
 					</div>
-						<div id="frame">
-						<div id="state" style="font-size:40px;">--</div>
-						<div id="label_lg">Hvac State</div>
+					<div id="frame">
+						<div id="cycb2" style="font-size:40px;">--</div>
+						<div id="label_lg">Temp Chambre 2</div>
 					</div>
 					<div id="frame">
 						<div id="tmpb" style="font-size:40px;">--</div>
 						<div id="label_lg">Temp Hot Water</div>
 					</div>
 					<div id="frame">
-						<div id="tmpe" style="font-size:40px;">--</div>
-						<div id="label_lg">Pump Floorheating</div>
+						<div id="ihum" style="color:lightblue;font-size:50px;">--</div>
+						<div id="label_lg">Humidity (%)</div>
 					</div>
 				</div>
 
-				<div>
-					<div id="frame">
-						<div id="mode" style="font-size:40px;;color:#3333cc;">--</div>
-						<div id="label_lg">Water Today (ltr)</div>
-					</div>
-					<div id="frame">
-						<div id="sgas" style="font-size:40px;color:#009933;">--</div>
-						<div id="label_lg">Gas Today (m³)</div>
-					</div>
-					<div id="frame">
-						<div id="estate" style="font-size:40px;color:#ff3333;">--</div>
-						<div id="label_lg">Energy Today (kW)</div>
-					</div>
-					<div id="frame">
-						<div id="ctmep" style="font-size:40px;color:#ff3333;">--</div>
-						<div id="label_lg">Current Energy (watt)</div>
-					</div>
-					<div id="frame">
-						<div id="ctme" style="font-size:40px;color:#ff3333;">--</div>
-						<div id="label_lg">Highest Consumer</div>
-					</div>
-				</div>
-
+				
+			<div><div id="frame"><div id="sep"></div><div id="label_lg" style="font-size:25px;margin-top:-30px;">Température Extérieurs</div></div></div>
+			
 			<div>
 				<div id="frame">
 					<div id="rain" style="font-size:40px;">--</div>
@@ -159,17 +152,40 @@ a:hover { text-decoration: none; color: #003366; }
 				</div>
 				<div id="frame">
 					<div id="wind" style="font-size:40px;">--</div>
-					<div id="label_lg">Wind Velocity (<span class="windsign">km/h</span>)</div>
+					<div id="label_lg">Vent (<span class="windsign">km/h</span>)</div>
 				</div>
 				<div id="frame">
 					<div id="otemp" style="font-size:40px;color:darkorange;">--</div>
-					<div id="label_lg">Outdoor Temp (º<span class="degsign">C</span>)</div>
+					<div id="label_lg">Temp Extérieur (º<span class="degsign">C</span>)</div>
 				</div>
 				<div id="frame">
 					<div id="ohum" style="font-size:40px;color:teal;">--</div>
-					<div id="label_lg">Outdoor Humidity (%)</div>
+					<div id="label_lg">Humidité Extérieur (%)</div>
 				</div>
 			</div>
+			<div><div id="frame"><div id="sep"></div><div id="label_lg" style="font-size:25px;margin-top:-30px;">Consomations</div></div></div>
+			<div>
+					<div id="frame">
+						<div id="mode" style="font-size:40px;;color:#3333cc;">--</div>
+						<div id="label_lg">Eau Aujourd'hui (ltr)</div>
+					</div>
+					<div id="frame">
+						<div id="sgas" style="font-size:40px;color:#009933;">--</div>
+						<div id="label_lg">Gas Aujourd'hui (m³)</div>
+					</div>
+					<div id="frame">
+						<div id="estate" style="font-size:40px;color:#ff3333;">--</div>
+						<div id="label_lg">Elect Aujourd'hui (kW)</div>
+					</div>
+					<div id="frame">
+						<div id="ctmep" style="font-size:40px;color:#ff3333;">--</div>
+						<div id="label_lg">Current Energy (watt)</div>
+					</div>
+					<div id="frame">
+						<div id="ctme" style="font-size:40px;color:#ff3333;">--</div>
+						<div id="label_lg">Highest Consumer</div>
+					</div>
+				</div>
 
 			<div>
 				<div id="frame">
@@ -233,12 +249,12 @@ function RefreshData()
 $(document).ready(function() {
 	$.LastUpdateTime=parseInt(0);
 	$.roomplan=21;
-	$.domoticzurl="http://192.168.0.17:8080";//"";
+	$.domoticzurl="http://88.174.118.8:8080";//"";
 	//format: idx, value, label, comment
 	$.PageArray = [
 		['21','Temp','itemp','woonkamer'],
 		['21','Humidity','ihum','woonkamer'],
-		//['21','Barometer','astatw','woonkamer'],
+		['21','Barometer','astatw','woonkamer'],
 		//['630','ForecastStr','otxt','woonkamer'],
 		['9','Temp','otemp','buiten'],
 		['9','Humidity','ohum','buiten'],
@@ -247,9 +263,10 @@ $(document).ready(function() {
 		//['584','CounterToday','estate','elektra'],
 		['11','Rain','rain','rain'],
 	//	['585','CounterToday','sgas','gas'],
-	//	['411','UVI','ohi','uv'],
-	//	['613','Speed','wind','wind'],
-	//	['401','Status','ilow','lamp'],
+		['14','UVI','ohi','uv'],
+		['10','Speed','wind','wind'],
+		['30','Status','ilow','lamp'],
+		['29','Status','iccha','lamp'],
 	];
 
     RefreshData();
