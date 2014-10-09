@@ -12,3 +12,8 @@ Fireplace;Fireplace;Fireplace
 Water;Water;Water
 Media;Media Player;Multi Media player
 Alarm;Alarm;Alarm
+Play;Play;Play/Pause
+Smartphone;Smartphone;Smartphone
+Server;Serveur;Serveur
+Xbmc;Xbmc;Xbmc
+Nuit;Nuit;Nuit/Jour
