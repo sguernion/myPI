@@ -13,9 +13,6 @@ function read_file (fileName)
   return property
 end
 
-function trim(s)
-  return (s:gsub("^%s*(.-)%s*$", "%1"))
-end
 
 
 function Properties.create(config)
@@ -26,7 +23,11 @@ function Properties.create(config)
 end
 
 function Properties:get(key)
-  return trim(self.properties[key])
+	value=self.properties[key]
+	if (value  ~= nil and value  ~= '') then
+		return (value:gsub("^%s*(.-)%s*$", "%1"))
+	end
+	return ''
 end
 
 function Properties:getArray(key)
