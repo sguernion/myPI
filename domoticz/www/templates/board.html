@@ -100,7 +100,7 @@ a:hover { text-decoration: none; color: #003366; }
 				<div id="frame">
 					<div id="iccha" style="font-size:35px;">--</div>
 					<div id="label_lg">Consigne Chauffage</div>
-					<div id="ilow" style="font-size:35px;">--</div>
+					<div id="ilow" style="font-size:35px;"><img src="../images/Fireplace48_On.png"/></div>
 					<div id="label_lg">Chaudière</div>
 				</div>
 				<div id="frame">
@@ -230,6 +230,7 @@ function RefreshData()
 					if( $.PageArray[ii][0] === item.idx ) {
 						var vtype=$.PageArray[ii][1];
 						var vlabel=$.PageArray[ii][2];
+						var vimg=$.PageArray[ii][3];
 						var vdata=item[vtype];
 						if (typeof vdata == 'undefined') {
 							vdata="??";
@@ -237,7 +238,50 @@ function RefreshData()
 						else {
 							vdata=new String(vdata).split(" ",1)[0];
 						}
-						$('#'+vlabel).html(vdata);
+						if(vimg ==''){
+							$('#'+vlabel).html(vdata);
+						}else{
+								$('#'+vlabel+' > img' ).attr('src','../images/'+vimg+'48_'+vdata+'.png');
+						}
+					}
+				}
+			});
+		}
+	});
+	var jurl=$.domoticzurl+"/json.htm?type=command&param=getuservariables";
+	$.getJSON(jurl,
+	{
+		format: "json"
+	},
+	function(data) {
+		if (typeof data.ActTime != 'undefined') {
+			$.LastUpdateTime=parseInt(data.ActTime);
+		}
+		if (typeof data.result != 'undefined') {
+			if (typeof data.WindSign != 'undefined') {
+				$('.windsign').html(data.WindSign);
+			}
+			if (typeof data.TempSign != 'undefined') {
+				$('.degsign').html(data.TempSign);
+			}
+			$.each(data.result, function(i,item){
+				for( var ii = 0, len = $.PageArray.length; ii < len; ii++ ) {
+					if( $.PageArray[ii][0] === 'uv'+item.idx ) {
+						var vtype=$.PageArray[ii][1];
+						var vlabel=$.PageArray[ii][2];
+						var vimg=$.PageArray[ii][3];
+						var vdata=item[vtype];
+						if (typeof vdata == 'undefined') {
+							vdata="??";
+						}
+						else {
+							vdata=new String(vdata).split(" ",1)[0];
+						}
+						if(vimg ==''){
+							$('#'+vlabel).html(vdata);
+						}else{
+							$('#'+vlabel+' > img' ).attr('src','../images/'+vimg+'48_'+vdata+'.png');
+						}
 					}
 				}
 			});
@@ -246,27 +290,30 @@ function RefreshData()
 	$.refreshTimer = setInterval(RefreshData, 10000);
 }
 
+
+
 $(document).ready(function() {
 	$.LastUpdateTime=parseInt(0);
 	$.roomplan=21;
 	$.domoticzurl="http://88.174.118.8:8080";//"";
-	//format: idx, value, label, comment
+	//format: idx, value, label, img, comment
 	$.PageArray = [
-		['21','Temp','itemp','woonkamer'],
-		['21','Humidity','ihum','woonkamer'],
-		['21','Barometer','astatw','woonkamer'],
-		//['630','ForecastStr','otxt','woonkamer'],
-		['9','Temp','otemp','buiten'],
-		['9','Humidity','ohum','buiten'],
-		//['627','SetPoint','ihi','room setpoint'],
-		//['584','Usage','ctmep','elektra'],
-		//['584','CounterToday','estate','elektra'],
-		['11','Rain','rain','rain'],
-	//	['585','CounterToday','sgas','gas'],
-		['14','UVI','ohi','uv'],
-		['10','Speed','wind','wind'],
-		['30','Status','ilow','lamp'],
-		['29','Status','iccha','lamp'],
+		['21','Temp','itemp','','woonkamer'],
+		['21','Humidity','ihum','','woonkamer'],
+		//['21','Barometer','astatw','','woonkamer'],
+		//['630','ForecastStr','otxt','','woonkamer'],
+		['44','Temp','otemp','','buiten'],
+		['44','Humidity','ohum','','buiten'],
+		['44','Barometer','astatw','','woonkamer'],
+		['uv1','Value','ihi','','variable consigne'],
+		['uv5','Value','ctemp','','variable temp min'],
+		//['584','CounterToday','estate','','elektra'],
+		['11','Rain','rain','','rain'],
+	//	['585','CounterToday','sgas','','gas'],
+		['14','UVI','ohi','','uv'],
+		['10','Speed','wind','','wind'],
+		['30','Status','ilow','Fireplace','lamp'],
+		['29','Status','iccha','','lamp'],
 	];
 
     RefreshData();

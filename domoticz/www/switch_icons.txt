@@ -17,3 +17,4 @@ Smartphone;Smartphone;Smartphone
 Server;Serveur;Serveur
 Xbmc;Xbmc;Xbmc
 Nuit;Nuit;Nuit/Jour
+LightChevet;LightChevet;LightChevet
