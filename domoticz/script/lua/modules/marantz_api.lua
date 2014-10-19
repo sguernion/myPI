@@ -1,4 +1,7 @@
 
+package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
+require 'properties'
+
 Marantz = {}
 Marantz.__index = Marantz
 
@@ -27,12 +30,12 @@ function Marantz:call_api(text)
 	commandArray['OpenURL']='http://' .. self.server .. ':' .. self.port .. '/' .. self.zone .. '/index.put.asp?' .. text
 end
 
-function Marantz.change_source(source)
-	self:call_api('cmd0=PutZone_InputFunction%2F' .. source )
+function Marantz:change_source(source)
+	self:call_api('cmd0=PutZone_InputFunction%2F'..source )
 end
 
 function Marantz:change_volume(decibel)
-	self:call_api('cmd0=PutMasterVolumeSet%2F' .. decibel )
+	self:call_api('cmd0=PutMasterVolumeSet%2F'..decibel )
 end
 
 function Marantz:volume_up()
@@ -43,11 +46,11 @@ function Marantz:volume_down()
 	self:call_api('cmd0=PutMasterVolumeBtn%2F%3C' )
 end
 
-function Marantz.volume_mute()
+function Marantz:volume_mute()
 	self:call_api('cmd0=PutVolumeMute%2Fon' )
 end
 
-function Marantz.volume_unmute()
+function Marantz:volume_unmute()
 	self:call_api('cmd0=PutVolumeMute%2Foff' )
 end
 
