@@ -1,9 +1,9 @@
 Light;Light/Switch;A Lamp or Switch
-WallSocket;Wall Socket;Power Wall Socket
+WallSocket;Prise;Prise de courant
 TV;Television;Television Screen
 Harddisk;Hard disk;Hard disk drive
-Printer;Printer;Printer
-Amplifier;Amplifier;Device that controls audio
+Printer;Imprimante;Imprimante
+Amplifier;Amplificateur;Device that controls audio
 Computer;Computer;Personal Computer System
 Fan;Fan;Airflow Producer
 Speaker;Speaker;Audio Speaker
@@ -17,4 +17,4 @@ Smartphone;Smartphone;Smartphone
 Server;Serveur;Serveur
 Xbmc;Xbmc;Xbmc
 Nuit;Nuit;Nuit/Jour
-LightChevet;LightChevet;LightChevet
+LightChevet;Chevet;Chevet

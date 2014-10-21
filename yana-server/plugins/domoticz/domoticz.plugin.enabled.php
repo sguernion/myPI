@@ -7,9 +7,9 @@ require_once('DomoticzApi.class.php');
 @name domoticz
 @author M.OU <nospam@free.fr>
 @author S.Guernion
-@link 
+@link https://github.com/sguernion/myPI/tree/master/yana-server/plugins/domoticz
 @licence 
-@version 1.0.4
+@version 1.1.0
 @description Permet la commande vocale des interrupteurs domoticz
 */
 
@@ -24,13 +24,15 @@ function domoticz_vocal_command(&$response,$actionUrl){
 		foreach($domoticzCmd as $row){
 			$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn(),
-				'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx(),'confidence'=>$row->getConfidence()
+				'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx(),'confidence'=>$row->getConfidence(),
+				'categorie'=>'Domoticz'
 				);	
 			if($row->getCmdOff() != null){
-			$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOff(),
-				'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=Off'.'&idx='.$row->getIdx(),'confidence'=>$row->getConfidence()
-				);		
+				$response['commands'][] = array(
+					'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOff(),
+					'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=Off'.'&idx='.$row->getIdx(),'confidence'=>$row->getConfidence(),
+					'categorie'=>'Domoticz'
+					);		
 			}
 		}
 	}
@@ -51,6 +53,7 @@ function domoticz_action(){
 	if($_['action'] == 'domoticz_add'){
 		global $_;
 		$idx=$_['idx'];
+		//TODO search by idx
 		$devices = $domoticzApi->getDevices();
 		if (is_array($devices)){
 			foreach($devices as $row2){
@@ -88,7 +91,6 @@ function domoticz_action(){
 		$domoticz = new DomoticzCmd();
 		$domoticz->delete(array('idx'=>$_['idx']));
 		header('location:setting.php?section=domoticz&block=cmd');
-		
 	}
 	
 	if($_['action'] == 'domoticz_enable'){
