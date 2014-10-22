@@ -14,3 +14,4 @@ http://forum.idleman.fr/discussion/251/yana-domoticz/p1
 
  * Personnalisation des commandes Vocales
  * widget : Modification de de l'image du devide après le changement d'état.
+ * Configuration : liste de choix pour sélectionner les devices a afficher dans le widget
