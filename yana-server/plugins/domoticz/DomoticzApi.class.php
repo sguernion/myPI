@@ -34,6 +34,12 @@ class DomoticzApi {
 		
 	}
 	
+	function getSunRise(){
+		$url =  $this->getUrl();
+		$url .=	'/json.htm?type=command&param=getSunRiseSet';
+		$infos = json_decode(file_get_contents($url), true);
+		return $infos;
+	}
 	
 	
 	function getInfo($id){

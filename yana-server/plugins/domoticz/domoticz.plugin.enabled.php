@@ -47,6 +47,7 @@ function domoticz_action(){
 			$conf->put('plugin_domoticz_port',$_['port']);
 			$conf->put('plugin_domoticz_user',$_['user']);
 			$conf->put('plugin_domoticz_pswd',$_['pswd']);
+			$conf->put('plugin_domoticz_plugins_devices',$_['devices']);
 			header('location:setting.php?section=preference&block=domoticz');
 	}
 	$domoticzApi = new DomoticzApi($conf);
@@ -130,7 +131,7 @@ function domoticz_action(){
 	
 	if($_['action'] == 'domoticz_action_mesure'){
 		$infos = $domoticzApi->getInfo($_['idx']);		
-		$affirmation = 'il fait '.$row2['Temp'];
+		$affirmation = 'il fait '.$infos['Temp'];
 		$response = array('responses'=>array(
                           array('type'=>'talk','sentence'=>$affirmation)
                     ));
@@ -142,7 +143,7 @@ function domoticz_action(){
 	if($_['action'] == 'domoticz_action_variable'){
 		$infos = $domoticzApi->getUserVariable($_['idx']);
 		
-		$affirmation = 'la valeur est '.$row2['Value'];
+		$affirmation = 'la valeur est '.$infos['Value'];
 		$response = array('responses'=>array(
                           array('type'=>'talk','sentence'=>$affirmation)
                     ));
@@ -150,6 +151,43 @@ function domoticz_action(){
         echo ($json=='[]'?'{}':$json); 
 		exit;
 	}
+	
+	
+	if($_['action'] == 'domoticz_monitoring_plugin_load'){
+			if($myUser==false) exit('Vous devez vous connecter pour cette action.');
+			header('Content-type: application/json');
+			$response = array();
+			switch($_['bloc']){
+				case 'sunrise':		
+					$response['title'] = 'Domoticz';
+					$sunrise = $domoticzApi->getSunRise();
+					$response['content'] = '<div style="width: 100%"><p>Aube '.$sunrise['Sunrise'].'</p><p>Crepuscule '.$sunrise['Sunset'].'</p></div>';
+				break;
+				case 'devices':
+						
+					$response['title'] = 'Domoticz';
+					
+					$response['content'] = '<div style="width: 100%">';
+					
+					$devices = explode (',',$conf->get('plugin_domoticz_plugins_devices'));
+					foreach($devices as $device){
+						$infos = $domoticzApi->getInfo($device);	
+						$path='http://'.$conf->get('plugin_domoticz_ip').':'.$conf->get('plugin_domoticz_port').'/images/';
+						if($infos['TypeImg'] == 'lightbulb'){
+							$response['content'] .= '<img onclick="change_switch_state(\''.($infos['Status']=='On'?'Off':'On').'\','.$infos['idx'].',this)" src="'.$path.$infos['Image'].'48_'.$infos['Status'].'.png" title="'.$infos['Name'].'" />';
+						}else if($infos['TypeImg'] == 'door'){
+							$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48'.($infos['Status']=='Open'?'open':'').'.png" title="'.$infos['Name'].'" />';
+						}else if($infos['TypeImg'] == 'temperature'){
+							$response['content'] .= '<img src="'.$path.'temp48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
+						}
+					}
+					$response['content'] .= '</div>';
+				break;
+			}
+		echo json_encode($response);
+		exit(0);
+	}
+
 }
 
 function domoticz_plugin_preference_menu(){
@@ -176,7 +214,9 @@ function domoticz_plugin_preference_page(){
 			    <br/><br/><label>Nom de l'utilisateur</label><br/>
 			    <input type="text" class="input-large" name="user" value="<?php echo $conf->get('plugin_domoticz_user');?>" placeholder="toto">					
 			    <br/><br/><label>Mot de passe</label><br/>
-			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('plugin_domoticz_pswd');?>" placeholder="********">					
+			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('plugin_domoticz_pswd');?>" placeholder="********">		
+				<br/><br/><label>Widget Devices (id1,id2..)</label><br/>
+			    <input type="text" class="input-large" name="devices" value="<?php echo $conf->get('plugin_domoticz_plugins_devices');?>" >						
 			    <br/><br/><button type="submit" class="btn">Sauvegarder</button>
 	    </form>
 		<?php 
@@ -202,6 +242,25 @@ function domoticz_plugin_preference_page(){
 function domoticz_plugin_menu(){
 	global $_;
 	echo '<li '.((isset($_['section']) && $_['section']=='domoticz') || !isset($_['section']) ?'class="active"':'').'><a href="setting.php?section=domoticz"><i class="fa fa-angle-right"></i> Domoticz</a></li>';
+}
+
+function domoticz_widget_plugin_menu(&$widgets){
+	$widgets[] = array(
+		    'uid'      => 'domoticz_widget',
+		    'icon'     => 'fa fa-sun-o',
+		    'label'    => 'Domoticz Sunrise',
+		    'background' => '#50597B', 
+		    'color' => '#fffffff',
+		    'onLoad'   => 'action.php?action=domoticz_monitoring_plugin_load&bloc=sunrise'
+		);
+	$widgets[] = array(
+		    'uid'      => 'domoticz_widget_devices',
+		    'icon'     => 'fa fa-play-circle-o',
+		    'label'    => 'Domoticz Devices',
+		    'background' => '#50597B', 
+		    'color' => '#fffffff',
+		    'onLoad'   => 'action.php?action=domoticz_monitoring_plugin_load&bloc=devices'
+		);
 }
 
 function domoticz_plugin_page(){
@@ -234,7 +293,7 @@ function domoticz_plugin_page(){
 					<thead>
 						<tr>
 							<!--th>Type</th -->
-							<th>device</th>
+							<th>Device</th>
 							
 							<th>Commande vocale On</th>
 							<th>Commande vocale Off</th>
@@ -263,7 +322,9 @@ function domoticz_plugin_page(){
 										else
 											{ echo '<i class="fa fa-microphone-slash fa-lg" style="color:#C1004F"></i>';}
 										?>
-										</a><a class="btn" href="action.php?action=domoticz_delete&idx=<?php echo $row->getIdx(); ?>">x</a></td>
+										</a>
+										<a class="btn" href="action.php?action=domoticz_edit&idx=<?php echo $row->getIdx(); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+										<a class="btn" href="action.php?action=domoticz_delete&idx=<?php echo $row->getIdx(); ?>"><i class="fa fa-trash-o fa-lg"  style="color:#C1004F"></i></a></td>
 									</tr>
 									
 									<?php
@@ -283,7 +344,7 @@ function domoticz_plugin_page(){
 					<thead>
 						<tr>
 							<th>Type</th>
-							<th>device</th>
+							<th>Device</th>
 							
 							<th>Commande vocale On</th>
 							<th>Commande vocale Off</th>
@@ -330,7 +391,7 @@ function domoticz_plugin_page(){
 										?></td>
 										<td>0.88</td>
 										<td><a class="btn" href="action.php?action=domoticz_add&idx=<?php echo $row2['idx']; ?>" title="Active ou désactive l’écoute de cette commande">
-										Add
+										<i class="fa fa-plus fa-lg"></i>
 										</a></td>
 									</tr>
 									
@@ -359,11 +420,13 @@ function domoticz_plugin_page(){
 }
 
 
+Plugin::addJs('/js/main.js',true);
 Plugin::addHook("setting_menu", "domoticz_plugin_menu");  
 Plugin::addHook("setting_bloc", "domoticz_plugin_page"); 
 Plugin::addHook("preference_menu", "domoticz_plugin_preference_menu"); 
 Plugin::addHook("preference_content", "domoticz_plugin_preference_page"); 
-    
+Plugin::addHook("widgets", "domoticz_widget_plugin_menu");
+
 Plugin::addHook("action_post_case", "domoticz_action");    
 Plugin::addHook("vocal_command", "domoticz_vocal_command");
 ?>
