@@ -174,7 +174,7 @@ function domoticz_action(){
 						$infos = $domoticzApi->getInfo($device);	
 						$path='http://'.$conf->get('plugin_domoticz_ip').':'.$conf->get('plugin_domoticz_port').'/images/';
 						if($infos['TypeImg'] == 'lightbulb'){
-							$response['content'] .= '<img onclick="change_switch_state(\''.($infos['Status']=='On'?'Off':'On').'\','.$infos['idx'].',this)" src="'.$path.$infos['Image'].'48_'.$infos['Status'].'.png" title="'.$infos['Name'].'" />';
+							$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['Image'].'48_On.png\',\''.$path.$infos['Image'].'48_Off.png\')" src="'.$path.$infos['Image'].'48_'.$infos['Status'].'.png" title="'.$infos['Name'].'" />';
 						}else if($infos['TypeImg'] == 'door'){
 							$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48'.($infos['Status']=='Open'?'open':'').'.png" title="'.$infos['Name'].'" />';
 						}else if($infos['TypeImg'] == 'temperature'){
