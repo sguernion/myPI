@@ -24,13 +24,13 @@ function domoticz_vocal_command(&$response,$actionUrl){
 		foreach($domoticzCmd as $row){
 			$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn(),
-				'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx(),'confidence'=>$row->getConfidence(),
+				'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx().'&name='.$row->getDevice(),'confidence'=>$row->getConfidence(),
 				'categorie'=>'Domoticz'
 				);	
 			if($row->getCmdOff() != null){
 				$response['commands'][] = array(
 					'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOff(),
-					'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=Off'.'&idx='.$row->getIdx(),'confidence'=>$row->getConfidence(),
+					'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=Off'.'&idx='.$row->getIdx().'&name='.$row->getDevice(),'confidence'=>$row->getConfidence(),
 					'categorie'=>'Domoticz'
 					);		
 			}
@@ -112,14 +112,14 @@ function domoticz_action(){
 	}
 	
 	if($_['action'] == 'domoticz_action_switch' || $_['action'] == 'domoticz_action_scene'){
-		$infos = $domoticzApi->getInfo($_['idx']);
-		$domoticzApi->setState('switchlight',$_['idx'],$_['state'] );
-		
-		if($infos['Type'] == 'Scene'){ 
-			$affirmation = 'mode '.$infos['Name'].' actif';
+		if($_['action'] == 'domoticz_action_scene'){ 
+			$domoticzApi->setState('switchscene',$_['idx'],$_['state'] );
+			if($_['state'] == 'On'){$affirmation = 'mode '.$_['name'].' actif';}
+			if($_['state'] == 'Off'){$affirmation = 'mode '.$_['name'].' inactif';}
 		}else{
-			if($_['state'] == 'Off'){ $affirmation = 'je viens d\'eteindre '.$infos['Name'];}
-			if($_['state'] == 'On'){ $affirmation = 'je viens d\'allumer '.$infos['Name'];}
+			$domoticzApi->setState('switchlight',$_['idx'],$_['state'] );
+			if($_['state'] == 'Off'){ $affirmation = 'je viens d\'eteindre '.$_['name'];}
+			if($_['state'] == 'On'){ $affirmation = 'je viens d\'allumer '.$_['name'];}
 		}
 		$response = array('responses'=>array(
                           array('type'=>'talk','sentence'=>$affirmation)
@@ -173,12 +173,16 @@ function domoticz_action(){
 					foreach($devices as $device){
 						$infos = $domoticzApi->getInfo($device);	
 						$path='http://'.$conf->get('plugin_domoticz_ip').':'.$conf->get('plugin_domoticz_port').'/images/';
-						if($infos['TypeImg'] == 'lightbulb'){
+						if($infos['TypeImg'] == 'lightbulb' ){
 							$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['Image'].'48_On.png\',\''.$path.$infos['Image'].'48_Off.png\')" src="'.$path.$infos['Image'].'48_'.$infos['Status'].'.png" title="'.$infos['Name'].'" />';
+						}else if($infos['TypeImg'] == 'push'){
+							$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['TypeImg'].'on48.png\',\''.$path.$infos['TypeImg'].'off48.png\')" src="'.$path.$infos['TypeImg'].'off48.png" title="'.$infos['Name'].'" />';
 						}else if($infos['TypeImg'] == 'door'){
 							$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48'.($infos['Status']=='Open'?'open':'').'.png" title="'.$infos['Name'].'" />';
 						}else if($infos['TypeImg'] == 'temperature'){
 							$response['content'] .= '<img src="'.$path.'temp48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
+						} else {
+							$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
 						}
 					}
 					$response['content'] .= '</div>';
