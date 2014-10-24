@@ -19,3 +19,4 @@ Xbmc;Xbmc;Xbmc
 Nuit;Nuit;Nuit/Jour
 LightChevet;Chevet;Chevet
 Chaudiere;Chaudiere;Chaudiere
+Chauffage;Chauffage;Chauffage
