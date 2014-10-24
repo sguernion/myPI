@@ -18,3 +18,4 @@ Server;Serveur;Serveur
 Xbmc;Xbmc;Xbmc
 Nuit;Nuit;Nuit/Jour
 LightChevet;Chevet;Chevet
+Chaudiere;Chaudiere;Chaudiere
