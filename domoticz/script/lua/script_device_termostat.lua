@@ -4,8 +4,9 @@
 	local consigne = uservariables["Consigne"]  --Température de consigne
 	local consigne_min = uservariables["Consigne_eco"]  --Température minimum
 	local hysteresis = 0.5 --Valeur seuil pour éviter que le relai ne cesse de commuter dans les 2 sens
-	local sonde = 'Temp Chambre2' --Nom de la sonde de température
+	local sonde = 'Temp Chambre' --Nom de la sonde de température
 	local thermostat = 'Calendrier Chauffage' --Nom de l'interrupteur virtuel du thermostat
+	local ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
 	local radiateur = 'Chauffage' --Nom du radiateur à allumer/éteindre
 	--------------------------------
 	-- Fin des variables à éditer --
@@ -16,11 +17,13 @@
 	-- d'exécution de ce script.
 	if (devicechanged[sonde]) then
 		local temperature = devicechanged[string.format('%s_Temperature', sonde)] --Temperature relevée
-	    --On n'agit que si le "Thermostat" est actif
-	    if (otherdevices[thermostat]=='On') then
+	    
+		
+		--On n'agit que si le "Thermostat" est actif
+	    if (otherdevices[thermostat]=='On' ) then
 	        --print('-- Gestion du thermostat --')
-	
-	    	if (temperature < (consigne - hysteresis) and otherdevices[radiateur]=='Off' ) then
+			
+	    	if (temperature < (consigne - hysteresis) and otherdevices[radiateur]=='Off' and otherdevices[ouverture]=='Off') then
 	            print('Allumage du chauffage')
 	            commandArray[radiateur]='On'
 	
@@ -30,7 +33,7 @@
 	
 		    end
 		elseif (otherdevices[thermostat]=='Off') then
-			if (temperature < (consigne_min - hysteresis)) then
+			if (temperature < (consigne_min - hysteresis) and otherdevices[ouverture]=='Off') then
 				commandArray[radiateur]='On'
 			elseif (temperature > (consigne_min + hysteresis)) then
 	            commandArray[radiateur]='Off'

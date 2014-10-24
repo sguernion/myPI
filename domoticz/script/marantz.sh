@@ -4,6 +4,14 @@
 command=$1
 url='http://192.168.0.11/MainZone/index.put.asp?cmd0='
 
+ #function getVolume {
+	#curl -L http://192.168.0.11/goform/formMainZone_MainZoneXml.xml -o marantz.xml
+	#v=80
+	#volume=(( $v + $(xmlstarlet sel -t -v "item/MasterVolume/value/text()" marantz.xml)))
+	#volume=30
+	#return $volume
+#}
+
 case $command in
 	volume_up)
 	curl $url'PutMasterVolumeBtn%2F%3E'
@@ -16,6 +24,9 @@ case $command in
 	;;
 	volume_set)
 	curl $url'PutMasterVolumeSet%2F'$2
+	;;
+	volume)
+	#echo getVolume()
 	;;
 	power_off)
 	curl $url'PutZone_OnOff%2FOFF'
