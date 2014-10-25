@@ -24,13 +24,15 @@ function domoticz_vocal_command(&$response,$actionUrl){
 		foreach($domoticzCmd as $row){
 			$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn(),
-				'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx().'&name='.$row->getDevice(),'confidence'=>$row->getConfidence(),
+				'url'=> $actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx().'&name='.urlencode ($row->getDevice()),
+				'confidence'=>$row->getConfidence(),
 				'categorie'=>'Domoticz'
 				);	
 			if($row->getCmdOff() != null){
 				$response['commands'][] = array(
 					'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOff(),
-					'url'=>$actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=Off'.'&idx='.$row->getIdx().'&name='.$row->getDevice(),'confidence'=>$row->getConfidence(),
+					'url'=> $actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=Off'.'&idx='.$row->getIdx().'&name='.urlencode ($row->getDevice()),
+					'confidence'=>$row->getConfidence(),
 					'categorie'=>'Domoticz'
 					);		
 			}
@@ -42,6 +44,13 @@ function domoticz_vocal_command(&$response,$actionUrl){
 function domoticz_action(){
 	global $_,$conf,$myUser;
 
+	if($_['action'] == 'domoticz_vocale'){
+		$response = array();
+		domoticz_vocal_command($response,'action.php');
+		$json = json_encode($response);
+        echo ($json=='[]'?'{}':$json); 
+		exit;
+	}
 	if($_['action'] == 'domoticz_plugin_setting'){
 			$conf->put('plugin_domoticz_ip',$_['ip']);
 			$conf->put('plugin_domoticz_port',$_['port']);
@@ -94,6 +103,19 @@ function domoticz_action(){
 		header('location:setting.php?section=domoticz&block=cmd');
 	}
 	
+	if($_['action'] == 'domoticz_edit'){
+		global $_;
+		$domoticz = new DomoticzCmd();
+		$domoticz = $domoticz->load(array('idx'=>$_['idx']));
+		
+		$domoticz->setCmdOn($_['cmdOn']);
+		$domoticz->setCmdOff($_['cmdOff']);
+		$domoticz->setConfidence($_['confidence']);
+		$domoticz->setVocal(true);
+		$domoticz->save();
+		header('location:setting.php?section=domoticz&block=cmd');
+	}
+	
 	if($_['action'] == 'domoticz_enable'){
 		global $_;
 		$domoticz = new DomoticzCmd();
@@ -111,16 +133,20 @@ function domoticz_action(){
 		header('location:setting.php?section=domoticz&block=cmd&save=ok');
 	}
 	
+	$phrases['switchlight']['Off'] = 'je viens d\'eteindre {NAME}';
+	$phrases['switchlight']['On'] = 'je viens d\'allumer {NAME}';
+	$phrases['switchscene']['On'] = 'mode {NAME} actif';
+	$phrases['switchscene']['Off'] = 'mode {NAME} inactif';
+	$phrases['temperature'] = 'il fait {VALUE}';
+	$phrases['variable'] = 'la valeur est {VALUE}';
+	
 	if($_['action'] == 'domoticz_action_switch' || $_['action'] == 'domoticz_action_scene'){
+		$type="switchlight";
 		if($_['action'] == 'domoticz_action_scene'){ 
-			$domoticzApi->setState('switchscene',$_['idx'],$_['state'] );
-			if($_['state'] == 'On'){$affirmation = 'mode '.$_['name'].' actif';}
-			if($_['state'] == 'Off'){$affirmation = 'mode '.$_['name'].' inactif';}
-		}else{
-			$domoticzApi->setState('switchlight',$_['idx'],$_['state'] );
-			if($_['state'] == 'Off'){ $affirmation = 'je viens d\'eteindre '.$_['name'];}
-			if($_['state'] == 'On'){ $affirmation = 'je viens d\'allumer '.$_['name'];}
+			$type="switchscene";
 		}
+		$domoticzApi->setState($type,$_['idx'],$_['state'] );
+		$affirmation = str_replace('{NAME}',$_['name'],$phrases['switchlight'][$_['state']]);
 		$response = array('responses'=>array(
                           array('type'=>'talk','sentence'=>$affirmation)
                     ));
@@ -129,9 +155,18 @@ function domoticz_action(){
 		exit;
 	}
 	
-	if($_['action'] == 'domoticz_action_mesure'){
-		$infos = $domoticzApi->getInfo($_['idx']);		
-		$affirmation = 'il fait '.$infos['Temp'];
+	if($_['action'] == 'domoticz_action_mesure' || $_['action'] == 'domoticz_action_variable'){
+		$type="temperature";
+		$field='Temp';
+		//TODO gestion des mesures % ...
+		if($_['action'] == 'domoticz_action_variable'){ 
+			$type="variable";
+			$field='Value';
+			$infos = $domoticzApi->getUserVariable($_['idx']);	
+		}else{
+			$infos = $domoticzApi->getInfo($_['idx']);
+		}
+		$affirmation = str_replace('{VALUE}',$infos[$field],$phrases[$type]);
 		$response = array('responses'=>array(
                           array('type'=>'talk','sentence'=>$affirmation)
                     ));
@@ -139,19 +174,7 @@ function domoticz_action(){
         echo ($json=='[]'?'{}':$json); 
 		exit;
 	}
-	
-	if($_['action'] == 'domoticz_action_variable'){
-		$infos = $domoticzApi->getUserVariable($_['idx']);
-		
-		$affirmation = 'la valeur est '.$infos['Value'];
-		$response = array('responses'=>array(
-                          array('type'=>'talk','sentence'=>$affirmation)
-                    ));
-        $json = json_encode($response);
-        echo ($json=='[]'?'{}':$json); 
-		exit;
-	}
-	
+
 	
 	if($_['action'] == 'domoticz_monitoring_plugin_load'){
 			if($myUser==false) exit('Vous devez vous connecter pour cette action.');
@@ -159,13 +182,13 @@ function domoticz_action(){
 			$response = array();
 			switch($_['bloc']){
 				case 'sunrise':		
-					$response['title'] = 'Domoticz';
+					$response['title'] = 'Domoticz Sunrise';
 					$sunrise = $domoticzApi->getSunRise();
 					$response['content'] = '<div style="width: 100%"><p>Aube '.$sunrise['Sunrise'].'</p><p>Crepuscule '.$sunrise['Sunset'].'</p></div>';
 				break;
 				case 'devices':
 						
-					$response['title'] = 'Domoticz';
+					$response['title'] = 'Domoticz Devices';
 					
 					$response['content'] = '<div style="width: 100%">';
 					
@@ -220,7 +243,7 @@ function domoticz_plugin_preference_page(){
 			    <br/><br/><label>Mot de passe</label><br/>
 			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('plugin_domoticz_pswd');?>" placeholder="********">		
 				<br/><br/><label>Widget Devices (id1,id2..)</label><br/>
-			    <input type="text" class="input-large" name="devices" value="<?php echo $conf->get('plugin_domoticz_plugins_devices');?>" >						
+			    <input type="text" class="input-xlarge" name="devices" value="<?php echo $conf->get('plugin_domoticz_plugins_devices');?>" >						
 			    <br/><br/><button type="submit" class="btn">Sauvegarder</button>
 	    </form>
 		<?php 
@@ -245,7 +268,7 @@ function domoticz_plugin_preference_page(){
 
 function domoticz_plugin_menu(){
 	global $_;
-	echo '<li '.((isset($_['section']) && $_['section']=='domoticz') || !isset($_['section']) ?'class="active"':'').'><a href="setting.php?section=domoticz"><i class="fa fa-angle-right"></i> Domoticz</a></li>';
+	echo '<li '.((isset($_['section']) && $_['section']=='domoticz') ?'class="active"':'').'><a href="setting.php?section=domoticz"><i class="fa fa-angle-right"></i> Domoticz</a></li>';
 }
 
 function domoticz_widget_plugin_menu(&$widgets){
@@ -269,7 +292,7 @@ function domoticz_widget_plugin_menu(&$widgets){
 
 function domoticz_plugin_page(){
 	global $myUser,$_,$conf;
-	if((isset($_['section']) && $_['section']=='domoticz') || !isset($_['section'])  ){
+	if((isset($_['section']) && $_['section']=='domoticz')  ){
 		if($myUser!=false){
 		
 		
@@ -278,10 +301,11 @@ function domoticz_plugin_page(){
 
 		<div class="span9 userBloc">
 		<h1>Domoticz</h1>
-		<p>Votre système domotique	</p>
+		<p>Votre syst&egrave;me domotique	</p>
 		<ul class="nav nav-tabs">
 			<li <?php echo (!isset($_['block']) || $_['block']=='cmd'?'class="active"':'')?> > <a href="setting.php?section=domoticz&amp;block=cmd"><i class="fa fa-angle-right"></i> Commandes Vocales</a></li>
 			<li <?php echo (isset($_['block']) && $_['block']=='new'?'class="active"':'')?> > <a href="setting.php?section=domoticz&amp;block=new"><i class="fa fa-angle-right"></i> Nouvelles Commandes</a></li>
+			<li <?php echo (isset($_['block']) && $_['block']=='edit'?'class="active"':'class="disabled"')?> > <a href="setting.php?section=domoticz&amp;block=edit"><i class="fa fa-angle-right"></i> Modification</a></li>
 
 		</ul>
 		 <?php 
@@ -291,7 +315,7 @@ function domoticz_plugin_page(){
 				$DomoticzManager = new DomoticzCmd();
 				$DomoticzCmds = $DomoticzManager->populate();
 				
-				?>
+					?>
 		
 			<table class="table table-striped table-bordered table-hover">
 					<thead>
@@ -317,17 +341,17 @@ function domoticz_plugin_page(){
 										?></td -->
 										<td><? echo $row->getDevice(); ?></td>
 										<td><? echo $conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn();?></td>
-										<td><? echo $conf->get('VOCAL_ENTITY_NAME').$row->getCmdOff();?></td>
+										<td><? echo ($row->getCmdOff()!=""?$conf->get('VOCAL_ENTITY_NAME'):'-').$row->getCmdOff();?></td>
 										<td><? echo $row->getConfidence(); ?></td>
-										<td><a class="btn" href="action.php?action=domoticz_enable&idx=<?php echo $row->getIdx(); ?>" title="Active ou désactive l’écoute de cette commande">
+										<td><a class="btn" href="action.php?action=domoticz_enable&idx=<?php echo $row->getIdx(); ?>" >
 										<?php 
 										if ($row->getVocal()) 
-											{ echo '<i class="fa fa-microphone fa-lg" style="color:#84C400"></i>';} 
+											{ echo '<i class="fa fa-microphone fa-lg" style="color:#84C400"  title="D&eacute;sactive l\’&eacute;coute de cette commande"></i>';} 
 										else
-											{ echo '<i class="fa fa-microphone-slash fa-lg" style="color:#C1004F"></i>';}
+											{ echo '<i class="fa fa-microphone-slash fa-lg" style="color:#C1004F" title="Active l\’&eacute;coute de cette commande"></i>';}
 										?>
 										</a>
-										<a class="btn" href="action.php?action=domoticz_edit&idx=<?php echo $row->getIdx(); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+										<a class="btn" href="setting.php?section=domoticz&amp;block=edit&idx=<?php echo $row->getIdx(); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
 										<a class="btn" href="action.php?action=domoticz_delete&idx=<?php echo $row->getIdx(); ?>"><i class="fa fa-trash-o fa-lg"  style="color:#C1004F"></i></a></td>
 									</tr>
 									
@@ -338,6 +362,29 @@ function domoticz_plugin_page(){
 			</table>
 		 <?php
 		 }}
+		 
+		  if((isset($_['section']) && $_['section']=='domoticz' && @$_['block']=='edit' )  ){
+				if($myUser!=false && isset($_['idx'])){
+					$domoticz = new DomoticzCmd();
+					$domoticz = $domoticz->load(array('idx'=>$_['idx']));
+					?>
+					<div class="span9 userBloc">
+						<form class="form-inline" action="action.php?action=domoticz_edit" method="POST">
+						<legend>Modification de la Commande Vocale</legend>
+							<input type="hidden"  name="idx" value="<?php echo $domoticz->getIdx();?>" >
+							<label>Devices : </label><?php echo $domoticz->getDevice();?>	
+							<br/><br/><label>Commande On : </label><br/>
+							<?php echo $conf->get('VOCAL_ENTITY_NAME') ?><input type="text" class="input-large" name="cmdOn" value="<?php echo $domoticz->getCmdOn();?>" >					
+							<br/><br/><label>Commande Off : </label><br/>
+							<?php echo $conf->get('VOCAL_ENTITY_NAME') ?><input type="text" class="input-large" name="cmdOff" value="<?php echo $domoticz->getCmdOff();?>" >					
+							<br/><br/><label>Confidence :</label><br/>
+							<input type="text" class="input-large" name="confidence" value="<?php echo $domoticz->getConfidence();?>" >						
+							<br/><br/><button type="submit" class="btn">Sauvegarder</button>
+						</form>
+					</div>
+					<?php
+				}
+		  }
 		 
 		 
 		 if((isset($_['section']) && $_['section']=='domoticz' && @$_['block']=='new' )  ){
