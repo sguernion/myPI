@@ -52,13 +52,32 @@ function domoticz_action(){
 		exit;
 	}
 	if($_['action'] == 'domoticz_plugin_setting'){
-			$conf->put('plugin_domoticz_ip',$_['ip']);
-			$conf->put('plugin_domoticz_port',$_['port']);
+			if(isset($_['ip'])){
+				$conf->put('plugin_domoticz_ip',$_['ip']);
+			}
+			if(isset($_['port'])){
+				$conf->put('plugin_domoticz_port',$_['port']);
+			}
+			if(isset($_['user'])){
 			$conf->put('plugin_domoticz_user',$_['user']);
-			$conf->put('plugin_domoticz_pswd',$_['pswd']);
-			$conf->put('plugin_domoticz_plugins_devices',$_['devices']);
+			}
+			if(isset($_['pswd'])){
+				$conf->put('plugin_domoticz_pswd',$_['pswd']);
+			}
+			if(isset($_['devices'])){
+				$conf->put('plugin_domoticz_plugins_devices',$_['devices']);
+			}
 			header('location:setting.php?section=preference&block=domoticz');
 	}
+	
+	if($_['action'] == 'domoticz_widget_setting'){
+			
+			if(isset($_['devices'])){
+				$conf->put('plugin_domoticz_plugins_devices',$_['devices']);
+			}
+			header('location:index.php');
+	}
+	
 	$domoticzApi = new DomoticzApi($conf);
 	if($_['action'] == 'domoticz_add'){
 		global $_;
@@ -79,6 +98,8 @@ function domoticz_action(){
 					}else if($row2['categorie'] == 'mesure'){		
 						$domoticz->setCmdOn(',  '.$row2['Name']);
 					}else if($row2['categorie'] == 'variable'){	
+						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
+					}else if($row2['categorie'] == 'utility'){	
 						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
 					}else {
 						$domoticz->setCmdOn(', allume '.$row2['Name']);
@@ -155,7 +176,7 @@ function domoticz_action(){
 		exit;
 	}
 	
-	if($_['action'] == 'domoticz_action_mesure' || $_['action'] == 'domoticz_action_variable'){
+	if($_['action'] == 'domoticz_action_mesure' || $_['action'] == 'domoticz_action_variable' || $_['action'] == 'domoticz_action_utility'){
 		$type="temperature";
 		$field='Temp';
 		//TODO gestion des mesures % ...
@@ -163,6 +184,10 @@ function domoticz_action(){
 			$type="variable";
 			$field='Value';
 			$infos = $domoticzApi->getUserVariable($_['idx']);	
+		}elseif($_['action'] == 'domoticz_action_utility'){ 
+			$type="variable";
+			$field='Data';
+			$infos = $domoticzApi->getInfo($_['idx']);	
 		}else{
 			$infos = $domoticzApi->getInfo($_['idx']);
 		}
@@ -174,9 +199,30 @@ function domoticz_action(){
         echo ($json=='[]'?'{}':$json); 
 		exit;
 	}
-
 	
-	if($_['action'] == 'domoticz_monitoring_plugin_load'){
+	if($_['action'] == 'domoticz_plugin_edit'){
+			if($myUser==false) exit('Vous devez vous connecter pour cette action.');
+			header('Content-type: application/json');
+			$response = array();
+			switch($_['bloc']){
+				case 'devices':		
+				
+				echo '<form class="form-inline" action="action.php?action=domoticz_widget_setting" method="POST">
+											<label>Widget Devices (id1,id2..)</label><br/>
+											<input type="text" class="input-xlarge" name="devices" value="'.$conf->get('plugin_domoticz_plugins_devices').'" >						
+											<br/><button type="submit" class="btn">Sauvegarder</button></form>';
+											exit(0);
+				break;
+			}
+			
+			
+			
+	}
+	
+	if($_['action'] == 'domoticz_plugin_delete'){}
+
+		
+	if($_['action'] == 'domoticz_plugin_load'){
 			if($myUser==false) exit('Vous devez vous connecter pour cette action.');
 			header('Content-type: application/json');
 			$response = array();
@@ -191,22 +237,26 @@ function domoticz_action(){
 					$response['title'] = 'Domoticz Devices';
 					
 					$response['content'] = '<div style="width: 100%">';
-					
-					$devices = explode (',',$conf->get('plugin_domoticz_plugins_devices'));
-					foreach($devices as $device){
-						$infos = $domoticzApi->getInfo($device);	
-						$path='http://'.$conf->get('plugin_domoticz_ip').':'.$conf->get('plugin_domoticz_port').'/images/';
-						if($infos['TypeImg'] == 'lightbulb' ){
-							$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['Image'].'48_On.png\',\''.$path.$infos['Image'].'48_Off.png\')" src="'.$path.$infos['Image'].'48_'.$infos['Status'].'.png" title="'.$infos['Name'].'" />';
-						}else if($infos['TypeImg'] == 'push'){
-							$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['TypeImg'].'on48.png\',\''.$path.$infos['TypeImg'].'off48.png\')" src="'.$path.$infos['TypeImg'].'off48.png" title="'.$infos['Name'].'" />';
-						}else if($infos['TypeImg'] == 'door'){
-							$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48'.($infos['Status']=='Open'?'open':'').'.png" title="'.$infos['Name'].'" />';
-						}else if($infos['TypeImg'] == 'temperature'){
-							$response['content'] .= '<img src="'.$path.'temp48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
-						} else {
-							$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
+					$ids = $conf->get('plugin_domoticz_plugins_devices');
+					$devices = explode (',',$ids);
+					if($ids != '' ){
+						foreach($devices as $device){
+							$infos = $domoticzApi->getInfo($device);	
+							$path='http://'.$conf->get('plugin_domoticz_ip').':'.$conf->get('plugin_domoticz_port').'/images/';
+							if($infos['TypeImg'] == 'lightbulb' ){
+								$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['Image'].'48_On.png\',\''.$path.$infos['Image'].'48_Off.png\')" src="'.$path.$infos['Image'].'48_'.$infos['Status'].'.png" title="'.$infos['Name'].'" />';
+							}else if($infos['TypeImg'] == 'push'){
+								$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['TypeImg'].'on48.png\',\''.$path.$infos['TypeImg'].'off48.png\')" src="'.$path.$infos['TypeImg'].'off48.png" title="'.$infos['Name'].'" />';
+							}else if($infos['TypeImg'] == 'door'){
+								$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48'.($infos['Status']=='Open'?'open':'').'.png" title="'.$infos['Name'].'" />';
+							}else if($infos['TypeImg'] == 'temperature'){
+								$response['content'] .= '<img src="'.$path.'temp48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
+							} else {
+								$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
+							}
 						}
+					}else{
+						$response['content'] .= 'Aucun Devices, Configurer le widget';
 					}
 					$response['content'] .= '</div>';
 				break;
@@ -241,9 +291,7 @@ function domoticz_plugin_preference_page(){
 			    <br/><br/><label>Nom de l'utilisateur</label><br/>
 			    <input type="text" class="input-large" name="user" value="<?php echo $conf->get('plugin_domoticz_user');?>" placeholder="toto">					
 			    <br/><br/><label>Mot de passe</label><br/>
-			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('plugin_domoticz_pswd');?>" placeholder="********">		
-				<br/><br/><label>Widget Devices (id1,id2..)</label><br/>
-			    <input type="text" class="input-xlarge" name="devices" value="<?php echo $conf->get('plugin_domoticz_plugins_devices');?>" >						
+			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('plugin_domoticz_pswd');?>" placeholder="********">					
 			    <br/><br/><button type="submit" class="btn">Sauvegarder</button>
 	    </form>
 		<?php 
@@ -267,8 +315,10 @@ function domoticz_plugin_preference_page(){
 }
 
 function domoticz_plugin_menu(){
-	global $_;
-	echo '<li '.((isset($_['section']) && $_['section']=='domoticz') ?'class="active"':'').'><a href="setting.php?section=domoticz"><i class="fa fa-angle-right"></i> Domoticz</a></li>';
+	global $_,$conf;
+	
+	$domoticzApi = new DomoticzApi($conf);
+	echo '<li '.((isset($_['section']) && $_['section']=='domoticz') ?'class="active"':'').'><a href="setting.php?section=domoticz"><img src="'.$domoticzApi->getUrl().'/images/logo.png'.'" width="16px" height="16px" alt=">" /> Domoticz</a></li>';
 }
 
 function domoticz_widget_plugin_menu(&$widgets){
@@ -278,7 +328,8 @@ function domoticz_widget_plugin_menu(&$widgets){
 		    'label'    => 'Domoticz Sunrise',
 		    'background' => '#50597B', 
 		    'color' => '#fffffff',
-		    'onLoad'   => 'action.php?action=domoticz_monitoring_plugin_load&bloc=sunrise'
+		    'onLoad'   => 'action.php?action=domoticz_plugin_load&bloc=sunrise',
+			'onDelete'   => 'action.php?action=domoticz_plugin_delete&bloc=sunrise'
 		);
 	$widgets[] = array(
 		    'uid'      => 'domoticz_widget_devices',
@@ -286,7 +337,9 @@ function domoticz_widget_plugin_menu(&$widgets){
 		    'label'    => 'Domoticz Devices',
 		    'background' => '#50597B', 
 		    'color' => '#fffffff',
-		    'onLoad'   => 'action.php?action=domoticz_monitoring_plugin_load&bloc=devices'
+		    'onLoad'   => 'action.php?action=domoticz_plugin_load&bloc=devices',
+			'onEdit'   => 'action.php?action=domoticz_plugin_edit&bloc=devices',
+			'onDelete'   => 'action.php?action=domoticz_plugin_delete&bloc=devices'
 		);
 }
 
@@ -295,12 +348,12 @@ function domoticz_plugin_page(){
 	if((isset($_['section']) && $_['section']=='domoticz')  ){
 		if($myUser!=false){
 		
-		
+		$domoticzApi = new DomoticzApi($conf);
 			
 	?>
 
 		<div class="span9 userBloc">
-		<h1>Domoticz</h1>
+		<h1><img src="<?php echo $domoticzApi->getUrl().'/images/logo.png'; ?>" width="48px" height="48px" /> Domoticz</h1>
 		<p>Votre syst&egrave;me domotique	</p>
 		<ul class="nav nav-tabs">
 			<li <?php echo (!isset($_['block']) || $_['block']=='cmd'?'class="active"':'')?> > <a href="setting.php?section=domoticz&amp;block=cmd"><i class="fa fa-angle-right"></i> Commandes Vocales</a></li>
@@ -406,7 +459,7 @@ function domoticz_plugin_page(){
 					</thead>
 					
 					<?php 	
-							$domoticzApi = new DomoticzApi($conf);
+							
 							$devices = $domoticzApi->getDevices();
 							
 							
@@ -427,7 +480,7 @@ function domoticz_plugin_page(){
 											echo $conf->get('VOCAL_ENTITY_NAME').', mode '.$row2['Name'];
 										}else if($row2['categorie'] == 'mesure'){	
 											echo $conf->get('VOCAL_ENTITY_NAME').',  '.$row2['Name'];
-										}else if($row2['categorie'] == 'variable'){	
+										}else if($row2['categorie'] == 'variable' || $row2['categorie'] == 'utility'){	
 											echo $conf->get('VOCAL_ENTITY_NAME').',  valeur '.$row2['Name'];
 										}else {
 											echo $conf->get('VOCAL_ENTITY_NAME').', allume '.$row2['Name'];
@@ -435,7 +488,7 @@ function domoticz_plugin_page(){
 										
 										?></td>
 										<td><? 
-										if($row2['Type'] != 'Scene' && $row2['categorie'] != 'mesure' && $row2['categorie'] != 'variable')
+										if($row2['Type'] != 'Scene' && $row2['categorie'] != 'mesure' && $row2['categorie'] != 'utility' && $row2['categorie'] != 'variable')
 										{
 											echo $conf->get('VOCAL_ENTITY_NAME').', eteint '.$row2['Name'];
 										}
