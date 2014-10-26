@@ -69,6 +69,44 @@ function xbmc_plugin_setting_page(){
 	
 		<?php 
 		}
+		 if((isset($_['section']) && $_['section']=='xbmcCmd' && (@$_['block']=='edit' ))  ){
+		 
+			$xbmcCmd = new XbmcCmd();
+				$xbmcCmd = $xbmcCmd->getById($_['id']);
+		?>
+		<form action="action.php?action=xbmcCmd_edit_xbmcCmd" method="POST">
+		<fieldset>
+		    <div class="left">
+			    <label for="name">Nom</label>
+				<input type="hidden" name="id" value="<? echo $xbmcCmd->getId(); ?>" />
+			    <input type="text" id="name" onkeyup="$('#vocalCommand').html($(this).val());" value="<? echo $xbmcCmd->getName(); ?>" name="name" /> <small>Commande vocale associée : "<span id="vocalCommand"></span>"</small></label>
+			    
+			    <label for="description">Description</label>
+			    <input type="text" name="description" value="<? echo $xbmcCmd->getDescription(); ?>" id="description"  />
+			    <label for="xbmcJsonCode">Code json de la commande</label>
+			    <input type="text" name="xbmcJsonCode" id="xbmcJsonCode" value="<? echo $xbmcCmd->getJson(); ?>" /> <a href="http://wiki.xbmc.org/index.php?title=JSON-RPC_API/v6" target="_blank" >JSON-RPC_API-V6-WIKI </a>
+                <label for="room">Pièce</label>
+                <select name="room" id="room">
+			    	<?php foreach($rooms as $room){ ?>
+			    	<option value="<?php echo $room->getId(); ?>" <?php echo ($room->getId() == $xbmcCmd->getRoom())?"selected":""; ?>><?php echo $room->getName(); ?></option>
+			    	<?php } ?>
+			    </select>   
+                <label for="confidence">Confidence</label>
+                <select name="confidence" id="confidence">
+                                <?php for($confidence=1; $confidence<=9; $confidence++){ ?>                                
+                                    <option value=0.<?php echo $confidence ?> <?php echo ('0.'.$confidence == $xbmcCmd->getConfidence())?"selected":""; ?>>0.<?php echo $confidence; ?></option>
+                                <?php } ?>
+                </select>                          
+			</div>
+
+  			<div class="clear"></div>
+		    <br/><button type="submit" class="btn">Modifier</button>
+	  	</fieldset>
+		<br/>
+	</form>
+	
+		<?php 
+		}
 		 if((isset($_['section']) && $_['section']=='xbmcCmd' && (@$_['block']=='cmd'  || @$_['block']==''))  ){
 		?>
 
@@ -94,7 +132,10 @@ function xbmc_plugin_setting_page(){
 		    <td><?php echo $xbmcCmd->getJson(); ?></td>  
             <td><?php echo $xbmcCmd->getConfidence(); ?></td>
 		    <td><?php echo $room->getName(); ?></td>                    
-            <td><a class="btn" href="action.php?action=xbmcCmd_delete_xbmcCmd&id=<?php echo $xbmcCmd->getId(); ?>"><i class="fa fa-trash-o fa-lg"></i></a></td>
+            <td>
+				<a class="btn" href="setting.php?section=xbmcCmd&amp;block=edit&id=<?php echo $xbmcCmd->getId(); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+										
+				<a class="btn" href="action.php?action=xbmcCmd_delete_xbmcCmd&id=<?php echo $xbmcCmd->getId(); ?>"><i class="fa fa-trash-o fa-lg"></i></a></td>
 	    </tr>
 	    <?php } ?>
 	    </table>
@@ -189,17 +230,35 @@ function xbmcCmd_action_xbmcCmd(){
 
 		case 'xbmcCmd_add_xbmcCmd':
 			if($myUser->can('xbmc','c')){
-                                $xbmcCmd = new XbmcCmd();
+                $xbmcCmd = new XbmcCmd();
 				$xbmcCmd->setName($_['name']);
 				$xbmcCmd->setDescription($_['description']);
 				$xbmcCmd->setJson($_['xbmcJsonCode']);
-                                $xbmcCmd->setConfidence($_['confidence']);
+                $xbmcCmd->setConfidence($_['confidence']);
 				$xbmcCmd->setRoom($_['room']);
 				$xbmcCmd->save();
 			}
 			header('location:setting.php?section=xbmcCmd');
 
 		break;
+		
+		case 'xbmcCmd_edit_xbmcCmd':
+			if($myUser->can('xbmc','c')){
+			
+			
+                $xbmcCmd = new XbmcCmd();
+				$xbmcCmd = $xbmcCmd->getById($_['id']);
+				$xbmcCmd->setName($_['name']);
+				$xbmcCmd->setDescription($_['description']);
+				$xbmcCmd->setJson($_['xbmcJsonCode']);
+                $xbmcCmd->setConfidence($_['confidence']);
+				$xbmcCmd->setRoom($_['room']);
+				$xbmcCmd->save();
+			}
+			header('location:setting.php?section=xbmcCmd');
+
+		break;
+		
 		case 'xbmcCmd_change_state':   
 			global $_,$myUser;
 
