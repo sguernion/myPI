@@ -1,4 +1,6 @@
 <?php
+require_once('MarantzAPI.class.php');
+
 
 class MarantzPlugin{
 	private $section="marantz";
@@ -9,10 +11,32 @@ class MarantzPlugin{
 	}
 	
 	function actions($_,$myUser){
+		
 		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
+		$marantzApi = new MarantzAPI($this->conf);
 		switch($_['action']){
 				case 'marantz_plugin_setting':
 					$this->action_plugin_setting($_);
+				break;
+				case 'marantz_action_vup':
+					$marantzApi->volume_up();
+					$affirmation = 'Je monte le son';
+					$response = array('responses'=>array(
+									  array('type'=>'talk','sentence'=>$affirmation)
+								));
+					$json = json_encode($response);
+					echo ($json=='[]'?'{}':$json); 
+					exit;
+				break;
+				case 'marantz_action_vdown':
+					$marantzApi->volume_down();
+					$affirmation = 'Je baisse le son';
+					$response = array('responses'=>array(
+									  array('type'=>'talk','sentence'=>$affirmation)
+								));
+					$json = json_encode($response);
+					echo ($json=='[]'?'{}':$json); 
+					exit;
 				break;
 		}
 	
@@ -25,7 +49,7 @@ class MarantzPlugin{
 			if(isset($_['port'])){
 				$this->conf->put('plugin_marantz_port',$_['port']);
 			}
-			header('location:setting.php?section=preference&block='+$this->section.'');
+			header('location:setting.php?section=preference&block='.$this->section.'');
 	}
 
 }

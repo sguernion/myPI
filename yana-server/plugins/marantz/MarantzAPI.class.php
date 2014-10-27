@@ -31,7 +31,7 @@ class MarantzAPI{
 		$url .=	$this->conf->get('plugin_marantz_ip').':'.$this->conf->get('plugin_marantz_port').'/'.$this->conf->get('plugin_marantz_zone').'/index.put.asp?';
 		return $url;
 	}
-	MainZone
+	
 	function sendCmd($cmd){
 		return $this->get($this->getUrl().'cmd0='.$cmd );
 	}

@@ -16,7 +16,7 @@ class DomoticzPlugin{
 	
 	function __construct($conf,$phrases){
 		$this->conf = $conf;
-		this->phrases = $phrases;
+		$this->phrases = $phrases;
 		$this->domoticzApi = new DomoticzApi($conf);
 	}
 	
@@ -86,7 +86,7 @@ class DomoticzPlugin{
 			if(isset($_['devices'])){
 				$this->conf->put('plugin_domoticz_widget_devices',$_['devices']);
 			}
-			header('location:setting.php?section=preference&block='+$this->section.'');
+			header('location:setting.php?section=preference&block='.$this->section);
 	}
 	
 	
@@ -126,7 +126,7 @@ class DomoticzPlugin{
 					$domoticz->save();
 				
 				
-					header('location:setting.php?section='+$this->section.'&block=new&save=ok');
+					header('location:setting.php?section='.$this->section.'&block=new&save=ok');
 				}
 			}
 		}
@@ -141,13 +141,13 @@ class DomoticzPlugin{
 		$domoticz->setConfidence($_['confidence']);
 		$domoticz->setVocal(true);
 		$domoticz->save();
-		header('location:setting.php?section='+$this->section.'&block=cmd');
+		header('location:setting.php?section='.$this->section.'&block=cmd');
 	}
 	
 	function action_delete($_){
 		$domoticz = new DomoticzCmd();
 		$domoticz->delete(array('idx'=>$_['idx']));
-		header('location:setting.php?section='+$this->section.'&block=cmd');
+		header('location:setting.php?section='.$this->section.'&block=cmd');
 	}
 	
 	function action_device_switch($_){
@@ -178,7 +178,7 @@ class DomoticzPlugin{
 			$domoticz->setVocal(1);
 		}
 		$domoticz->save();
-		header('location:setting.php?section='+$this->section.'&block=cmd&save=ok');
+		header('location:setting.php?section='.$this->section.'&block=cmd&save=ok');
 	}
 	
 	

@@ -53,8 +53,8 @@ function domoticz_action(){
 	$phrases['variable'] = 'la valeur est {VALUE}';
 	
 	
-	$domoticzPlugin = new DomoticzPlugin($conf);
-	$domoticzPlugin->actions($_,$myUser,$phrases);
+	$domoticzPlugin = new DomoticzPlugin($conf,$phrases);
+	$domoticzPlugin->actions($_,$myUser);
 }
 
 function domoticz_plugin_preference_menu(){

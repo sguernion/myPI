@@ -13,26 +13,28 @@ require_once('MarantzPlugin.class.php');
 
 
 function marantz_vocal_command(&$response,$actionUrl){
-
+	global $_,$conf;
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Monte le son',
+				'url'=> $actionUrl.'?action=marantz_action_vup','confidence'=>'0.8');	
+				
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Baisse le son',
+				'url'=> $actionUrl.'?action=marantz_action_vdown','confidence'=>'0.8');				
 }
 
 function marantz_action(){
 	global $_,$conf,$myUser;
-	$marantzPlugins = MarantzPlugin($conf);
+	$marantzPlugins = new MarantzPlugin($conf);
 	$marantzPlugins->actions($_,$myUser);
 }
 
-function marantz_plugin_page(){
-	global $myUser,$_,$conf;
-	if((isset($_['section']) && $_['section']=='marantz')  ){
-		if($myUser!=false){
-		
-		}
-	}
+function marantz_plugin_menu(){
+	echo '<li '.((isset($_['section']) && $_['section']=='marantz') ?'class="active"':'').'><a href="setting.php?section=marantz">> Marantz</a></li>';
 }
 
 function marantz_plugin_page(){
-	global $_,$conf;
+	global $_,$conf,$myUser;
 		if((isset($_['section']) && $_['section']=='marantz')  ){
 		if($myUser!=false){
 	?>
