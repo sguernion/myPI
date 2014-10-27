@@ -20,7 +20,15 @@ function marantz_vocal_command(&$response,$actionUrl){
 				
 	$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Baisse le son',
-				'url'=> $actionUrl.'?action=marantz_action_vdown','confidence'=>'0.8');				
+				'url'=> $actionUrl.'?action=marantz_action_vdown','confidence'=>'0.8');	
+
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Ampli Off',
+				'url'=> $actionUrl.'?action=marantz_action_poff','confidence'=>'0.8');	
+
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Ampli On',
+				'url'=> $actionUrl.'?action=marantz_action_pon','confidence'=>'0.8');					
 }
 
 function marantz_action(){
@@ -30,7 +38,7 @@ function marantz_action(){
 }
 
 function marantz_plugin_menu(){
-	echo '<li '.((isset($_['section']) && $_['section']=='marantz') ?'class="active"':'').'><a href="setting.php?section=marantz">> Marantz</a></li>';
+	//echo '<li '.((isset($_['section']) && $_['section']=='marantz') ?'class="active"':'').'><a href="setting.php?section=marantz">> Marantz</a></li>';
 }
 
 function marantz_plugin_page(){

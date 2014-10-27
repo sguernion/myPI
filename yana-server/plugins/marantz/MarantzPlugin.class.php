@@ -38,6 +38,46 @@ class MarantzPlugin{
 					echo ($json=='[]'?'{}':$json); 
 					exit;
 				break;
+				case 'marantz_action_muteon':
+					$marantzApi->mute_on();
+					$affirmation = 'Je coupe le son';
+					$response = array('responses'=>array(
+									  array('type'=>'talk','sentence'=>$affirmation)
+								));
+					$json = json_encode($response);
+					echo ($json=='[]'?'{}':$json); 
+					exit;
+				break;
+				case 'marantz_action_mute_off':
+					$marantzApi->mute_off();
+					$affirmation = 'Je remet le son';
+					$response = array('responses'=>array(
+									  array('type'=>'talk','sentence'=>$affirmation)
+								));
+					$json = json_encode($response);
+					echo ($json=='[]'?'{}':$json); 
+					exit;
+				break;
+				case 'marantz_action_pon':
+					$marantzApi->power_on();
+					$affirmation = 'Ampli allumer';
+					$response = array('responses'=>array(
+									  array('type'=>'talk','sentence'=>$affirmation)
+								));
+					$json = json_encode($response);
+					echo ($json=='[]'?'{}':$json); 
+					exit;
+				break;
+				case 'marantz_action_poff':
+					$marantzApi->power_off();
+					$affirmation = 'Ampli eteint';
+					$response = array('responses'=>array(
+									  array('type'=>'talk','sentence'=>$affirmation)
+								));
+					$json = json_encode($response);
+					echo ($json=='[]'?'{}':$json); 
+					exit;
+				break;
 		}
 	
 	}
