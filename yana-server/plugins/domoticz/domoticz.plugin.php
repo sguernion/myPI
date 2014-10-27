@@ -2,6 +2,7 @@
 
 require_once('DomoticzCmd.class.php');
 require_once('DomoticzApi.class.php');
+require_once('DomoticzPlugin.class.php');
 
 /*
 @name domoticz
@@ -43,116 +44,6 @@ function domoticz_vocal_command(&$response,$actionUrl){
 
 function domoticz_action(){
 	global $_,$conf,$myUser;
-
-	if($_['action'] == 'domoticz_vocale'){
-		$response = array();
-		domoticz_vocal_command($response,'action.php');
-		$json = json_encode($response);
-        echo ($json=='[]'?'{}':$json); 
-		exit;
-	}
-	if($_['action'] == 'domoticz_plugin_setting'){
-			if(isset($_['ip'])){
-				$conf->put('plugin_domoticz_ip',$_['ip']);
-			}
-			if(isset($_['port'])){
-				$conf->put('plugin_domoticz_port',$_['port']);
-			}
-			if(isset($_['user'])){
-			$conf->put('plugin_domoticz_user',$_['user']);
-			}
-			if(isset($_['pswd'])){
-				$conf->put('plugin_domoticz_pswd',$_['pswd']);
-			}
-			if(isset($_['devices'])){
-				$conf->put('plugin_domoticz_plugins_devices',$_['devices']);
-			}
-			header('location:setting.php?section=preference&block=domoticz');
-	}
-	
-	if($_['action'] == 'domoticz_widget_setting'){
-			
-			if(isset($_['devices'])){
-				$conf->put('plugin_domoticz_plugins_devices',$_['devices']);
-			}
-			header('location:index.php');
-	}
-	
-	$domoticzApi = new DomoticzApi($conf);
-	if($_['action'] == 'domoticz_add'){
-		global $_;
-		$idx=$_['idx'];
-		//TODO search by idx
-		$devices = $domoticzApi->getDevices();
-		if (is_array($devices)){
-			foreach($devices as $row2){
-				if($idx == $row2['idx']){
-					$domoticz = new DomoticzCmd();
-					$domoticz->setIdx($row2['idx']);
-					$domoticz->setType($row2['Type']);
-					$domoticz->setDevice($row2['Name']);
-					$domoticz->setCategorie($row2['categorie']);
-					if($row2['Type'] == 'Scene')
-					{
-						$domoticz->setCmdOn(', mode '.$row2['Name']);
-					}else if($row2['categorie'] == 'mesure'){		
-						$domoticz->setCmdOn(',  '.$row2['Name']);
-					}else if($row2['categorie'] == 'variable'){	
-						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
-					}else if($row2['categorie'] == 'utility'){	
-						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
-					}else {
-						$domoticz->setCmdOn(', allume '.$row2['Name']);
-						$domoticz->setCmdOff(', eteint '.$row2['Name']);
-					}
-					
-					$domoticz->setConfidence(0.88);
-					$domoticz->setVocal(true);
-					$domoticz->save();
-				
-				
-					header('location:setting.php?section=domoticz&block=new&save=ok');
-				}
-			}
-		}
-	}
-	
-	if($_['action'] == 'domoticz_delete'){
-		global $_;
-		$domoticz = new DomoticzCmd();
-		$domoticz->delete(array('idx'=>$_['idx']));
-		header('location:setting.php?section=domoticz&block=cmd');
-	}
-	
-	if($_['action'] == 'domoticz_edit'){
-		global $_;
-		$domoticz = new DomoticzCmd();
-		$domoticz = $domoticz->load(array('idx'=>$_['idx']));
-		
-		$domoticz->setCmdOn($_['cmdOn']);
-		$domoticz->setCmdOff($_['cmdOff']);
-		$domoticz->setConfidence($_['confidence']);
-		$domoticz->setVocal(true);
-		$domoticz->save();
-		header('location:setting.php?section=domoticz&block=cmd');
-	}
-	
-	if($_['action'] == 'domoticz_enable'){
-		global $_;
-		$domoticz = new DomoticzCmd();
-		$domoticz = $domoticz->load(array('idx'=>$_['idx']));
-					
-		if ($domoticz->getVocal() ==1) 
-		{ 
-			$domoticz->setVocal(0);
-		}
-		elseif ($domoticz->getVocal() ==0)
-		{ 
-			$domoticz->setVocal(1);
-		}
-		$domoticz->save();
-		header('location:setting.php?section=domoticz&block=cmd&save=ok');
-	}
 	
 	$phrases['switchlight']['Off'] = 'je viens d\'eteindre {NAME}';
 	$phrases['switchlight']['On'] = 'je viens d\'allumer {NAME}';
@@ -161,110 +52,9 @@ function domoticz_action(){
 	$phrases['temperature'] = 'il fait {VALUE}';
 	$phrases['variable'] = 'la valeur est {VALUE}';
 	
-	if($_['action'] == 'domoticz_action_switch' || $_['action'] == 'domoticz_action_scene'){
-		$type="switchlight";
-		if($_['action'] == 'domoticz_action_scene'){ 
-			$type="switchscene";
-		}
-		$domoticzApi->setState($type,$_['idx'],$_['state'] );
-		$affirmation = str_replace('{NAME}',$_['name'],$phrases['switchlight'][$_['state']]);
-		$response = array('responses'=>array(
-                          array('type'=>'talk','sentence'=>$affirmation)
-                    ));
-        $json = json_encode($response);
-        echo ($json=='[]'?'{}':$json); 
-		exit;
-	}
 	
-	if($_['action'] == 'domoticz_action_mesure' || $_['action'] == 'domoticz_action_variable' || $_['action'] == 'domoticz_action_utility'){
-		$type="temperature";
-		$field='Temp';
-		//TODO gestion des mesures % ...
-		if($_['action'] == 'domoticz_action_variable'){ 
-			$type="variable";
-			$field='Value';
-			$infos = $domoticzApi->getUserVariable($_['idx']);	
-		}elseif($_['action'] == 'domoticz_action_utility'){ 
-			$type="variable";
-			$field='Data';
-			$infos = $domoticzApi->getInfo($_['idx']);	
-		}else{
-			$infos = $domoticzApi->getInfo($_['idx']);
-		}
-		$affirmation = str_replace('{VALUE}',$infos[$field],$phrases[$type]);
-		$response = array('responses'=>array(
-                          array('type'=>'talk','sentence'=>$affirmation)
-                    ));
-        $json = json_encode($response);
-        echo ($json=='[]'?'{}':$json); 
-		exit;
-	}
-	
-	if($_['action'] == 'domoticz_plugin_edit'){
-			if($myUser==false) exit('Vous devez vous connecter pour cette action.');
-			header('Content-type: application/json');
-			$response = array();
-			switch($_['bloc']){
-				case 'devices':		
-				
-				echo '<form class="form-inline" action="action.php?action=domoticz_widget_setting" method="POST">
-											<label>Widget Devices (id1,id2..)</label><br/>
-											<input type="text" class="input-xlarge" name="devices" value="'.$conf->get('plugin_domoticz_plugins_devices').'" >						
-											<br/><button type="submit" class="btn">Sauvegarder</button></form>';
-											exit(0);
-				break;
-			}
-			
-			
-			
-	}
-	
-	if($_['action'] == 'domoticz_plugin_delete'){}
-
-		
-	if($_['action'] == 'domoticz_plugin_load'){
-			if($myUser==false) exit('Vous devez vous connecter pour cette action.');
-			header('Content-type: application/json');
-			$response = array();
-			switch($_['bloc']){
-				case 'sunrise':		
-					$response['title'] = 'Domoticz Sunrise';
-					$sunrise = $domoticzApi->getSunRise();
-					$response['content'] = '<div style="width: 100%"><p>Aube '.$sunrise['Sunrise'].'</p><p>Crepuscule '.$sunrise['Sunset'].'</p></div>';
-				break;
-				case 'devices':
-						
-					$response['title'] = 'Domoticz Devices';
-					
-					$response['content'] = '<div style="width: 100%">';
-					$ids = $conf->get('plugin_domoticz_plugins_devices');
-					$devices = explode (',',$ids);
-					if($ids != '' ){
-						foreach($devices as $device){
-							$infos = $domoticzApi->getInfo($device);	
-							$path='http://'.$conf->get('plugin_domoticz_ip').':'.$conf->get('plugin_domoticz_port').'/images/';
-							if($infos['TypeImg'] == 'lightbulb' ){
-								$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['Image'].'48_On.png\',\''.$path.$infos['Image'].'48_Off.png\')" src="'.$path.$infos['Image'].'48_'.$infos['Status'].'.png" title="'.$infos['Name'].'" />';
-							}else if($infos['TypeImg'] == 'push'){
-								$response['content'] .= '<img value="'.($infos['Status']=='On'?'Off':'On').'" onclick="change_switch_state('.$infos['idx'].',this,\''.$path.$infos['TypeImg'].'on48.png\',\''.$path.$infos['TypeImg'].'off48.png\')" src="'.$path.$infos['TypeImg'].'off48.png" title="'.$infos['Name'].'" />';
-							}else if($infos['TypeImg'] == 'door'){
-								$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48'.($infos['Status']=='Open'?'open':'').'.png" title="'.$infos['Name'].'" />';
-							}else if($infos['TypeImg'] == 'temperature'){
-								$response['content'] .= '<img src="'.$path.'temp48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
-							} else {
-								$response['content'] .= '<img src="'.$path.$infos['TypeImg'].'48.png" title="'.$infos['Name'].' '.$infos['Data'].'" />';
-							}
-						}
-					}else{
-						$response['content'] .= 'Aucun Devices, Configurer le widget';
-					}
-					$response['content'] .= '</div>';
-				break;
-			}
-		echo json_encode($response);
-		exit(0);
-	}
-
+	$domoticzPlugin = new DomoticzPlugin($conf);
+	$domoticzPlugin->actions($_,$myUser,$phrases);
 }
 
 function domoticz_plugin_preference_menu(){
@@ -328,8 +118,8 @@ function domoticz_widget_plugin_menu(&$widgets){
 		    'label'    => 'Domoticz Sunrise',
 		    'background' => '#50597B', 
 		    'color' => '#fffffff',
-		    'onLoad'   => 'action.php?action=domoticz_plugin_load&bloc=sunrise',
-			'onDelete'   => 'action.php?action=domoticz_plugin_delete&bloc=sunrise'
+		    'onLoad'   => 'action.php?action=domoticz_widget_load&bloc=sunrise',
+			'onDelete'   => 'action.php?action=domoticz_widget_delete&bloc=sunrise'
 		);
 	$widgets[] = array(
 		    'uid'      => 'domoticz_widget_devices',
@@ -337,9 +127,9 @@ function domoticz_widget_plugin_menu(&$widgets){
 		    'label'    => 'Domoticz Devices',
 		    'background' => '#50597B', 
 		    'color' => '#fffffff',
-		    'onLoad'   => 'action.php?action=domoticz_plugin_load&bloc=devices',
-			'onEdit'   => 'action.php?action=domoticz_plugin_edit&bloc=devices',
-			'onDelete'   => 'action.php?action=domoticz_plugin_delete&bloc=devices'
+		    'onLoad'   => 'action.php?action=domoticz_widget_load&bloc=devices',
+			'onEdit'   => 'action.php?action=domoticz_widget_edit&bloc=devices',
+			'onDelete'   => 'action.php?action=domoticz_widget_delete&bloc=devices'
 		);
 }
 

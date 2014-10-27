@@ -4,7 +4,7 @@
 @author Stéphane BOLLARD <fafnus@yahoo.fr>
 @link http://blog.idleman.fr
 @licence CC by nc sa
-@version 2.0.3
+@version 2.0.4
 @description Plugin permettant la reconnaissance vocale du Media-Center XBMC.
 
 */
