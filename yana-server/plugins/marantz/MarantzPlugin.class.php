@@ -18,66 +18,47 @@ class MarantzPlugin{
 				case 'marantz_plugin_setting':
 					$this->action_plugin_setting($_);
 				break;
-				case 'marantz_action_vup':
+				case 'marantz_vocale_action_vup':
 					$marantzApi->volume_up();
 					$affirmation = 'Je monte le son';
-					$response = array('responses'=>array(
-									  array('type'=>'talk','sentence'=>$affirmation)
-								));
-					$json = json_encode($response);
-					echo ($json=='[]'?'{}':$json); 
-					exit;
 				break;
-				case 'marantz_action_vdown':
+				case 'marantz_vocale_action_vdown':
 					$marantzApi->volume_down();
 					$affirmation = 'Je baisse le son';
-					$response = array('responses'=>array(
-									  array('type'=>'talk','sentence'=>$affirmation)
-								));
-					$json = json_encode($response);
-					echo ($json=='[]'?'{}':$json); 
-					exit;
 				break;
-				case 'marantz_action_muteon':
+				case 'marantz_vocale_action_muteon':
 					$marantzApi->mute_on();
 					$affirmation = 'Je coupe le son';
-					$response = array('responses'=>array(
-									  array('type'=>'talk','sentence'=>$affirmation)
-								));
-					$json = json_encode($response);
-					echo ($json=='[]'?'{}':$json); 
-					exit;
 				break;
-				case 'marantz_action_mute_off':
+				case 'marantz_vocale_action_mute_off':
 					$marantzApi->mute_off();
 					$affirmation = 'Je remet le son';
-					$response = array('responses'=>array(
-									  array('type'=>'talk','sentence'=>$affirmation)
-								));
-					$json = json_encode($response);
-					echo ($json=='[]'?'{}':$json); 
-					exit;
 				break;
-				case 'marantz_action_pon':
+				case 'marantz_vocale_action_pon':
 					$marantzApi->power_on();
 					$affirmation = 'Ampli allumer';
-					$response = array('responses'=>array(
-									  array('type'=>'talk','sentence'=>$affirmation)
-								));
-					$json = json_encode($response);
-					echo ($json=='[]'?'{}':$json); 
-					exit;
 				break;
-				case 'marantz_action_poff':
+				case 'marantz_vocale_action_poff':
 					$marantzApi->power_off();
 					$affirmation = 'Ampli eteint';
-					$response = array('responses'=>array(
+				break;
+				case 'marantz_vocale_action_volume':
+					$marantzApi->change_volume($_['decibel']);
+					$affirmation = 'Volume '.$_['decibel'];
+				break;
+				case 'marantz_vocale_action_source':
+					$marantzApi->change_source($_['source']);
+					$affirmation = 'Source '.$_['source'];
+				break;
+		}
+		
+		if(startsWith($_['action'], 'marantz_vocale_action_')){
+			$response = array('responses'=>array(
 									  array('type'=>'talk','sentence'=>$affirmation)
 								));
-					$json = json_encode($response);
-					echo ($json=='[]'?'{}':$json); 
-					exit;
-				break;
+			$json = json_encode($response);
+			echo ($json=='[]'?'{}':$json); 
+			exit;
 		}
 	
 	}

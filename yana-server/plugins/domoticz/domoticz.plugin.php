@@ -9,7 +9,7 @@ require_once('DomoticzPlugin.class.php');
 @author S.Guernion <email@gmail.com>
 @author M.OU <nospam@free.fr>
 @link https://github.com/sguernion/myPI/tree/master/yana-server/plugins/domoticz
-@licence 
+@licence CC by nc sa
 @version 1.1.0
 @description Permet la commande vocale des interrupteurs domoticz
 */

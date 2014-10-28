@@ -3,9 +3,9 @@
 
 /*
 @name marantz
-@author S.Guernion
+@author S.Guernion <email@gmaim.com>
 @link https://github.com/sguernion/myPI/tree/master/yana-server/plugins/marantz
-@licence 
+@licence CC by nc sa
 @version 0.1
 @description Permet la commande vocale d'un amplificateur Marantz
 */
@@ -16,19 +16,27 @@ function marantz_vocal_command(&$response,$actionUrl){
 	global $_,$conf;
 	$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Monte le son',
-				'url'=> $actionUrl.'?action=marantz_action_vup','confidence'=>'0.8');	
+				'url'=> $actionUrl.'?action=marantz_vocale_action_vup','confidence'=>'0.8');	
 				
 	$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Baisse le son',
-				'url'=> $actionUrl.'?action=marantz_action_vdown','confidence'=>'0.8');	
+				'url'=> $actionUrl.'?action=marantz_vocale_action_vdown','confidence'=>'0.8');	
+				
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Coupe le son',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_muteon','confidence'=>'0.8');	
+				
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Remet le son',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_muteoff','confidence'=>'0.8');	
 
 	$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Ampli Off',
-				'url'=> $actionUrl.'?action=marantz_action_poff','confidence'=>'0.8');	
+				'url'=> $actionUrl.'?action=marantz_vocale_action_poff','confidence'=>'0.8');	
 
 	$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Ampli On',
-				'url'=> $actionUrl.'?action=marantz_action_pon','confidence'=>'0.8');					
+				'url'=> $actionUrl.'?action=marantz_vocale_action_pon','confidence'=>'0.8');					
 }
 
 function marantz_action(){
