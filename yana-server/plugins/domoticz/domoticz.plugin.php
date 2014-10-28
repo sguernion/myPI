@@ -6,8 +6,8 @@ require_once('DomoticzPlugin.class.php');
 
 /*
 @name domoticz
+@author S.Guernion <email@gmail.com>
 @author M.OU <nospam@free.fr>
-@author S.Guernion
 @link https://github.com/sguernion/myPI/tree/master/yana-server/plugins/domoticz
 @licence 
 @version 1.1.0
@@ -141,7 +141,6 @@ function domoticz_plugin_page(){
 		$domoticzApi = new DomoticzApi($conf);
 			
 	?>
-
 		<div class="span9 userBloc">
 		<h1><img src="<?php echo $domoticzApi->getUrl().'/images/logo.png'; ?>" width="48px" height="48px" /> Domoticz</h1>
 		<p>Votre syst&egrave;me domotique	</p>
