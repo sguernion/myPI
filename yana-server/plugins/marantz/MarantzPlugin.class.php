@@ -30,7 +30,7 @@ class MarantzPlugin{
 					$marantzApi->mute_on();
 					$affirmation = 'Je coupe le son';
 				break;
-				case 'marantz_vocale_action_mute_off':
+				case 'marantz_vocale_action_muteoff':
 					$marantzApi->mute_off();
 					$affirmation = 'Je remet le son';
 				break;
@@ -44,15 +44,15 @@ class MarantzPlugin{
 				break;
 				case 'marantz_vocale_action_volume':
 					$marantzApi->change_volume($_['decibel']);
-					$affirmation = 'Volume '.$_['decibel'];
+					$affirmation = 'Volume '.$_['volume'];
 				break;
 				case 'marantz_vocale_action_source':
 					$marantzApi->change_source($_['source']);
-					$affirmation = 'Source '.$_['source'];
+					$affirmation = 'Source '.$_['sourceName'];
 				break;
 		}
 		
-		if(startsWith($_['action'], 'marantz_vocale_action_')){
+		if(0 === strpos($_['action'], 'marantz_vocale_action_')){
 			$response = array('responses'=>array(
 									  array('type'=>'talk','sentence'=>$affirmation)
 								));

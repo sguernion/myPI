@@ -7,7 +7,7 @@
 @link https://github.com/sguernion/myPI/tree/master/yana-server/plugins/marantz
 @licence CC by nc sa
 @version 0.1
-@description Permet la commande vocale d'un amplificateur Marantz
+@description Permet la commande vocale d'un amplificateur Marantz (testé avec le modèle NR1604 )
 */
 require_once('MarantzPlugin.class.php');
 
@@ -36,7 +36,30 @@ function marantz_vocal_command(&$response,$actionUrl){
 
 	$response['commands'][] = array(
 				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Ampli On',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_pon','confidence'=>'0.8');					
+				'url'=> $actionUrl.'?action=marantz_vocale_action_pon','confidence'=>'0.8');
+
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Source Tuner',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_source&source=TUNER&sourceName=Tuner','confidence'=>'0.8');
+				
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Source Tv',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_source&source=TV&sourceName=Tv','confidence'=>'0.8');
+				
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Source Satelite',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_source&source=SAT/CBL&sourceName=Satelite','confidence'=>'0.8');
+				
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' volume a 40',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_volume&decibel=-40&volume=40','confidence'=>'0.8');
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' volume a 50',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_volume&decibel=-30&volume=50','confidence'=>'0.8');
+				
+	$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').' volume a 30',
+				'url'=> $actionUrl.'?action=marantz_vocale_action_volume&decibel=-50&volume=30','confidence'=>'0.8');
 }
 
 function marantz_action(){
