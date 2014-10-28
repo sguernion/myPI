@@ -180,12 +180,12 @@ function domoticz_plugin_page(){
 							foreach($DomoticzCmds as $row){
 									?>
 									<tr>
-										<!--td><? //echo $row->getType(); 
+										<!--td><?php //echo $row->getType(); 
 										?></td -->
-										<td><? echo $row->getDevice(); ?></td>
-										<td><? echo $conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn();?></td>
-										<td><? echo ($row->getCmdOff()!=""?$conf->get('VOCAL_ENTITY_NAME'):'-').$row->getCmdOff();?></td>
-										<td><? echo $row->getConfidence(); ?></td>
+										<td><?php echo $row->getDevice(); ?></td>
+										<td><?php echo $conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn();?></td>
+										<td><?php echo ($row->getCmdOff()!=""?$conf->get('VOCAL_ENTITY_NAME'):'-').$row->getCmdOff();?></td>
+										<td><?php echo $row->getConfidence(); ?></td>
 										<td><a class="btn" href="action.php?action=domoticz_enable&idx=<?php echo $row->getIdx(); ?>" >
 										<?php 
 										if ($row->getVocal()) 
@@ -262,9 +262,9 @@ function domoticz_plugin_page(){
 								if($domoticzCmd == null){
 									?>
 									<tr>
-										<td><? echo $row2['Type']; ?></td>
-										<td><? echo $row2['Name']; ?></td>
-										<td><? 
+										<td><?php echo $row2['Type']; ?></td>
+										<td><?php echo $row2['Name']; ?></td>
+										<td><?php 
 										if($row2['Type'] == 'Scene')
 										{
 											echo $conf->get('VOCAL_ENTITY_NAME').', mode '.$row2['Name'];
@@ -277,7 +277,7 @@ function domoticz_plugin_page(){
 										}
 										
 										?></td>
-										<td><? 
+										<td><?php
 										if($row2['Type'] != 'Scene' && $row2['categorie'] != 'mesure' && $row2['categorie'] != 'utility' && $row2['categorie'] != 'variable')
 										{
 											echo $conf->get('VOCAL_ENTITY_NAME').', eteint '.$row2['Name'];
