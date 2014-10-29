@@ -10,56 +10,21 @@
 @description Permet la commande vocale d'un amplificateur Marantz (testé avec le modèle NR1604 )
 */
 require_once('MarantzPlugin.class.php');
+require_once('MarantzCmd.class.php');
+
+
 
 
 function marantz_vocal_command(&$response,$actionUrl){
 	global $_,$conf;
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Monte le son',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_vup','confidence'=>'0.8');	
-				
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Baisse le son',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_vdown','confidence'=>'0.8');	
-				
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Coupe le son',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_muteon','confidence'=>'0.8');	
-				
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Remet le son',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_muteoff','confidence'=>'0.8');	
-
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Ampli Off',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_poff','confidence'=>'0.8');	
-
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Ampli On',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_pon','confidence'=>'0.8');
-
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Source Tuner',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_source&source=TUNER&sourceName=Tuner','confidence'=>'0.8');
-				
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Source Tv',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_source&source=TV&sourceName=Tv','confidence'=>'0.8');
-				
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' Source Satelite',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_source&source=SAT/CBL&sourceName=Satelite','confidence'=>'0.8');
-				
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' volume a 40',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_volume&decibel=-40&volume=40','confidence'=>'0.8');
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' volume a 50',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_volume&decibel=-30&volume=50','confidence'=>'0.8');
-				
-	$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').' volume a 30',
-				'url'=> $actionUrl.'?action=marantz_vocale_action_volume&decibel=-50&volume=30','confidence'=>'0.8');
+	$marantzPlugins = new MarantzPlugin($conf);
+	$commands = $marantzPlugins->predefined_commands($actionUrl);
+	
+	foreach($commands as $command){
+		$response['commands'][] = array(
+					'command'=>$conf->get('VOCAL_ENTITY_NAME').$command['command'],
+					'url'=> $command['url'],'confidence'=>$command['confidence']);	
+	}		
 }
 
 function marantz_action(){
@@ -69,7 +34,7 @@ function marantz_action(){
 }
 
 function marantz_plugin_menu(){
-	//echo '<li '.((isset($_['section']) && $_['section']=='marantz') ?'class="active"':'').'><a href="setting.php?section=marantz">> Marantz</a></li>';
+	echo '<li '.((isset($_['section']) && $_['section']=='marantz') ?'class="active"':'').'><a href="setting.php?section=marantz">> Marantz</a></li>';
 }
 
 function marantz_plugin_page(){
@@ -90,6 +55,9 @@ function marantz_plugin_page(){
 	<?php 
 		 if((isset($_['section']) && $_['section']=='marantz' && (@$_['block']=='cmd'  || @$_['block']==''))  ){
 				if($myUser!=false){
+						$maranzManager = new MarantzCmd();
+						$marantzCmds = $maranzManager->populate();
+				
 						?>
 		
 					<table class="table table-striped table-bordered table-hover">
@@ -102,13 +70,114 @@ function marantz_plugin_page(){
 							<th>Actions</th>
 						</tr>
 						
+					</thead>
+					<?php 	
+							
+							if (is_array($marantzCmds)){
+							foreach($marantzCmds as $row){
+									?>
+									<tr>
+										<!--td><?php //echo $row->getType(); 
+										?></td -->
+										<td><?php echo $row->getName(); ?></td>
+										<td><?php echo $conf->get('VOCAL_ENTITY_NAME').$row->getCmd();?></td>
+										<td><?php echo $row->getParametre();?></td>
+										<td><?php echo $row->getConfidence(); ?></td>
+										<td><a class="btn" href="action.php?action=marantz_enable&id=<?php echo $row->getId(); ?>" >
+										<?php 
+										if ($row->getVocal()) 
+											{ echo '<i class="fa fa-microphone fa-lg" style="color:#84C400"  title="D&eacute;sactive l\’&eacute;coute de cette commande"></i>';} 
+										else
+											{ echo '<i class="fa fa-microphone-slash fa-lg" style="color:#C1004F" title="Active l\’&eacute;coute de cette commande"></i>';}
+										?>
+										</a>
+										<a class="btn" href="setting.php?section=marantz&amp;block=edit&idx=<?php echo $row->getIdx(); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+										<a class="btn" href="action.php?action=marantz_delete&id=<?php echo $row->getId(); ?>"><i class="fa fa-trash-o fa-lg"  style="color:#C1004F"></i></a></td>
+									</tr>
+									
+									<?php
+							}
+							} ?>
+					
+					
+					</table>
+					
+					<?php 	
+				}
+		}
+		
+		?>
+		<?php 
+		 if((isset($_['section']) && $_['section']=='marantz' && (@$_['block']=='new'  || @$_['block']==''))  ){
+				if($myUser!=false){
+				
+					
+						?>
+		
+					<table class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Commande vocale</th>
+							<th>Paramètres</th>
+							<th>Confidence</th>
+							<th>Actions</th>
+						</tr>
+					<?php
+					$marantzPlugins = new MarantzPlugin($conf);
+					$commands = $marantzPlugins->predefined_commands($actionUrl,$conf->get('VOCAL_ENTITY_NAME'));
+					
+					foreach($commands as $command){
+					?>
+							<tr>
+							<td><?php echo $command['name'];?></td>
+							<td><?php echo $command['command'];?></td>
+							<td></td>
+							<td><?php echo $command['confidence'];?></td>
+							<td><a class="btn" href="action.php?action=marantz_add&id=<?php echo $row2['id']; ?>" title="Active ou désactive l’écoute de cette commande">
+										<i class="fa fa-plus fa-lg"></i>
+										</a></td>
+						</tr>
+					
+					
+					<?php }	 ?>
+						
 					</thead></table>
 					
 					<?php 	
 				}
 		}
 		
-		?></div><?
+			 if((isset($_['section']) && $_['section']=='marantz' && @$_['block']=='edit' )  ){
+				if($myUser!=false && isset($_['id'])){
+				
+					if(isset($_['id'])){
+						$marantz = new MarantzCmd();
+						$marantz = $marantz->load(array('id'=>$_['id']));
+					}else{
+						$marantz = new MarantzCmd();
+					}
+					?>
+					<div class="span9 userBloc">
+						<form class="form-inline" action="action.php?action=marantz_edit" method="POST">
+						<legend>Modification de la Commande Vocale</legend>
+							<input type="hidden"  name="id" value="<?php echo $marantz->getId();?>" >
+							<label>Nom : </label><?php echo $marantz->getName();?>	
+							<br/><br/><label>Commande  : </label><br/>
+							<?php echo $conf->get('VOCAL_ENTITY_NAME') ?><input type="text" class="input-large" name="cmd" value="<?php echo $marantz->getCmd();?>" >					
+							<br/><br/><label>Parametre : </label><br/>
+							<input type="text" class="input-large" name="parametre" value="<?php echo $marantz->getParametre();?>" >					
+							<br/><br/><label>Confidence :</label><br/>
+							<input type="text" class="input-large" name="confidence" value="<?php echo $marantz->getConfidence();?>" >						
+							<br/><br/><button type="submit" class="btn">Sauvegarder</button>
+						</form>
+					</div>
+					<?php
+				}
+		  }
+		
+		?>
+		</div><?
 		}
 	}
 }
