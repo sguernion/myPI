@@ -7,7 +7,7 @@
 
 class MarantzCmd extends SQLiteEntity{
 
-	protected $id,$name,$cmd,$parametre,$confidence,$vocal;
+	protected $id,$name,$cmd,$parametre,$zone,$reponses,$confidence,$vocal;
 	protected $TABLE_NAME = 'plugin_marantz';
 	protected $CLASS_NAME = 'MarantzCmd';
 	protected $object_fields = 
@@ -15,6 +15,8 @@ class MarantzCmd extends SQLiteEntity{
 		'id'=>'key',
 		'name'=>'string',
 		'parametre'=>'string',
+		'zone'=>'string',
+		'reponses'=>'string',
 		'cmd'=>'string',
         'confidence'=>'string',
 		'vocal'=>'boolean'
@@ -58,6 +60,22 @@ class MarantzCmd extends SQLiteEntity{
 
 	function setParametre($parametre){
 		$this->parametre = $parametre;
+	}
+	
+	function getZone(){
+		return $this->zone;
+	}
+
+	function setZone($zone){
+		$this->zone = $zone;
+	}
+	
+	function getReponses(){
+		return $this->reponses;
+	}
+
+	function setReponses($reponses){
+		$this->reponses = $reponses;
 	}
         
 	function getConfidence(){

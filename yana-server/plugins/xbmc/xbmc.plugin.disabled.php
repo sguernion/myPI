@@ -143,15 +143,7 @@ function xbmc_plugin_setting_page(){
 
 <?php 
 }
-}else{ ?>
-
-		<div id="main" class="wrapper clearfix">
-			<article>
-					<h3>Vous devez être connecté</h3>
-			</article>
-		</div>
-<?php
-		}
+}else{ 	header('location:index.php?connexion=ko');}
 	}
 
 }
@@ -388,14 +380,7 @@ function xbmcCmd_plugin_preference_page(){
 		    </p>                    
 		</div>
 
-<?php }else{ ?>
-
-		<div id="main" class="wrapper clearfix">
-			<article>
-					<h3>Vous devez être connecté</h3>
-			</article>
-		</div>
-<?php
+<?php }else{ 	header('location:index.php?connexion=ko');
 
 		}
 	}

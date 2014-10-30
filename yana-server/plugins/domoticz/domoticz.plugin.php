@@ -10,7 +10,7 @@ require_once('DomoticzPlugin.class.php');
 @author M.OU <nospam@free.fr>
 @link https://github.com/sguernion/myPI/tree/master/yana-server/plugins/domoticz
 @licence CC by nc sa
-@version 1.1.0
+@version 1.1.1-snapshot
 @description Permet la commande vocale des interrupteurs domoticz
 */
 
@@ -91,14 +91,7 @@ function domoticz_plugin_preference_page(){
 			?>
 		</div>
 
-<?php }else{ ?>
-
-		<div id="main" class="wrapper clearfix">
-			<article>
-					<h3>Vous devez être connecté</h3>
-			</article>
-		</div>
-<?php
+<?php }else{ 	header('location:index.php?connexion=ko');
 
 		}
 	}
@@ -220,7 +213,11 @@ function domoticz_plugin_page(){
 							<br/><br/><label>Commande Off : </label><br/>
 							<?php echo $conf->get('VOCAL_ENTITY_NAME') ?><input type="text" class="input-large" name="cmdOff" value="<?php echo $domoticz->getCmdOff();?>" >					
 							<br/><br/><label>Confidence :</label><br/>
-							<input type="text" class="input-large" name="confidence" value="<?php echo $domoticz->getConfidence();?>" >						
+							<select name="confidence" id="confidence">
+                                <?php for($confidence=1; $confidence<=9; $confidence++){ ?>                                
+                                    <option value=0.<?php echo $confidence ?> <?php echo ('0.'.$confidence == $domoticz->getConfidence())?"selected":""; ?>>0.<?php echo $confidence; ?></option>
+                                <?php } ?>
+                            </select>   							
 							<br/><br/><button type="submit" class="btn">Sauvegarder</button>
 						</form>
 					</div>
@@ -299,14 +296,7 @@ function domoticz_plugin_page(){
 	  
 		</div>
 
-<?php }else{ ?>
-
-		<div id="main" class="wrapper clearfix">
-			<article>
-					<h3>Vous devez être connecté</h3>
-			</article>
-		</div>
-<?php
+<?php }else{ 	header('location:index.php?connexion=ko');
 
 		}
 	}

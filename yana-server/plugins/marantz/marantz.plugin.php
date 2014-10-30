@@ -17,14 +17,20 @@ require_once('MarantzCmd.class.php');
 
 function marantz_vocal_command(&$response,$actionUrl){
 	global $_,$conf;
-	$marantzPlugins = new MarantzPlugin($conf);
-	$commands = $marantzPlugins->predefined_commands($actionUrl);
-	
-	foreach($commands as $command){
-		$response['commands'][] = array(
-					'command'=>$conf->get('VOCAL_ENTITY_NAME').$command['command'],
-					'url'=> $command['url'],'confidence'=>$command['confidence']);	
-	}		
+
+	$marantz = new MarantzCmd();
+	$marantzCmd = $marantz->loadAll(array('vocal'=>true));
+
+	if (is_array($marantzCmd)){
+		foreach($marantzCmd as $row){
+			$response['commands'][] = array(
+				'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmd(),
+				'url'=> $actionUrl.'?action=marantz_vocale'.'&id='.$row->getId(),
+				'confidence'=>$row->getConfidence(),
+				'categorie'=>'Marantz'
+				);	
+		}
+	}	
 }
 
 function marantz_action(){
@@ -81,7 +87,7 @@ function marantz_plugin_page(){
 										?></td -->
 										<td><?php echo $row->getName(); ?></td>
 										<td><?php echo $conf->get('VOCAL_ENTITY_NAME').$row->getCmd();?></td>
-										<td><?php echo $row->getParametre();?></td>
+										<td><?php echo urldecode($row->getParametre());?></td>
 										<td><?php echo $row->getConfidence(); ?></td>
 										<td><a class="btn" href="action.php?action=marantz_enable&id=<?php echo $row->getId(); ?>" >
 										<?php 
@@ -91,7 +97,7 @@ function marantz_plugin_page(){
 											{ echo '<i class="fa fa-microphone-slash fa-lg" style="color:#C1004F" title="Active l\’&eacute;coute de cette commande"></i>';}
 										?>
 										</a>
-										<a class="btn" href="setting.php?section=marantz&amp;block=edit&idx=<?php echo $row->getIdx(); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+										<a class="btn" href="setting.php?section=marantz&amp;block=edit&id=<?php echo $row->getId(); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
 										<a class="btn" href="action.php?action=marantz_delete&id=<?php echo $row->getId(); ?>"><i class="fa fa-trash-o fa-lg"  style="color:#C1004F"></i></a></td>
 									</tr>
 									
@@ -108,7 +114,7 @@ function marantz_plugin_page(){
 		
 		?>
 		<?php 
-		 if((isset($_['section']) && $_['section']=='marantz' && (@$_['block']=='new'  || @$_['block']==''))  ){
+		 if((isset($_['section']) && $_['section']=='marantz' && (@$_['block']=='new'  ))  ){
 				if($myUser!=false){
 				
 					
@@ -132,9 +138,9 @@ function marantz_plugin_page(){
 							<tr>
 							<td><?php echo $command['name'];?></td>
 							<td><?php echo $command['command'];?></td>
-							<td></td>
+							<td><?php echo urldecode($command['parametre']);?></td>
 							<td><?php echo $command['confidence'];?></td>
-							<td><a class="btn" href="action.php?action=marantz_add&id=<?php echo $row2['id']; ?>" title="Active ou désactive l’écoute de cette commande">
+							<td><a class="btn" href="action.php?action=marantz_add&uid=<?php echo $command['uid']; ?>" title="Active ou désactive l’écoute de cette commande">
 										<i class="fa fa-plus fa-lg"></i>
 										</a></td>
 						</tr>
@@ -168,7 +174,11 @@ function marantz_plugin_page(){
 							<br/><br/><label>Parametre : </label><br/>
 							<input type="text" class="input-large" name="parametre" value="<?php echo $marantz->getParametre();?>" >					
 							<br/><br/><label>Confidence :</label><br/>
-							<input type="text" class="input-large" name="confidence" value="<?php echo $marantz->getConfidence();?>" >						
+							 <select name="confidence" id="confidence">
+                                <?php for($confidence=1; $confidence<=9; $confidence++){ ?>                                
+                                    <option value=0.<?php echo $confidence ?> <?php echo ('0.'.$confidence == $marantz->getConfidence())?"selected":""; ?>>0.<?php echo $confidence; ?></option>
+                                <?php } ?>
+                            </select>    					
 							<br/><br/><button type="submit" class="btn">Sauvegarder</button>
 						</form>
 					</div>
@@ -197,8 +207,10 @@ function marantz_plugin_preference_page(){
 			
 			    <label>Ip de l'amplificateur</label><br/>
 			    <input type="text" class="input-xlarge" name="ip" value="<?php echo $conf->get('plugin_marantz_ip');?>" placeholder="192.168.0.11">	
-			    <br/><br/><label>Port du e l'amplificateur</label><br/>
-			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('plugin_marantz_port');?>" placeholder="80">					
+			    <br/><br/><label>Port de l'amplificateur</label><br/>
+			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('plugin_marantz_port');?>" placeholder="80">		
+				<br/><br/><label>Zone de l'amplificateur</label><br/>
+				<input type="text" class="input-large" name="zone" value="<?php echo $conf->get('plugin_marantz_zone');?>" placeholder="MainZone">						
 			    <br/><br/><button type="submit" class="btn">Sauvegarder</button>
 	    </form>
 		<?php 
@@ -208,15 +220,8 @@ function marantz_plugin_preference_page(){
 			?>
 		</div>
 		<?php
-		}else{ ?>
-
-		<div id="main" class="wrapper clearfix">
-			<article>
-					<h3>Vous devez être connecté</h3>
-			</article>
-		</div>
-	<?php
-
+		}else{ 
+				header('location:index.php?connexion=ko');
 		}
 	}
 }

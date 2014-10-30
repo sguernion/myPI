@@ -21,7 +21,7 @@ class DomoticzPlugin{
 	}
 	
 	function actions($_,$myUser){
-		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
+		if($myUser==false) { 	header('location:index.php?connexion=ko'); }
 		switch($_['action']){
 				case 'domoticz_plugin_setting':
 					$this->action_plugin_setting($_);
