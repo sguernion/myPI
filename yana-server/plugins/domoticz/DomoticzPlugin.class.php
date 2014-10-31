@@ -72,19 +72,19 @@ class DomoticzPlugin{
 	
 	function action_plugin_setting($_){
 			if(isset($_['ip'])){
-				$this->conf->put('plugin_domoticz_ip',$_['ip']);
+				$this->conf->put('ip',$_['ip'],'domoticz');
 			}
 			if(isset($_['port'])){
-				$this->conf->put('plugin_domoticz_port',$_['port']);
+				$this->conf->put('port',$_['port'],'domoticz');
 			}
 			if(isset($_['user'])){
-				$this->conf->put('plugin_domoticz_user',$_['user']);
+				$this->conf->put('user',$_['user'],'domoticz');
 			}
 			if(isset($_['pswd'])){
-				$this->conf->put('plugin_domoticz_pswd',$_['pswd']);
+				$this->conf->put('pswd',$_['pswd'],'domoticz');
 			}
 			if(isset($_['devices'])){
-				$this->conf->put('plugin_domoticz_widget_devices',$_['devices']);
+				$this->conf->put('widgets_devices',$_['devices']);
 			}
 			header('location:setting.php?section=preference&block='.$this->section);
 	}
@@ -213,7 +213,7 @@ class DomoticzPlugin{
 	
 	function domoticz_widget_setting($_){
 		if(isset($_['devices'])){
-			$this->conf->put('plugin_domoticz_widget_devices',$_['devices']);
+			$this->conf->put('widgets_devices',$_['devices'],'domoticz');
 		}
 		header('location:index.php');
 	}
@@ -226,7 +226,7 @@ class DomoticzPlugin{
 				
 				echo '<form class="form-inline" action="action.php?action=domoticz_widget_setting" method="POST">
 											<label>Widget Devices (id1,id2..)</label><br/>
-											<input type="text" class="input-xlarge" name="devices" value="'.$this->conf->get('plugin_domoticz_widget_devices').'" >						
+											<input type="text" class="input-xlarge" name="devices" value="'.$this->conf->get('widgets_devices','domoticz').'" >						
 											<br/><button type="submit" class="btn">Sauvegarder</button></form>';
 											exit(0);
 				break;
@@ -248,7 +248,7 @@ class DomoticzPlugin{
 					$response['title'] = 'Domoticz Devices';
 					
 					$response['content'] = '<div style="width: 100%">';
-					$ids = $this->conf->get('plugin_domoticz_plugins_devices');
+					$ids = $this->conf->get('widgets_devices','domoticz');
 					$devices = explode (',',$ids);
 					if($ids != '' ){
 						foreach($devices as $device){

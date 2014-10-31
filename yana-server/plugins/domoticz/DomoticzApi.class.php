@@ -34,8 +34,8 @@ class DomoticzApi {
 	
 	function getUrl(){
 		$url = 'http://';
-		$url .=	$this->conf->get('plugin_domoticz_user').':'.$this->conf->get('plugin_domoticz_pswd').'@';
-		$url .=	$this->conf->get('plugin_domoticz_ip').':'.$this->conf->get('plugin_domoticz_port');
+		$url .=	$this->conf->get('user','domoticz').':'.$this->conf->get('pswd','domoticz').'@';
+		$url .=	$this->conf->get('ip','domoticz').':'.$this->conf->get('port','domoticz');
 		return $url;
 	}
 	

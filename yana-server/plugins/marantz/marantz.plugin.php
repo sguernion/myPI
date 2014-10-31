@@ -206,11 +206,11 @@ function marantz_plugin_preference_page(){
 			<legend>Informations de connexion a l'Ampli Marantz</legend>
 			
 			    <label>Ip de l'amplificateur</label><br/>
-			    <input type="text" class="input-xlarge" name="ip" value="<?php echo $conf->get('plugin_marantz_ip');?>" placeholder="192.168.0.11">	
+			    <input type="text" class="input-xlarge" name="ip" value="<?php echo $conf->get('ip','marantz');?>" placeholder="192.168.0.11">	
 			    <br/><br/><label>Port de l'amplificateur</label><br/>
-			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('plugin_marantz_port');?>" placeholder="80">		
+			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('port','marantz');?>" placeholder="80">		
 				<br/><br/><label>Zone de l'amplificateur</label><br/>
-				<input type="text" class="input-large" name="zone" value="<?php echo $conf->get('plugin_marantz_zone');?>" placeholder="MainZone">						
+				<input type="text" class="input-large" name="zone" value="<?php echo $conf->get('zone','marantz');?>" placeholder="MainZone">						
 			    <br/><br/><button type="submit" class="btn">Sauvegarder</button>
 	    </form>
 		<?php 

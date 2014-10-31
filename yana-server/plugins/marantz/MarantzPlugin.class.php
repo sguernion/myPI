@@ -112,10 +112,10 @@ class MarantzPlugin{
 	
 	function action_plugin_setting($_){
 			if(isset($_['ip'])){
-				$this->conf->put('plugin_marantz_ip',$_['ip']);
+				$this->conf->put('ip',$_['ip'],'marantz');
 			}
 			if(isset($_['port'])){
-				$this->conf->put('plugin_marantz_port',$_['port']);
+				$this->conf->put('port',$_['port'],'marantz');
 			}
 			header('location:setting.php?section=preference&block='.$this->section.'');
 	}
@@ -136,7 +136,7 @@ class MarantzPlugin{
 					$marantz->setCmd($cmd['command']);
 					$marantz->setParametre($cmd['parametre']);
 					$marantz->setConfidence($cmd['confidence']);
-					$marantz->setZone($conf->get['plugin_marantz_zone']);
+					$marantz->setZone($conf->get('zone','marantz'));
 					$marantz->setReponses($cmd['reponses']);
 					$marantz->setVocal(true);
 					$marantz->save();
@@ -153,7 +153,7 @@ class MarantzPlugin{
 					$marantz->setParametre($_['parametre']);
 					$marantz->setConfidence($_['confidence']);
 					$marantz->setReponses($_['reponses']);
-					$marantz->setZone($conf->get['plugin_marantz_zone']);
+					$marantz->setZone($conf->get('zone','marantz'));
 					$marantz->setVocal(true);
 					$marantz->save();
 				

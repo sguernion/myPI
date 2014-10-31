@@ -6,6 +6,6 @@ $table = new DomoticzCmd();
 $table->create();
  
 $conf = new Configuration();
-$conf->put('plugin_domoticz_ip','localhost');
-$conf->put('plugin_domoticz_port','8080');
+$conf->put('ip','localhost','domoticz');
+$conf->put('port','8080','domoticz');
 ?>

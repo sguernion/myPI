@@ -25,13 +25,13 @@ function transmission_action(){
 	if($_['action'] == 'transmission_widget_load'){
 	header('Content-type: application/json');
 				$rpc = new TransmissionRPC();
-				if($conf->get('plugin_transmission_user') != ''){
-					$rpc->username = $conf->get('plugin_transmission_user');
+				if($conf->get('user','transmission') != ''){
+					$rpc->username = $conf->get('user','transmission');
 				}
-				if($conf->get('plugin_transmission_pswd') != ''){
-					$rpc->password =$conf->get('plugin_transmission_pswd');
+				if($conf->get('pswd','transmission') != ''){
+					$rpc->password =$conf->get('pswd','transmission');
 				}
-				$rpc->url = 'http://'.$conf->get('plugin_transmission_ip').':'.$conf->get('plugin_transmission_port').'/transmission/rpc';
+				$rpc->url = 'http://'.$conf->get('ip','transmission').':'.$conf->get('port','transmission').'/transmission/rpc';
 					$response['title'] = 'Transmission';
 					$response['content'] = '<div style="width: 100%">';
 					try
@@ -65,16 +65,16 @@ function transmission_action(){
 	
 	if($_['action'] == 'transmission_plugin_setting'){
 		if(isset($_['ip'])){
-				$conf->put('plugin_transmission_ip',$_['ip']);
+				$conf->put('ip',$_['ip'],'transmission');
 			}
 			if(isset($_['port'])){
-				$conf->put('plugin_transmission_port',$_['port']);
+				$conf->put('port',$_['port'],'transmission');
 			}
 			if(isset($_['user'])){
-				$conf->put('plugin_transmission_user',$_['user']);
+				$conf->put('user',$_['user'],'transmission');
 			}
 			if(isset($_['pswd'])){
-				$conf->put('plugin_transmission_pswd',$_['pswd']);
+				$conf->put('pswd',$_['pswd'],'transmission');
 			}
 			header('location:setting.php?section=preference&block=transmission');
 	}
@@ -99,13 +99,13 @@ function transmission_plugin_preference_page(){
 			<legend>Informations sur le serveur Transmission</legend>
 			
 			    <label>Ip du serveur</label><br/>
-			    <input type="text" class="input-xlarge" name="ip" value="<?php echo $conf->get('plugin_transmission_ip');?>" placeholder="localhost">	
+			    <input type="text" class="input-xlarge" name="ip" value="<?php echo $conf->get('ip','transmission');?>" placeholder="localhost">	
 			    <br/><br/><label>Port du serveur</label><br/>
-			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('plugin_transmission_port');?>" placeholder="9091">					
+			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('port','transmission');?>" placeholder="9091">					
 			    <br/><br/><label>Nom de l'utilisateur</label><br/>
-			    <input type="text" class="input-large" name="user" value="<?php echo $conf->get('plugin_transmission_user');?>" placeholder="toto">					
+			    <input type="text" class="input-large" name="user" value="<?php echo $conf->get('user','transmission');?>" placeholder="toto">					
 			    <br/><br/><label>Mot de passe</label><br/>
-			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('plugin_transmission_pswd');?>" placeholder="********">					
+			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('pswd','transmission');?>" placeholder="********">					
 			    <br/><br/><button type="submit" class="btn">Sauvegarder</button>
 	    </form>
 		<?php 

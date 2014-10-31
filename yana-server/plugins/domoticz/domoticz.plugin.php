@@ -75,13 +75,13 @@ function domoticz_plugin_preference_page(){
 			<legend>Informations sur le serveur Domoticz</legend>
 			
 			    <label>Ip du serveur Domoticz</label><br/>
-			    <input type="text" class="input-xlarge" name="ip" value="<?php echo $conf->get('plugin_domoticz_ip');?>" placeholder="localhost">	
+			    <input type="text" class="input-xlarge" name="ip" value="<?php echo $conf->get('ip','domoticz');?>" placeholder="localhost">	
 			    <br/><br/><label>Port du serveur Domoticz</label><br/>
-			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('plugin_domoticz_port');?>" placeholder="8080">					
+			    <input type="text" class="input-large" name="port" value="<?php echo $conf->get('port','domoticz');?>" placeholder="8080">					
 			    <br/><br/><label>Nom de l'utilisateur</label><br/>
-			    <input type="text" class="input-large" name="user" value="<?php echo $conf->get('plugin_domoticz_user');?>" placeholder="toto">					
+			    <input type="text" class="input-large" name="user" value="<?php echo $conf->get('user','domoticz');?>" placeholder="toto">					
 			    <br/><br/><label>Mot de passe</label><br/>
-			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('plugin_domoticz_pswd');?>" placeholder="********">					
+			    <input type="password" class="input-large" name="pswd" value="<?php echo $conf->get('pswd','domoticz');?>" placeholder="********">					
 			    <br/><br/><button type="submit" class="btn">Sauvegarder</button>
 	    </form>
 		<?php 

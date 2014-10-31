@@ -27,8 +27,8 @@ class MarantzAPI{
 	
 	function getUrl(){
 		$url = 'http://';
-		//$url .=	$this->conf->get('plugin_marantz_user').':'.$this->conf->get('plugin_marantz_pswd').'@';
-		$url .=	$this->conf->get('plugin_marantz_ip').':'.$this->conf->get('plugin_marantz_port').'/'.$this->conf->get('plugin_marantz_zone').'/index.put.asp?';
+		//$url .=	$this->conf->get('user','marantz').':'.$this->conf->get('pswd','marantz').'@';
+		$url .=	$this->conf->get('ip','marantz').':'.$this->conf->get('port','marantz').'/'.$this->conf->get('zone','marantz').'/index.put.asp?';
 		return $url;
 	}
 	

@@ -9,9 +9,10 @@ $table = new XbmcCmd();
 $execQuery = $table->query('DROP TABLE yana_plugin_xbmc');
 
 $table_configuration = new configuration();
-$table_configuration->delete(array('key'=>'plugin_xbmcCmd_api_url_xbmc'));
-$table_configuration->delete(array('key'=>'plugin_xbmcCmd_api_timeout_xbmc'));
-$table_configuration->delete(array('key'=>'plugin_xbmcCmd_api_recognition_status'));
+$table_configuration->getAll();
+$table_configuration->remove('plugin_xbmcCmd_api_url_xbmc');
+$table_configuration->remove('plugin_xbmcCmd_api_timeout_xbmc');
+$table_configuration->remove('plugin_xbmcCmd_api_recognition_status');
 
 // suppression de la piece XBMC
 $table_room = new Room();
