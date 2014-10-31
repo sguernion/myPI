@@ -22,6 +22,62 @@ function transmission_vocal_command(&$response,$actionUrl){
 
 function transmission_action(){
 	global $_,$conf,$myUser;
+	if($_['action'] == 'transmission_widget_load'){
+	header('Content-type: application/json');
+				$rpc = new TransmissionRPC();
+				if($conf->get('plugin_transmission_user') != ''){
+					$rpc->username = $conf->get('plugin_transmission_user');
+				}
+				if($conf->get('plugin_transmission_pswd') != ''){
+					$rpc->password =$conf->get('plugin_transmission_pswd');
+				}
+				$rpc->url = 'http://'.$conf->get('plugin_transmission_ip').':'.$conf->get('plugin_transmission_port').'/transmission/rpc';
+					$response['title'] = 'Transmission';
+					$response['content'] = '<div style="width: 100%">';
+					try
+					{
+					  $rpc->return_as_array = true;
+					   $result = $rpc->get(array(),array('name','percentDone','id'));
+
+						 $torrents = $result['arguments']['torrents'];
+						 $response['content'] .='<ul>';
+						  foreach($torrents as $torrent){
+						  
+							 $response['content'] .= '<li title="'.$torrent['name'].'"> '.substr ($torrent['name'],0,40).' <span class="label '.($torrent['percentDone']== 1?'label-success':($torrent['percentDone'] > 0.5?'label-info':'label-warning')).'">'.($torrent['percentDone']*100).'%</span></li>';
+						  
+						  }
+						   $response['content'] .='</ul>';
+						  
+					  
+					  $rpc->return_as_array = false;
+					  
+					  
+					} catch (Exception $e) {
+					  $response['content'] .='Erreur de connexion';
+					}
+					
+					
+					
+					$response['content'] .= '</div>';
+					echo json_encode($response);
+					exit(0);
+	}
+	
+	if($_['action'] == 'transmission_plugin_setting'){
+		if(isset($_['ip'])){
+				$conf->put('plugin_transmission_ip',$_['ip']);
+			}
+			if(isset($_['port'])){
+				$conf->put('plugin_transmission_port',$_['port']);
+			}
+			if(isset($_['user'])){
+				$conf->put('plugin_transmission_user',$_['user']);
+			}
+			if(isset($_['pswd'])){
+				$conf->put('plugin_transmission_pswd',$_['pswd']);
+			}
+			header('location:setting.php?section=preference&block=transmission');
+	}
 	
 }
 
@@ -33,7 +89,7 @@ function transmission_plugin_preference_menu(){
 
 function transmission_plugin_preference_page(){
 	global $myUser,$_,$conf;
-	if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='domoticz' )  ){
+	if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='transmission' )  ){
 		if($myUser!=false){
 	
 	?>
@@ -79,6 +135,16 @@ function transmission_plugin_menu(){
 }
 
 function transmission_widget_plugin_menu(&$widgets){
+	$widgets[] = array(
+		    'uid'      => 'transmission_widget_dl',
+		    'icon'     => 'fa fa-play-circle-o',
+		    'label'    => 'Transmission',
+		    'background' => '#50597B', 
+		    'color' => '#fffffff',
+		    'onLoad'   => 'action.php?action=transmission_widget_load&bloc=dl',
+			'onEdit'   => 'action.php?action=transmission_widget_edit&bloc=dl',
+			'onDelete'   => 'action.php?action=transmission_widget_delete&bloc=dl'
+		);
 	
 }
 
