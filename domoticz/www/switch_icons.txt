@@ -21,3 +21,5 @@ LightChevet;Chevet;Chevet
 Chaudiere;Chaudiere;Chaudiere
 Chauffage;Chauffage;Chauffage
 Ouverture;Ouverture;Ouverture
+Sapin;Sapin;Sapin
+Vmc;Vmc;Vmc
