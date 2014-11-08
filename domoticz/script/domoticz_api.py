@@ -17,22 +17,24 @@ switch_map = None
 scene_map = None
 
 def get_switch_id(name):
-	if switch_map is not None:
+	if switch_map is None:
 		response = json.load(call_api('type=command&param=getlightswitches'))
 		for switch in response.result:
 			name = lower(switch.Name)
 			id = switch.idx
 			switch_map[name] = id
-	return switch_map[name] if (name in switch_map) else None
+	if name in switch_map:
+		return switch_map[name]
 
 def get_scene_id(name):
-	if scene_map is not None:
+	if scene_map is  None:
 		response = json.load(call_api('type=scenes'))
 		for scene in response.result:
 			name = lower(scene.Name)
 			id = scene.idx
 			scene_map[name] = id
-	return scene_map[name] if (name in scene_map) else None
+	if name in scene_map:
+		return scene_map[name]
 
 def call_api(text):
 	request = urllib2.Request('http://' + server + ':' + port + '/json.htm?' + text)
@@ -52,17 +54,24 @@ def get_state(name):
 		
 	ok, idx = get_switch_id(name)
 	if ok:
-		response = json.load(call_api('type=devices&rid=' + str(idx)))
-		#print response
-		item = response['result'][0]
-		return item['Status']
+		return get_state_idx(idx)
+
+def get_state_idx(idx):
+	response = json.load(call_api('type=devices&rid=' + str(idx)))
+	#print response
+	item = response['result'][0]
+	return item['Status']
 
 def set_state(name,state):
 	ok, idx = get_switch_id(name)
 	if ok:
-		call_api('type=command&param=switchlight&idx=' + str(idx) + '&switchcmd=' + state)
+		set_state_idx(idx,state)
 	else:
 		print "Unknown switch name"
+		
+def set_state_idx(idx,state):
+	call_api('type=command&param=switchlight&idx=' + str(idx) + '&switchcmd=' + state)
+
 
 def set_level(name,level):
 	ok, idx = get_switch_id(name)
