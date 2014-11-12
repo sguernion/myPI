@@ -1,6 +1,12 @@
 	--------------------------------
+	------ Variables à créer  ------
+	--------------------------------
+
+	-- modes : [{'id':'off'},{'id':'auto'},{'id':'force'}]
+	--------------------------------
 	------ Variables à éditer ------
 	--------------------------------
+	
 	local consigne = uservariables["Consigne"]  --Température de consigne
 	local consigne_min = uservariables["Consigne_eco"]  --Température minimum
 	local consigne_hors_gel = uservariables["Consigne_hors_gel"]
