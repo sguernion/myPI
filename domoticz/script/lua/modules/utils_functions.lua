@@ -46,7 +46,38 @@ end
 	else
 		print(" ip null for device ".. device )
 	end
-		  return commandArray[device]
- end
+end
  
 
+-- domoticz functions
+
+function command_scene(scene,action)
+	command('Scene:'..scene,action)
+end
+
+function command_variable(variable,valeur)
+	command('Variable:'..variable,tostring(valeur))
+end
+
+function command(command,action)
+	commandArray[command] = action
+end
+
+-- Custom implementation (mobile, motion sensors...)
+function presenceAtHome()
+	return otherdevices['Smartphone'] == 'On'
+end
+
+function auto()
+	return otherdevices['Auto'] == 'On'
+end
+
+function absence()
+	return otherdevices['Mode_Absence'] == 'On'
+end
+
+function devicesOff()
+    print('Turning off all device')
+	commandArray['Scene:DevicesOff']='On'
+	commandArray['Chevet']='Off'
+end

@@ -98,13 +98,14 @@ a:hover { text-decoration: none; color: #003366; }
 		<div>
 			<div>
 				<div id="frame">
-					<div id="iccha" style="font-size:35px;">--</div>
+					<div id="iccha" style="font-size:35px;"><img src="../images/Chauffage48_On.png"/></div>
 					<div id="label_lg">Consigne Chauffage</div>
-					<div id="ilow" style="font-size:35px;"><img src="../images/Chaudiere48_On.png"/></div>
-					<div id="label_lg">Chaudière</div>
+					<div id="ilow" style="font-size:35px;">--</div>
+					<div id="label_lg">+ - (°C)</div>
 				</div>
 				<div id="frame">
-					<div id="itemp">--</div>
+					<div id="ichau" style="background: url(../images/Fireplace48_Off.png) no-repeat right top;">
+					<div id="itemp">--</div></div>
 					<div id="label_lg" style="font-size:25px;margin-top:-30px;">Temp (º<span class="degsign">C</span>)</div>
 				</div>
 				<div id="frame">
@@ -194,7 +195,11 @@ function RefreshData()
 						var vtype=$.PageArray[ii][1];
 						var vlabel=$.PageArray[ii][2];
 						var vimg=$.PageArray[ii][3];
+						var bstyle=$.PageArray[ii][5];
 						var vdata=item[vtype];
+						if (typeof bstyle == 'undefined') {
+							bstyle=0;
+						}
 						if (typeof vdata == 'undefined') {
 							vdata="??";
 						}
@@ -204,7 +209,11 @@ function RefreshData()
 						if(vimg ==''){
 							$('#'+vlabel).html(vdata);
 						}else{
+							if(bstyle == 1){
+								$('#'+vlabel ).attr('style','background: url(../images/'+vimg+'48_'+vdata+'.png) no-repeat right top;');
+							}else{
 								$('#'+vlabel+' > img' ).attr('src','../images/'+vimg+'48_'+vdata+'.png');
+							}
 						}
 					}
 				}
@@ -233,7 +242,12 @@ function RefreshData()
 						var vtype=$.PageArray[ii][1];
 						var vlabel=$.PageArray[ii][2];
 						var vimg=$.PageArray[ii][3];
+						var bstyle=$.PageArray[ii][5];
 						var vdata=item[vtype];
+						
+						if (typeof bstyle == 'undefined') {
+							bstyle=0;
+						}
 						if (typeof vdata == 'undefined') {
 							vdata="??";
 						}
@@ -243,7 +257,11 @@ function RefreshData()
 						if(vimg ==''){
 							$('#'+vlabel).html(vdata);
 						}else{
-							$('#'+vlabel+' > img' ).attr('src','../images/'+vimg+'48_'+vdata+'.png');
+							if(bstyle == 1){
+								$('#'+vlabel ).attr('style','background: url(../images/'+vimg+'48_'+vdata+'.png) no-repeat right top;');
+							}else{
+								$('#'+vlabel+' > img' ).attr('src','../images/'+vimg+'48_'+vdata+'.png');
+							}
 						}
 					}
 				}
@@ -259,7 +277,7 @@ $(document).ready(function() {
 	$.LastUpdateTime=parseInt(0);
 	$.roomplan=21;
 	$.domoticzurl="http://88.174.118.8:8080";//"";
-	//format: idx, value, label, img, comment
+	//format: idx, value, label, img, comment, style
 	$.PageArray = [
 		['21','Temp','itemp','','woonkamer'],
 		['21','Humidity','ihum','','woonkamer'],
@@ -275,8 +293,10 @@ $(document).ready(function() {
 	//	['585','CounterToday','sgas','','gas'],
 		['14','UVI','ohi','','uv'],
 		['10','Speed','wind','','wind'],
-		['30','Status','ilow','Fireplace','lamp'],
-		['29','Status','iccha','','lamp'],
+		['30','Status','ichau','Fireplace','lamp',1],
+		['29','Status','iccha','Chauffage','lamp'],
+		['uv13','Value','ilow','','variable temp'],
+		
 	];
 
     RefreshData();
