@@ -7,7 +7,7 @@
 
 class DomoticzCmd extends SQLiteEntity{
 
-	protected $id,$idx,$type,$categorie,$device,$cmdOn,$cmdOff,$confidence,$vocal;
+	protected $id,$idx,$type,$categorie,$device,$cmdOn,$cmdOff,$reponsesOff,$reponsesOn,$confidence,$vocal;
 	protected $TABLE_NAME = 'plugin_domoticz';
 	protected $CLASS_NAME = 'DomoticzCmd';
 	protected $object_fields = 
@@ -18,6 +18,8 @@ class DomoticzCmd extends SQLiteEntity{
 		'device'=>'string',
 		'cmdOn'=>'string',
 		'cmdOff'=>'string',
+		'reponsesOn'=>'string',
+		'reponsesOff'=>'string',
 		'categorie'=>'string',
         'confidence'=>'string',
 		'vocal'=>'boolean'
@@ -73,6 +75,22 @@ class DomoticzCmd extends SQLiteEntity{
 
 	function setCmdOff($cmdOff){
 		$this->cmdOff = $cmdOff;
+	}
+	
+	function getReponsesOn(){
+		return $this->reponsesOn;
+	}
+
+	function setReponsesOn($reponsesOn){
+		$this->reponsesOn = $reponsesOn;
+	}
+	
+	function getReponsesOff(){
+		return $this->reponsesOff;
+	}
+
+	function setReponsesOff($reponsesOff){
+		$this->reponsesOff = $reponsesOff;
 	}
         
 	function getConfidence(){

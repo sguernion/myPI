@@ -110,18 +110,28 @@ class DomoticzPlugin{
 					if($row2['Type'] == 'Scene')
 					{
 						$domoticz->setCmdOn(', mode '.$row2['Name']);
+						$domoticz->setReponsesOn( str_replace('{NAME}',$row2['Name'],$this->phrases['switchscene']['On']));
 					}else if($row2['categorie'] == 'mesure'){		
 						$domoticz->setCmdOn(',  '.$row2['Name']);
+						$domoticz->setReponsesOn($this->phrases[$row2['categorie']]);
 					}else if($row2['categorie'] == 'variable'){	
 						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
+						$domoticz->setReponsesOn($this->phrases[$row2['categorie']]);
 					}else if($row2['categorie'] == 'utility'){	
 						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
+						$domoticz->setReponsesOn($this->phrases[$row2['categorie']]);
+						
 					}else {
 						$domoticz->setCmdOn(', allume '.$row2['Name']);
 						$domoticz->setCmdOff(', eteint '.$row2['Name']);
+						
+						$domoticz->setReponsesOn(str_replace('{NAME}',$row2['Name'],$this->phrases['switchlight']['On']));
+						$domoticz->setReponsesOff(str_replace('{NAME}',$row2['Name'],$this->phrases['switchlight']['Off']));
 					}
 					
-					$domoticz->setConfidence(0.88);
+			
+					
+					$domoticz->setConfidence(0.8);
 					$domoticz->setVocal(true);
 					$domoticz->save();
 				
@@ -138,7 +148,10 @@ class DomoticzPlugin{
 		
 		$domoticz->setCmdOn($_['cmdOn']);
 		$domoticz->setCmdOff($_['cmdOff']);
+		$domoticz->setReponsesOn(urldecode ($_['reponsesOn']));
+		$domoticz->setReponsesOff(urldecode ($_['reponsesOff']));
 		$domoticz->setConfidence($_['confidence']);
+		
 		$domoticz->setVocal(true);
 		$domoticz->save();
 		header('location:setting.php?section='.$this->section.'&block=cmd');
@@ -155,8 +168,24 @@ class DomoticzPlugin{
 		if($_['action'] == 'domoticz_action_scene'){ 
 			$type="switchscene";
 		}
+		
+		$domoticz = new DomoticzCmd();
+		$domoticz = $domoticz->load(array('idx'=>$_['idx']));
+		
+		if($domoticz->getReponsesOn() != "" && $_['state'] == "On" ){
+		
+			$phrasesOn = explode(';',$domoticz->getReponsesOn());
+			$phrase = $phrasesOn[rand(0,count($phrasesOn)-1)];
+		}elseif($domoticz->getReponsesOff() != "" && $_['state'] == "Off" ){
+		
+			$phrasesOff = explode(';',$domoticz->getReponsesOff());
+			$phrase = $phrasesOff[rand(0,count($phrasesOff)-1)];
+		}else{
+			$phrase = $this->phrases['switchlight'][$_['state']];
+		}
+		
 		$this->domoticzApi->setState($type,$_['idx'],$_['state'] );
-		$affirmation = str_replace('{NAME}',$_['name'],$this->phrases['switchlight'][$_['state']]);
+		$affirmation = str_replace('{NAME}',$_['name'],$phrase);
 		$response = array('responses'=>array(
                           array('type'=>'talk','sentence'=>$affirmation)
                     ));
@@ -197,7 +226,16 @@ class DomoticzPlugin{
 		}else{
 			$infos = $this->domoticzApi->getInfo($_['idx']);
 		}
-		$affirmation = str_replace('{VALUE}',$infos[$field],$this->phrases[$type]);
+		
+		if($domoticz->getReponsesOn() != "" ){
+			$phrasesOn = explode(';',$domoticz->getReponsesOn());
+			$phrase = $phrasesOn[rand(0,count($phrasesOn)-1)];
+		}else{
+			$phrase = $this->phrases[$type];
+		}
+		
+		
+		$affirmation = str_replace('{VALUE}',$infos[$field],$phrase);
 		$response = array('responses'=>array(
                           array('type'=>'talk','sentence'=>$affirmation)
                     ));
