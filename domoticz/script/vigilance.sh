@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #vigilance.sh
 color=$(curl http://api.domogeek.fr/vigilance/35/color)
 risk=$(curl http://api.domogeek.fr/vigilance/35/risk)
