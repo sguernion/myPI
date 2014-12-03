@@ -23,7 +23,7 @@ local properties = Properties.create(uservariables["config_file"])
 for i,server in pairs(properties:getArray('servers.ping.device')) do 
 	if (server  ~= nil and server  ~= '') then
 		--print('device : '.. server)
-		ping_alive(server,properties:get('server.' .. server .. '.ip')
+		ping_alive(server,properties:get('server.' .. server .. '.ip'))
 	end
 end
 

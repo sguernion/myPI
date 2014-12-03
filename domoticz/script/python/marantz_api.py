@@ -4,10 +4,14 @@ import json
 import urllib2
 import ElemenTree as etree
 #import base64
+import ConfigParser
 
 #config
-server = '192.168.0.11'
-port = '80'
+config = ConfigParser.RawConfigParser()
+config.read('/home/pi/domoticz/scripts/lua/config.properties')
+server = config.get('', 'marantz.host');
+port = config.get('', 'marantz.port');
+#local caches
 
 
 # Variables

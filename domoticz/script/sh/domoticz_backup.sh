@@ -22,6 +22,7 @@ PORT="587"                              # used for: mail scp
 WHERE="."                               # used for: mail scp
 RCPT="DESTINATION MAIL ADDRESS"         # used for: mail
 DESTDIR="/opt/backup"                   # used for: local
+TEMPDIR="/var/opt/"
  
 ### END OF USER CONFIGURABLE PARAMETERS
  
@@ -34,8 +35,8 @@ BACKUPFILE="domoticz_$TIMESTAMP.db"
 BACKUPFILEGZ="$BACKUPFILE".gz
  
  
-/usr/bin/curl -s http://$DOMO_IP:$DOMO_PORT/backupdatabase.php > /var/tmp/$BACKUPFILE
-gzip -9 /var/tmp/$BACKUPFILE
+/usr/bin/curl -s http://$DOMO_IP:$DOMO_PORT/backupdatabase.php > $TEMPDIR$BACKUPFILE
+gzip -9 $TEMPDIR$BACKUPFILE
 
 DOMO_SCRIPT_PATH="/home/pi/domoticz/scripts"
 # le nom du fichier de backup des scripts scripts_domoticz_AAMMJJHHMMSS
@@ -45,39 +46,39 @@ SCRIPT_FILE="scripts_domoticz"
 BACKUP_SCRIPT_FILEGZ="$SCRIPT_FILE$TIMESTAMP.gz"
 cd $DOMO_SCRIPT_PATH
 cd ..
-tar zcvf /var/tmp/$BACKUP_SCRIPT_FILEGZ scripts/
+tar zcvf $TEMPDIR$BACKUP_SCRIPT_FILEGZ scripts/
  
 echo "backup Mode $MODE"
  
 case $MODE in
   scp)
-    /usr/bin/sshpass -p $PASSWORD /usr/bin/scp -P $PORT /var/tmp/$BACKUPFILEGZ $USERNAME@$SERVER:$WHERE
-	/usr/bin/sshpass -p $PASSWORD /usr/bin/scp -P $PORT /var/tmp/$BACKUP_SCRIPT_FILEGZ $USERNAME@$SERVER:$WHERE
+    /usr/bin/sshpass -p $PASSWORD /usr/bin/scp -P $PORT $TEMPDIR$BACKUPFILEGZ $USERNAME@$SERVER:$WHERE
+	/usr/bin/sshpass -p $PASSWORD /usr/bin/scp -P $PORT $TEMPDIR$BACKUP_SCRIPT_FILEGZ $USERNAME@$SERVER:$WHERE
   ;;
  
   ftp)
-    curl -s --disable-epsv -v -T"/var/tmp/$BACKUPFILEGZ" -u"$USERNAME:$PASSWORD" "ftp://$SERVER/"
-	curl -s --disable-epsv -v -T"/var/tmp/$BACKUP_SCRIPT_FILEGZ" -u"$USERNAME:$PASSWORD" "ftp://$SERVER/"
+    curl -s --disable-epsv -v -T"$TEMPDIR$BACKUPFILEGZ" -u"$USERNAME:$PASSWORD" "ftp://$SERVER/"
+	curl -s --disable-epsv -v -T"$TEMPDIR$BACKUP_SCRIPT_FILEGZ" -u"$USERNAME:$PASSWORD" "ftp://$SERVER/"
   ;;
  
   local)
     echo local
-    cp /var/tmp/$BACKUPFILEGZ $DESTDIR
-	cp /var/tmp/$BACKUP_SCRIPT_FILEGZ $DESTDIR
+    cp $TEMPDIR$BACKUPFILEGZ $DESTDIR
+	cp $TEMPDIR$BACKUP_SCRIPT_FILEGZ $DESTDIR
     echo "Your local copy of database is now on $DESTDIR"
   ;;
  
   mail)
-    /usr/bin/sendemail -f $RCPT -t $RCPT -u "Mail from Domoticz" -m "Backup of Domoticz DB" -s $SERVER:$PORT -o tls=yes -xu $USERNAME -xp $PASSWORD -a /var/tmp/$BACKUPFILEGZ
+    /usr/bin/sendemail -f $RCPT -t $RCPT -u "Mail from Domoticz" -m "Backup of Domoticz DB" -s $SERVER:$PORT -o tls=yes -xu $USERNAME -xp $PASSWORD -a $TEMPDIR$BACKUPFILEGZ
  
   ;;
  
   dropbox)
-    /opt/bin/dropbox_uploader.sh upload /var/tmp/$BACKUPFILEGZ /$BACKUPFILEGZ
-	/opt/bin/dropbox_uploader.sh upload /var/tmp/$BACKUP_SCRIPT_FILEGZ /$BACKUP_SCRIPT_FILEGZ
+    /opt/bin/dropbox_uploader.sh upload $TEMPDIR$BACKUPFILEGZ /$BACKUPFILEGZ
+	/opt/bin/dropbox_uploader.sh upload $TEMPDIR$BACKUP_SCRIPT_FILEGZ /$BACKUP_SCRIPT_FILEGZ
   ;;
  
 esac
  
-/bin/rm /var/tmp/$BACKUPFILEGZ
-/bin/rm /var/tmp/$BACKUP_SCRIPT_FILEGZ
+/bin/rm $TEMPDIR$BACKUPFILEGZ
+/bin/rm $TEMPDIR$BACKUP_SCRIPT_FILEGZ

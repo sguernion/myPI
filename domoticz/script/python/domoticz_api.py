@@ -3,10 +3,21 @@
 import json
 import urllib2
 #import base64
+ 
+import ConfigParser
 
 #config
-server = '192.168.0.17'
-port = '8080'
+config = ConfigParser.RawConfigParser()
+config.read('/home/pi/domoticz/scripts/lua/config.properties')
+
+ 
+# domoticz machine and port
+server = config.get('', 'domoticz.host');
+port = config.get('', 'domoticz.port');
+password = config.get('', 'domoticz.pwd');
+username = config.get('', 'domoticz.user');
+
+
 
 #local caches
 state_cache_dir = "/home/pi/domoticz/state/"

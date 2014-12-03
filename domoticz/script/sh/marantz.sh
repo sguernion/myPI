@@ -1,8 +1,22 @@
-#!/bin/sh
+#!/bin/bash
 ################################################
 
 command=$1
-url='http://192.168.0.11/MainZone/index.put.asp?cmd0='
+FILE_NAME=/home/pi/domoticz/scripts/lua/config.properties
+
+read_properties()
+{
+  file="$1"
+  while IFS="=" read -r key value; do
+    case "$key" in
+      "server.Ampli.ip") ampliIp="$value" ;;
+      "server.Ampli.idx") ampliIdx="$value" ;;
+    esac
+  done < "$file"
+}
+
+read_properties $FILE_NAME
+url='http://'$ampliIp'/MainZone/index.put.asp?cmd0='
 
  #function getVolume {
 	#curl -L http://192.168.0.11/goform/formMainZone_MainZoneXml.xml -o marantz.xml
@@ -11,6 +25,7 @@ url='http://192.168.0.11/MainZone/index.put.asp?cmd0='
 	#volume=30
 	#return $volume
 #}
+
 
 case $command in
 	volume_up)

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
    use v5.14;
    use LWP::Simple;                # From CPAN
    use JSON qw( decode_json );     # From CPAN
@@ -6,19 +6,22 @@
    use strict;                     # Good practice
    use warnings;                   # Good practice
    use utf8;
+   use Config::Simple;
    use feature     qw< unicode_strings >;
    # Configuration section, please update to your values
-   my $domoticz = "192.168.0.17:8080";  # ip and port of your Domoticz server 
+   my $conf = "/home/pi/domoticz/scripts/lua/config.properties";
+   my $cfg;
+   my $Config=&read_conf($conf);
+   
+   # ip and port of your Domoticz server 
+   my $domoticz = $Config->{"default.domoticz.ip"}.":".$Config->{"default.domoticz.port"}; 
    my $domo_cmd = "http://$domoticz/json.htm?type=devices&filter=all&used=true&order=Name";
 
-           # Array of (device idx, IP)
-                     my %IP=(15=>'192.168.0.10',	# Ip 1
-                             18=>'192.168.0.11',
-							19=>'192.168.0.12',
-							16=>'192.168.0.13',
-							17=>'192.168.0.14',
-							25=>'192.168.0.15');      # Ip 3
-   my $debug=0;
+  
+   my @servers;
+   @servers = $Config->{"default.servers.ping.device"};
+  
+   my $debug=1;
    # Get the JSON url
    my $json = get( $domo_cmd );
    die "Could not get $domo_cmd!" unless defined $json;
@@ -33,10 +36,13 @@
      }
    }
    # Now we go all over the IP to check if they are alive
-   foreach my $k (keys %IP) {
-           my $ip=$IP{$k};
+   foreach  (values $servers[0] ) {
+		   my $k = $Config->{"default.server.".$_.".idx"};
+           my $ip = $Config->{"default.server.".$_.".ip"};
+		    if ($debug) {print $_." ".$k." ".$ip;}
+		   
            my $res=system("sudo ping $ip -w 3 2>&1 > /dev/null");
-   #print $k." ".$res."\n";
+		   if ($debug) {print $k." ".$res."\n";}
            if (($res==0)&&($tab[$k] eq 'Off')) {
                    #If device answered to ping and device status is Off, turn it On in Domoticz
                    if ($debug) {print "$k is On\n"};
@@ -49,3 +55,14 @@
                    if ($debug) {print "do nothing: $k is ".$tab[$k]."\n";}
            }
    }
+   
+   
+ sub read_conf {
+	my $conf=$_[0];
+	$cfg = new Config::Simple($conf) or die Config::Simple->error();
+	$cfg->autosave(1);
+	# getting the values as a hash:
+	#print $cfg->vars();
+	my %Config = $cfg->vars();
+	return \%Config;
+}
