@@ -12,10 +12,10 @@ config.read('/home/pi/domoticz/scripts/lua/config.properties')
 
  
 # domoticz machine and port
-server = config.get('', 'domoticz.host');
-port = config.get('', 'domoticz.port');
-password = config.get('', 'domoticz.pwd');
-username = config.get('', 'domoticz.user');
+server = config.get('domoticz', 'domoticz.host');
+port = config.get('domoticz', 'domoticz.port');
+password = config.get('domoticz', 'domoticz.pwd');
+username = config.get('domoticz', 'domoticz.user');
 
 
 

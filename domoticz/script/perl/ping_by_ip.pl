@@ -14,14 +14,14 @@
    my $Config=&read_conf($conf);
    
    # ip and port of your Domoticz server 
-   my $domoticz = $Config->{"default.domoticz.ip"}.":".$Config->{"default.domoticz.port"}; 
+   my $domoticz = $Config->{"domoticz.domoticz.ip"}.":".$Config->{"domoticz.domoticz.port"}; 
    my $domo_cmd = "http://$domoticz/json.htm?type=devices&filter=all&used=true&order=Name";
 
   
    my @servers;
-   @servers = $Config->{"default.servers.ping.device"};
+   @servers = $Config->{"global.servers.ping.device"};
   
-   my $debug=1;
+   my $debug=0;
    # Get the JSON url
    my $json = get( $domo_cmd );
    die "Could not get $domo_cmd!" unless defined $json;
@@ -37,12 +37,12 @@
    }
    # Now we go all over the IP to check if they are alive
    foreach  (values $servers[0] ) {
-		   my $k = $Config->{"default.server.".$_.".idx"};
-           my $ip = $Config->{"default.server.".$_.".ip"};
-		    if ($debug) {print $_." ".$k." ".$ip;}
+		   my $k = $Config->{"global.server.".$_.".idx"};
+           my $ip = $Config->{"global.server.".$_.".ip"};
+		    #print $_." ".$k." ".$ip;
 		   
            my $res=system("sudo ping $ip -w 3 2>&1 > /dev/null");
-		   if ($debug) {print $k." ".$res."\n";}
+		   #print $k." ".$res."\n";
            if (($res==0)&&($tab[$k] eq 'Off')) {
                    #If device answered to ping and device status is Off, turn it On in Domoticz
                    if ($debug) {print "$k is On\n"};

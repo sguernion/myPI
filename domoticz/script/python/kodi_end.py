@@ -12,15 +12,15 @@ config.read('/home/pi/domoticz/scripts/lua/config.properties')
 
  
 # Kodi machine and port
-kodi_host = config.get('', 'kodi.host');
-kodi_port = config.get('', 'kodi.port');
-kodi_password = config.get('', 'kodi.pw');
-kodi_username = config.get('', 'kodi.user');
+kodi_host = config.get('kodi', 'kodi.host');
+kodi_port = config.get('kodi', 'kodi.port');
+kodi_password = config.get('kodi', 'kodi.pw');
+kodi_username = config.get('kodi', 'kodi.user');
  
 # Domoticz server and port information
-domoticzserver= config.get('', 'domoticz.ip')+":"+config.get('', 'domoticz.port')
-domoticzusername = config.get('', 'domoticz.user');
-domoticzpassword = config.get('', 'domoticz.pwd');
+domoticzserver= config.get('domoticz', 'domoticz.ip')+":"+config.get('domoticz', 'domoticz.port')
+domoticzusername = config.get('domoticz', 'domoticz.user');
+domoticzpassword = config.get('domoticz', 'domoticz.pwd');
 
 # Domoticz uservariable
 uservarid_kodi_play_duration = "13"
