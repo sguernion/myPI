@@ -12,22 +12,7 @@ Détails sur [Kodi](https://github.com/sguernion/myPI/tree/master/kodi)
 
 ## Domoticz
 
-Détails sur [Kodi](https://github.com/sguernion/myPI/tree/master/domoticz)
-
-
-### Backup
-Sinon pour declencher ça à 6H du matin, un petit
-
-sudo crontab -e
-
-puis coller
-
-0 6 * * * sudo /home/pi/domoticz/scripts/domoticz_backup.sh
-
-### Scripts
-- divers scripts lua,python,perl,sh pour domoticz
-
-
+Détails sur [Domoticz](https://github.com/sguernion/myPI/tree/master/domoticz)
 
 ## Plugins Yana-server
 
