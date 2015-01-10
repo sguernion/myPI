@@ -2,29 +2,13 @@
 
 Programmation avec une raspberry pi, découvrez les articles sur le [Blog](http://sguernion.github.io/)
 
-## installation
-le script postinstall.py, retrace les diffèrentes chose que j'ai du installer.
-Cela me sert d'aide memoire si je doit repartir d'une image raspbmc toute fraîche
+## Serveur
+Détails sur [Serveur](https://github.com/sguernion/myPI/tree/master/serveur)
 
 
-## BerryClip
 
-Quelques [scripts](https://github.com/sguernion/myPI/tree/master/python/gpio) python d'utilisation de la carte BerryClip
- * alarm.py : utilisation du buzzer comme alarme, arret du son a l'aide du bouton
- * jenkins.py : affichage grace au leds du status d'un build jenkins
- * gmail.py : signale l'arrivé d'un mail
- * noel.py : quelques animation lumineuse grace aux leds
- * temp.py : affiche la temperation des la raspberry dans la console et affiche une tendance grace aux leds
- 
-## Bluetooh
-TODO
-### Wiimote
-TODO
-
-## Xbmc
-### Backup
-sudo /home/pi/xbmc_backup.sh
-
+## Kodi
+Détails sur [Kodi](https://github.com/sguernion/myPI/tree/master/kodi)
 
 ## Domotique
 ### Backup
@@ -37,4 +21,10 @@ puis coller
 0 6 * * * sudo /home/pi/domoticz/scripts/domoticz_backup.sh
 
 ### Scripts
-TODO
+- divers scripts lua,python,perl,sh pour domoticz
+
+
+
+## Plugins Yana-server
+
+plus de détails sur [plugins Yana-server](https://github.com/sguernion/myPI/tree/master/yana-server)
