@@ -10,7 +10,11 @@ Détails sur [Serveur](https://github.com/sguernion/myPI/tree/master/serveur)
 ## Kodi
 Détails sur [Kodi](https://github.com/sguernion/myPI/tree/master/kodi)
 
-## Domotique
+## Domoticz
+
+Détails sur [Kodi](https://github.com/sguernion/myPI/tree/master/domoticz)
+
+
 ### Backup
 Sinon pour declencher ça à 6H du matin, un petit
 

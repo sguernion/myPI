@@ -1,0 +1,146 @@
+begin
+    button = input
+    button = input
+    button = KEY_OK
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py source
+    repeat = 1
+end
+
+begin
+    button = KEY_LEFT
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh left
+    repeat = 1
+end
+
+begin
+    button = KEY_RIGHT
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh right
+    repeat = 1
+end
+
+begin
+    button = KEY_UP
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh up
+    repeat = 1
+end
+
+begin
+    button = KEY_DOWN
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh down
+    repeat = 1
+end
+
+begin
+    button = KEY_STOP
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh stop_player
+    repeat = 1
+end
+
+begin
+    button = KEY_BACK
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh back
+    repeat = 1
+end
+
+begin
+    button = KEY_OK
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh ok
+    repeat = 1
+end
+
+begin
+    button = KEY_SUBTITLE
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh subtitle
+    repeat = 1
+end
+
+begin
+    button = KEY_PAUSE
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh play
+    repeat = 1
+end
+
+begin
+    button = KEY_NEXTSONG
+    prog = irexec
+    config = /home/pi/domoticz/scripts/sh/kodi.sh party
+    repeat = 1
+end
+
+
+begin
+    remote = lgtv
+    button = KEY_VOLUMEUP
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py volume_up
+    repeat = 1 
+end 
+begin
+    remote = marrantz
+    button = KEY_VOLUMEUP
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py v_volume_down
+    repeat = 1 
+end 
+
+begin
+    remote = lgtv
+    button = KEY_VOLUMEDOWN
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py volume_down
+    repeat = 1 
+end 
+
+begin
+    remote = marrantz
+    button = KEY_VOLUMEDOWN
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py v_volume_up
+    repeat = 1
+end
+
+
+begin
+    remote = lgtv
+    button = KEY_MUTE
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py mute_on
+    repeat = 3 
+end 
+
+begin
+    remote = marrantz
+    button = KEY_MUTE
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py mute_on
+    repeat = 3
+end
+
+begin
+    remote = marrantz
+    button = KEY_MEDIA
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py Source_Tv
+    repeat = 1
+end
+
+begin
+    remote = marrantz
+    button = KEY_MEDIA
+    prog = irexec
+    config = /home/pi/domoticz/scripts/python/domoticz.py Source_Kodi
+    repeat = 1
+end
+
+
+
