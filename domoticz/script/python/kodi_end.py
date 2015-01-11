@@ -3,57 +3,41 @@ from urllib2 import urlopen
 from json import loads
 from time import time
 import socket, json, string, sys, urllib2, datetime, base64
- 
+import os
 import ConfigParser
+sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
+from kodi_api import *
+from domoticz_api import *
 
-#config
-config = ConfigParser.RawConfigParser()
-config.read('/home/pi/domoticz/scripts/lua/config.properties')
-
- 
-# Kodi machine and port
-kodi_host = config.get('kodi', 'kodi.host');
-kodi_port = config.get('kodi', 'kodi.port');
-kodi_password = config.get('kodi', 'kodi.pw');
-kodi_username = config.get('kodi', 'kodi.user');
- 
-# Domoticz server and port information
-domoticzserver= config.get('domoticz', 'domoticz.ip')+":"+config.get('domoticz', 'domoticz.port')
-domoticzusername = config.get('domoticz', 'domoticz.user');
-domoticzpassword = config.get('domoticz', 'domoticz.pwd');
+debug = 1
 
 # Domoticz uservariable
-uservarid_kodi_play_duration = "13"
-kodi_play_duration = "kodi_play_duration"
-kodi_play_duration_type = 2
+uservarid_kodi_play_duration = config.get('domoticz', 'idx.v_kodi_play_duration');
+kodi_play_duration = = config.get('domoticz', 'name.v_kodi_play_duration');
+kodi_play_duration_type = config.get('domoticz', 'type.v_kodi_play_duration');
 
 # Do not change anything beyond this line.
 #___________________________________________________________________________________________________
 
-def getJson(url,username, password):
-     base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
-     request = urllib2.Request(url)
-     request.add_header("Authorization", "Basic %s" % base64string)   
-     req = urlopen(request)
-     res = req.read()
-     data = loads(res)
-     return data
-	 
-def kodi_send(request):
-     return getJson('http://'+ kodi_host +':'+str(kodi_port)+'/jsonrpc?request='+request,kodi_password,kodi_username)
-	 
-def domoticz_update_uservariable(id,name,type,value):
-     dz_url = 'http://'+domoticzserver+'/json.htm?type=command&param=updateuservariable&idx='+id+'&vname='+name+'&vtype='+type+'&vvalue=0'+value
-     #print(dz_url)
-     getJson(dz_url,domoticzusername, domoticzpassword)
-	 
-response = kodi_send('{"id":1,"jsonrpc":"2.0","method":"Player.GetProperties","params":{"playerid":1,"properties":["totaltime","percentage","time"]}}')
-t_time = (((response['result']['totaltime']['hours']*60+response['result']['totaltime']['minutes']))*60)+response['result']['totaltime']['seconds']
-p_time = (((response['result']['time']['hours']*60+response['result']['time']['minutes']))*60)+response['result']['time']['seconds']
-r_time = t_time - p_time
+def get_video_end():
+     response = kodi_send(1,'Player.GetActivePlayers','{}')
+     mediatype = response['result'][0]['type']
+     playerid = response['result'][0]['playerid']
 
-duration = str(datetime.timedelta(seconds=r_time))
-print(duration)
+     if mediatype == 'video':
+         response = kodi_send(1,'Player.GetProperties','{"playerid":' + str(playerid) +',"properties":["totaltime","percentage","time"]}')
+         t_time = (((response['result']['totaltime']['hours']*60+response['result']['totaltime']['minutes']))*60)+response['result']['totaltime']['seconds']
+         p_time = (((response['result']['time']['hours']*60+response['result']['time']['minutes']))*60)+response['result']['time']['seconds']
+         r_time = t_time - p_time
+
+         duration = str(datetime.timedelta(seconds=r_time))
+         if debug == 1:
+             print("0"+duration[0:-3])
+         return "0"+duration[0:-3]
 
 
-domoticz_update_uservariable(uservarid_kodi_play_duration,kodi_play_duration,kodi_play_duration_type,duration[0:-3])
+def update_video_end(kodi_play_duration,play_duration,play_duration_type):
+     duration = get_video_end()
+     update_uservariable(kodi_play_duration,play_duration,play_duration_type,duration)
+		 
+update_video_end(uservarid_kodi_play_duration,kodi_play_duration,kodi_play_duration_type)

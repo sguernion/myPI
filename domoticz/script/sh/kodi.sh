@@ -42,11 +42,11 @@ case $command in
 	curl -i -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"Input.Back","params":{},"id":1}' $url
 	;;
 	play)
-	curl -i -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"Player.PlayPause","params":{"playerid":0},"id":1}' $url
+	curl -i -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"Player.PlayPause","params":{"playerid":1	},"id":1}' $url
 	
 	;;
 	stop_player)
-	curl -i -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"Player.Stop","params":{"playerid":0},"id":1}' $url
+	curl -i -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"Player.Stop","params":{"playerid":1},"id":1}' $url
 	;;
 	shutdown)
 	curl -i -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "System.Shutdown", "params": {  }, "id": 1 }' $url

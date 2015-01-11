@@ -2,6 +2,12 @@
 
 import socket, json, string, asynchat, asyncore, subprocess, sys, time, urllib2, datetime, base64
 import ConfigParser
+from urllib2 import urlopen
+from json import loads
+
+import os
+sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
+from domoticz_api import *
 
 #config
 config = ConfigParser.RawConfigParser()
@@ -9,21 +15,83 @@ config.read('/home/pi/domoticz/scripts/lua/config.properties')
 
  # Kodi machine and port
 kodi_host = config.get('kodi', 'kodi.host');
-kodi_port = config.get('kodi', 'kodi.port');
+kodi_port =  int(config.get('kodi', 'kodi.port'));
+kodi_password = config.get('kodi', 'kodi.pw');
+kodi_username = config.get('kodi', 'kodi.user');
+kodi_image = config.get('kodi', 'kodi.notification.image');
+kodi_title = config.get('kodi', 'kodi.notification.title');
+kodi_time = config.get('kodi', 'kodi.notification.time');
 
-#local caches
 
+switchid_kodi_playing = config.get('domoticz', 'idx.kodi_playing');
 
 # Variables
+debug = 0
 
+
+###################################################
+#
+#        KODI functions
+#
+###################################################
 
 def is_json(myjson):
+  print myjson
   try:
-    json_object = json.loads(myjson)
+    json_data = json.dumps(myjson)
+    json_data = json.loads(json_data)
   except ValueError, e:
+    print "is_json error" +e
     return False
   return True
+  
+def process_method(method):
+    print method
+    if method == "Player.OnPause": 
+         if get_state_idx(switchid_kodi_playing) == "On" : set_state_idx(switchid_kodi_playing,'Off') 
+    if method == "Player.OnPlay": 
+         if get_state_idx(switchid_kodi_playing) == "Off" : set_state_idx(switchid_kodi_playing,'On') 
+    if method == "Player.OnStop": 
+         if get_state_idx(switchid_kodi_playing) == "On" : set_state_idx(switchid_kodi_playing,'Off') 
+
+def process_result(result):
+    try:
+        if "playerid" in result:
+            if get_state_idx(switchid_kodi_playing) == "Off" : set_state_idx (switchid_kodi_playing, 'On')
+    except Exception,e:
+        print e
+
+def getJson(url,username, password):
+     base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
+     request = urllib2.Request(url)
+     request.add_header("Authorization", "Basic %s" % base64string)   
+     req = urlopen(request)
+     res = req.read()
+     data = loads(res)
+     if debug == 1:
+         print data
+     return data
+
+def kodi_request(request):
+     if debug == 1:
+         print request
+     return getJson('http://'+ kodi_host +':'+str(kodi_port)+'/jsonrpc?request='+request,kodi_password,kodi_username)
+
+def kodi_send(id,method,params):
+	return kodi_request('{"jsonrpc":"2.0","method":"' + method + '","params":' + params +',"id":'+ str(id) +'}')
  
+def sendmessagetokodi(kodimachine, message):
+    if kodimachine.connection_state == "connected":
+        print datetime.datetime.now().strftime("%H:%M:%S") + "- Sending Notification (" + message + ") to Kodi"
+        request = '{"jsonrpc":"2.0","id":1,"method":"GUI.ShowNotification","params":{"title":"' + kodi_title + '","message":"' + message+ '","displaytime":' + kodi_time + ',"image":"' + kodi_image + '"}}';
+        #kodimachine.send(request)
+        kodi_request(request)
+
+###################################################
+#
+#        KODI Client
+#
+###################################################
 class KODIClient (asynchat.async_chat):
  
     def __init__(self, host, port):
@@ -38,19 +106,17 @@ class KODIClient (asynchat.async_chat):
     def collect_incoming_data(self, data):
         self.buffer.append(data)
         if is_json(data):
+            json_data = json.dumps(myjson)
             json_data = json.loads(data)
             process_method(json_data.get("method", {}))
             if "result" in json_data:
-                try:
-                    if "playerid" in json_data.get("result", {})[0]:
-                        setdomoticzstatus (self,switchid_kodi_playing, True)
-                except Exception,e:
-                    print e
+			    process_result(json_data.get("result", {})[0])
+             
  
     def found_terminator(self):
         msg = ''.join(self.buffer)
-        print 'Received : ', msg
-        print
+        if debug == 1:
+             print 'Received : ', msg
         self.buffer = []
  
     def handle_connect_event(self):
@@ -67,9 +133,3 @@ class KODIClient (asynchat.async_chat):
  
     def writable(self):
         return False
- 
- 
-def sendmessagetokodi(kodimachine,title, message):
-    if kodimachine.connection_state == "connected":
-        print datetime.datetime.now().strftime("%H:%M:%S") + "- Sending Notification (" + message + ") to Kodi"
-        kodimachine.send('{"jsonrpc":"2.0","id":1,"method":"GUI.ShowNotification","params":{"title":"' + title + '","message":"' + message+ '"}}')

@@ -15,7 +15,7 @@ idx_v_source = config.get('domoticz', 'idx.v_source');
 idx_v_volume_up = config.get('domoticz', 'idx.v_volume.up');
 idx_v_volume_down = config.get('domoticz', 'idx.v_volume.down');
 
-command + sys.argv[1]
+command = sys.argv[1]
 
 if command=='volume_up':
      set_state_idx(idx_vol_up,'On')

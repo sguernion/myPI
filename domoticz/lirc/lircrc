@@ -10,70 +10,70 @@ end
 begin
     button = KEY_LEFT
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh left
+    config = /home/pi/domoticz/scripts/python/kodi.py left
     repeat = 1
 end
 
 begin
     button = KEY_RIGHT
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh right
+    config = /home/pi/domoticz/scripts/python/kodi.py right
     repeat = 1
 end
 
 begin
     button = KEY_UP
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh up
+    config = /home/pi/domoticz/scripts/python/kodi.py up
     repeat = 1
 end
 
 begin
     button = KEY_DOWN
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh down
+    config = /home/pi/domoticz/scripts/python/kodi.py down
     repeat = 1
 end
 
 begin
     button = KEY_STOP
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh stop_player
+    config = /home/pi/domoticz/scripts/python/kodi.py stop_player
     repeat = 1
 end
 
 begin
     button = KEY_BACK
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh back
+    config = /home/pi/domoticz/scripts/python/kodi.py back
     repeat = 1
 end
 
 begin
     button = KEY_OK
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh ok
+    config = /home/pi/domoticz/scripts/python/kodi.py ok
     repeat = 1
 end
 
 begin
     button = KEY_SUBTITLE
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh subtitle
+    config = /home/pi/domoticz/scripts/python/kodi.py subtitle
     repeat = 1
 end
 
 begin
     button = KEY_PAUSE
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh play
+    config = /home/pi/domoticz/scripts/python/kodi.py play
     repeat = 1
 end
 
 begin
     button = KEY_NEXTSONG
     prog = irexec
-    config = /home/pi/domoticz/scripts/sh/kodi.sh party
+    config = /home/pi/domoticz/scripts/python/kodi.py party
     repeat = 1
 end
 

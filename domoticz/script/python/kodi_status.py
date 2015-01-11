@@ -23,28 +23,13 @@ from domoticz_api import *
 #config
 config = ConfigParser.RawConfigParser()
 config.read('/home/pi/domoticz/scripts/lua/config.properties')
-
- 
-# Kodi machine and port
-kodi_host = config.get('kodi', 'kodi.host');
-kodi_port = int(config.get('kodi', 'kodi.port'));
- 
-# Domoticz server and port information
-domoticzserver= config.get('domoticz', 'domoticz.ip')+":"+config.get('domoticz', 'domoticz.port')
-domoticzusername = config.get('domoticz', 'domoticz.user');
-domoticzpassword = config.get('domoticz', 'domoticz.pwd');
  
 # Domotizc switchid to toggle when Kodi machine comes online / offline
 kodi_online = "P_Kodi"
  
-# Domoticz switchid to toggle when Kodi start playing / stops playing.
-switchid_kodi_playing = 62
- 
-# Title for nofications to Kodi (empty disables notification)
-message_title = "Kodi Status Script"
  
 # Interval between checks to see if Kodi is available in seconds
-ping_interval = 1
+ping_interval = 10
  
  
 # Do not change anything beyond this line.
@@ -58,19 +43,12 @@ if int(subprocess.check_output('ps x | grep \'' + sys.argv[0] + '\' | grep -cv g
  
 def domoticzstatus (switchid):
     status = ""
-    state = get_state_idx(switchid)
+    state = get_state(switchid)
     if state == "On": 
          status = 1
     if state == "Off": 
          status = 0
     return status
-
-
-def process_method(method):
-    if method == "Player.OnPause": set_state_idx(switchid_kodi_playing,'Off') 
-    if method == "Player.OnPlay": set_state_idx(switchid_kodi_playing,'On') 
-    if method == "Player.OnStop": set_state_idx(switchid_kodi_playing,'Off') 
-
  
 
 previous_kodi_state = ""
@@ -96,18 +74,27 @@ while 1==1:
         if kodimachine.connection_state == "connected":
             if previous_kodi_state != "connected": 
                 print datetime.datetime.now().strftime("%H:%M:%S") + "- Connected to Kodi"
-                if message_title: sendmessagetokodi(kodimachine,message_title, "Connection established")
-            set_state_idx(switchid_kodi_online, 'On')
+                sendmessagetokodi(kodimachine, "Connection established")
+            if domoticzstatus(kodi_online) == 0: set_state(kodi_online, 'On')
              
             print datetime.datetime.now().strftime("%H:%M:%S") + "- Sending request for player status"
-            kodimachine.send ('{"jsonrpc": "2.0", "method": "Player.GetActivePlayers", "id": 1}')
- 
-            asyncore.loop(timeout=5.0)
+            result = kodi_send(1,"Player.GetActivePlayers",'{}')
+            json_data = json.dumps(result)
+            json_data = json.loads(json_data)
+            process_method(json_data.get("method", {}))
+			
+            if "result" in json_data:
+                if len(json_data.get("result", {})) > 0:
+                     process_result(json_data.get("result", {})[0])
+                else:
+				    set_state_idx (switchid_kodi_playing, 'Off')
+            #asyncore.loop(timeout=5.0)
             #kodimachine = KODIClient(kodi_host, kodi_port)
     if current_device_ping_state == 1 and previous_device_ping_state != 1:
         print datetime.datetime.now().strftime("%H:%M:%S") + "- Kodi machine offline"
-        if domoticzstatus(switchid_kodi_online) == 1: set_state(kodi_online, 'Off')
+        if domoticzstatus(kodi_online) == 1: set_state(kodi_online, 'Off')
  
     previous_device_ping_state = current_device_ping_state
     if current_device_ping_state == 0: previous_kodi_state = kodimachine.connection_state
     time.sleep (float(ping_interval))
+    print "end while"

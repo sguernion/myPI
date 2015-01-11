@@ -1,12 +1,9 @@
 commandArray = {}
 
--- configurer ssh authorised_key for pi user
--- sudo chmod u+s /sbin/halt
 
-
-if (devicechanged['P_RaspBox'] == 'Off') then
+if (devicechanged['POWER_OFF_RASPBOX'] == 'Off') then
     print('Turning off RaspBox')
-    result = os.execute('ssh pi@192.168.0.14 /sbin/halt')
+    result = os.execute("/home/pi/domoticz/script/sh/power_off_raspbox.sh")
     print(result)
 end
 
