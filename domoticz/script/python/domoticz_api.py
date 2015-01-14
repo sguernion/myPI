@@ -49,7 +49,10 @@ def get_scene_id(name_s):
 		return scene_map[name_s]
 
 def call_api(text):
-	request = urllib2.Request('http://' + server + ':' + port + '/json.htm?' + text)
+	return call_url('http://' + server + ':' + port + '/json.htm?' + text)
+	
+def call_url(text):
+	request = urllib2.Request(text)
 	#base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
 	#request.add_header("Authorization", "Basic %s" % base64string)   
 	return urllib2.urlopen(request)
@@ -84,6 +87,8 @@ def set_state(name,state):
 def set_state_idx(idx,state):
 	call_api('type=command&param=switchlight&idx=' + str(idx) + '&switchcmd=' + state)
 
+def set_udevice_state_idx(idx,value,text):
+	call_api('type=command&param=udevice&idx=' + str(idx) + '&nvalue=' + str(value) + '&svalue=' + text)
 
 def set_level(name,level):
 	idx = get_switch_id(name)
