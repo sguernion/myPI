@@ -39,9 +39,10 @@ function oneDeviceChangeHasState(devicePrefix,state)
 	present = false
 	for i, v in pairs(devicechanged) do
 		tc = tostring(i)
-		v = i:sub(1,state:len())
-		if (tc:sub(1,devicePrefix:len()) == devicePrefix and v == state) then
-			present = true
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix) then
+			if(otherdevices[tc] == state) then
+				present = true
+			end
 		end
 	end
 	return present
@@ -51,11 +52,13 @@ function oneDeviceHasState(devicePrefix,state)
 	present = false
 	for i, v in pairs(otherdevices) do
 		tc = tostring(i)
-		v = i:sub(1,state:len())
 		
-		if (tc:sub(1,devicePrefix:len()) == devicePrefix and v == state) then
-			print(tc:sub(1,devicePrefix:len()) ..' '..devicePrefix.. ' '..v)
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix) then
+			--print(tc:sub(1,devicePrefix:len()) ..' '..devicePrefix.. ' '..v)
+			if(otherdevices[tc] == state) then
+			--print(tc:sub(1,devicePrefix:len()) ..' '..devicePrefix.. ' '..v)
 			present = true
+		end
 		end
 	end
 	return present
@@ -67,8 +70,10 @@ function oneDeviceHasStateAfterTime(devicePrefix,state,diffTime)
 		tc = tostring(i)
 		v = i:sub(1,state:len())
 		difference = time_difference(tc)
-		if (tc:sub(1,devicePrefix:len()) == devicePrefix and v == state and difference > diffTime) then
-			present = true
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix ) then
+			if(otherdevices[tc] == state and difference > diffTime) then
+				present = true
+			end
 		end
 	end
 	return present
