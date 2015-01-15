@@ -35,6 +35,45 @@ function time_difference (device)
 	return (os.difftime (t1, t2))
 end
 
+function oneDeviceChangeHasState(devicePrefix,state)
+	present = false
+	for i, v in pairs(devicechanged) do
+		tc = tostring(i)
+		v = i:sub(1,state:len())
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix and v == state) then
+			present = true
+		end
+	end
+	return present
+end
+
+function oneDeviceHasState(devicePrefix,state)
+	present = false
+	for i, v in pairs(otherdevices) do
+		tc = tostring(i)
+		v = i:sub(1,state:len())
+		
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix and v == state) then
+			print(tc:sub(1,devicePrefix:len()) ..' '..devicePrefix.. ' '..v)
+			present = true
+		end
+	end
+	return present
+end
+
+function oneDeviceHasStateAfterTime(devicePrefix,state,diffTime)
+	present = false
+	for i, v in pairs(otherdevices) do
+		tc = tostring(i)
+		v = i:sub(1,state:len())
+		difference = time_difference(tc)
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix and v == state and difference > diffTime) then
+			present = true
+		end
+	end
+	return present
+end
+
 
  function ping_alive (device,ip)
 	if (ip  ~= nil and ip  ~= '') then
@@ -70,8 +109,14 @@ end
 
 -- Custom implementation (mobile, motion sensors...)
 function presenceAtHome()
-	return otherdevices['P_Smartphone'] == 'On'
+	return presenceSmartphone()
 end
+-- Detect device P_Smartphone or P_Smartphone_XXX is present
+function presenceSmartphone()
+	return oneDeviceHasState('P_Smartphone','On')
+end
+
+
 
 function auto()
 	return otherdevices['Auto'] == 'On'
