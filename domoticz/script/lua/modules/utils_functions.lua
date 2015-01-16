@@ -79,6 +79,21 @@ function oneDeviceHasStateAfterTime(devicePrefix,state,diffTime)
 	return present
 end
 
+function oneDeviceHasStateBetweenTime(devicePrefix,state,diffStart,diffEnd)
+	present = false
+	for i, v in pairs(otherdevices) do
+		tc = tostring(i)
+		v = i:sub(1,state:len())
+		difference = time_difference(tc)
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix ) then
+			if(otherdevices[tc] == state and difference > diffStart and difference < diffEnd) then
+				present = true
+			end
+		end
+	end
+	return present
+end
+
 
  function ping_alive (device,ip)
 	if (ip  ~= nil and ip  ~= '') then
@@ -114,11 +129,17 @@ end
 
 -- Custom implementation (mobile, motion sensors...)
 function presenceAtHome()
-	return presenceSmartphone()
+	return presenceSmartphone() or presenceMotion()
 end
+
 -- Detect device P_Smartphone or P_Smartphone_XXX is present
 function presenceSmartphone()
 	return oneDeviceHasState('P_Smartphone','On')
+end
+
+-- Detect device P_Motion or P_Motion_XXX is present
+function presenceMotion()
+	return oneDeviceHasState('P_Motion','On')
 end
 
 
@@ -131,14 +152,12 @@ function absence()
 	return otherdevices['Mode_Absence'] == 'On'
 end
 
-function vacances()
-	return otherdevices['Vacances'] == 'On'
+function vacances(name)
+	return otherdevices['Vacances_'..name] == 'On'
 end
 
 function devicesOff()
-    print('Turning off all device')
 	commandArray['Scene:DevicesOff']='On'
-	--commandArray['Chevet']='Off'
 end
 
 

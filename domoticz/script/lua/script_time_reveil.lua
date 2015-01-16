@@ -26,46 +26,60 @@ hours=tonumber(os.date('%H',time))
 	------ Variables à éditer ------
 	--------------------------------
 	local heure_reveil = uservariables["heure_reveil"] -- Heure du reveil
-	local heure_reveil_off = uservariables["heure_reveil_off"] -- Heure de fin du reveil
+	local heure_unset = uservariables["heure_unset"] -- "00:00" -- Valeur qui permet d'indiquer qu'une heure n'est pas initialisée
+	local scene_reveil_prefix = 'Reveil_'
+	local chevet_prefix = 'Chevet_'
+	local chevet_delai_off = 1800 -- 30 min
+	
 	local heure_coucher = uservariables["heure_coucher"] -- Heure du coucher
 	local heure_coucher_dec = uservariables["heure_coucher_dec"] -- Heure du coucher avec décalage (fin de films)
-	local heure_unset = uservariables["heure_unset"] -- "00:00" -- Valeur qui permet d'indiquer qu'une heure n'est pas initialisée
-	local scene_reveil = 'Reveil' -- Scene a déclencher lors du reveil
 	local scene_coucher = 'Coucher' -- Scene a déclencher lors du coucher
+		
+	
 	--------------------------------
 	-- Fin des variables à éditer --
 	--------------------------------
 
 decalage_coucher_fin_films('kodi_play_duration','heure_coucher_dec',heure_unset)
 
+function reveil_travail(name_reveil,heure_reveil)
+	if (heure_reveil == heure_unset or vacances(name_reveil)) then
+			print ("PAS DE REVEIL CAR PROGRAMME A "..heure_unset)
+    else 
+		 if(not jourChome())then
+             -- Reveil jours de travail
+	         if( istime == heure_reveil) then
+		         command_scene(scene_reveil_prefix..name_reveil,'On')
+	         end
+			 
+			if (oneDeviceHasStateAfterTime(chevet_prefix..name_reveil,'On',chevet_delai_off) ) then
+				 command(chevet_prefix..name_reveil,'Off')
+			end
+	     end
+	 end
+end
+
+
+function reveil_occasionnel(name_reveil,reveil_occ)
+	if (jourChome() or vacances(name_reveil)) then
+		if (reveil_occ == heure_unset) then
+		else 
+		   if( istime == reveil_occ) then
+				command_scene(scene_reveil_prefix..name_reveil,'On')
+			end
+			
+			if (oneDeviceHasStateAfterTime(chevet_prefix..name_reveil,'On',chevet_delai_off) ) then
+				 command(chevet_prefix..name_reveil,'Off')
+			end
+		end
+	end
+end
 	
 --print(istime..' veilleJourChome :'..tostring(veilleJourChome()) ..' jourChome: '..tostring(jourChome()))
 if(auto() and not absence() and presenceAtHome()) then
-        if (heure_reveil == heure_unset or vacances()) then
-			print ("PAS DE REVEIL CAR PROGRAMME A "..heure_unset)
-        else 
-	        if(not jourChome())then
-					print('Reveil '..heure_reveil)
-                        -- Reveil jours de travail
-	                if( istime == heure_reveil) then
-		                 command_scene(scene_reveil,'On')
-	                end
-	                if( istime == heure_reveil_off) then
-		                 command('Chevet','Off')
-	                end	
-	        else
-		        -- Reveil jours chomé
-		
-	        end
-	end
-	
+	reveil_travail('Sylvain',heure_reveil)
 	-- reveil occasionnel
-	if (reveil_occ == heure_unset) then
-    else 
-	   if( istime == reveil_occ) then
-		    command_scene(scene_reveil,'On')
-	    end
-	end
+	reveil_occasionnel('Sylvain',reveil_occ)
 	
 	
 
