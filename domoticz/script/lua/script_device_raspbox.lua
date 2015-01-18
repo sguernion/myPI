@@ -3,7 +3,7 @@ commandArray = {}
 
 if (devicechanged['POWER_OFF_RASPBOX'] == 'Off') then
     print('Turning off RaspBox')
-    result = os.execute("/home/pi/domoticz/script/sh/power_off_raspbox.sh")
+    result = os.execute("/home/pi/domoticz/scripts/sh/power_off_raspbox.sh")
     print(result)
 end
 

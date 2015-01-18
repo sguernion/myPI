@@ -157,64 +157,8 @@ function vacances(name)
 end
 
 function devicesOff()
-	commandArray['Scene:DevicesOff']='On'
+	command_scene('DevicesOff','On')
 end
-
-
-
-function decalage_coucher_fin_films (kodi_play_dur_name,heure_coucher_dec_name,heure_unset)
-	if (uservariables[kodi_play_dur_name] == heure_unset ) then
-		-- aucun decalage, reset heure coucher
-		-- seulement si on a paas dépaassé l'heure de couché
-		t_minutes=tonumber(os.date('%M',os.time()))
- 		hours=tonumber(os.date('%H',os.time()))
- 		nhour =  tonumber(string.sub(uservariables["heure_coucher"], 0, 2))
- 		nminutes =  tonumber(string.sub(uservariables["heure_coucher"], 4, 5))
- 		nhour_R =  tonumber(string.sub(uservariables["heure_reveil"], 0, 2))
- 
- 		
- 		if(hours >= nhour) then 
- 			if(t_minutes >= nminutes) then 
- 				sminutes = tostring(nminutes+2)
- 				shour = tostring(nhour)
- 				command_variable(heure_coucher_dec_name,shour..':'..sminutes)
- 			end
- 		end
- 		
- 		if(hours < nhour_R) then 
- 			sminutes = tostring(nminutes+2)
- 			shour = tostring(nhour)
- 			command_variable(heure_coucher_dec_name,shour..':'..sminutes)
- 		end
-		command_variable(heure_coucher_dec_name,uservariables["heure_coucher"])
-	else 
-		t_minutes=tonumber(os.date('%M',time)) + 3
-		hours=tonumber(os.date('%H',time))
-		nhour = hours + tonumber(string.sub(uservariables[kodi_play_dur_name], 0, 2))
-		nminutes = t_minutes + tonumber(string.sub(uservariables[kodi_play_dur_name], 4, 5))
-		if( nminutes > 60 ) then 
-			nhour = nhour+1
-			nminutes = nminutes -60
-		end
-		if( nhour > 23 ) then 
-			nhour = nhour-23
-		end
-		
-		sminutes = tostring(nminutes)
-		if( nminutes < 10 ) then 
-			sminutes = '0'..sminutes
-		end
-		
-		shour = tostring(nhour)
-		if( nhour < 10 ) then 
-			shour = '0'..shour
-		end
-		
-		--print(tostring(nhour)..':'..tostring(nminutes))
-		command_variable(heure_coucher_dec_name,shour..':'..sminutes)
-	end
-end
-
 
 
 function sourceTv ()
