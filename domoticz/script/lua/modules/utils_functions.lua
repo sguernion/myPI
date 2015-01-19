@@ -20,6 +20,11 @@ end
 -- calcul du temps en seconde depuis la derniere mise a jour du capteur
 function time_difference (device)
 	t1 = os.time()
+	return basetime_difference (t1,device)
+end
+
+function basetime_difference (t1,device)
+	t1 = os.time()
 	s = otherdevices_lastupdate[device]
 	-- returns a date time like 2013-07-11 17:23:12
 
@@ -65,6 +70,21 @@ function oneDeviceHasState(devicePrefix,state)
 end
 
 function oneDeviceHasStateAfterTime(devicePrefix,state,diffTime)
+	present = false
+	for i, v in pairs(otherdevices) do
+		tc = tostring(i)
+		v = i:sub(1,state:len())
+		difference = time_difference(tc)
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix ) then
+			if(otherdevices[tc] == state and difference > diffTime) then
+				present = true
+			end
+		end
+	end
+	return present
+end
+
+function oneDeviceHasStateAfterBaseTime(devicePrefix,state,baseTime,diffTime)
 	present = false
 	for i, v in pairs(otherdevices) do
 		tc = tostring(i)

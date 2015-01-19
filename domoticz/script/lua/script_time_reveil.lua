@@ -34,6 +34,9 @@ if(auto() and not absence() and presenceAtHome()) then
 	coucher.coucher('Sylvain')
 	
 	
+	if(oneDeviceHasStateAfterTime(chevet_prefix..'Sylvain','On',chevet_delai_off)) then
+		 command('Multimedia_Chanbre','Off')
+	end
 end
 
 return commandArray

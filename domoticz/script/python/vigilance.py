@@ -5,6 +5,18 @@ import sys
 import os
 sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
 from domoticz_api import *
+import ConfigParser
+
+#config
+config = ConfigParser.RawConfigParser()
+config.read('/home/pi/domoticz/scripts/lua/config.properties')
+
+def send_sms (user,key,message):
+	call_url('https://smsapi.free-mobile.fr/sendmsg?user='+user+'&pass='+key+'&msg='+message)
+
+	
+user = config.get('domoticz', 'free.mobile.api.user');
+key = config.get('domoticz', 'free.mobile.api.key');
 
 col=1
 
@@ -19,7 +31,7 @@ elif color == "orange":
 	col=3
 elif color == "rouge":
 	col=4
-	# TODO Send SMS
+	send_sms (user,key,'Vigilance : Attention risque Rouge')
 
 
 set_udevice_state_idx(8,col,risk);
