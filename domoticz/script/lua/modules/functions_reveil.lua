@@ -55,7 +55,7 @@ end
 function Reveil:reveil_occasionnel(name_reveil)
 	if (jourChome() or vacances(name_reveil)) then
 		if (uservariables[self.reveil_occ_prefix ..name_reveil ] == self.heure_unset) then
-			print ("PAS DE REVEIL CAR PROGRAMME A "..self.heure_unset)
+			-- print ("PAS DE REVEIL CAR PROGRAMME A "..self.heure_unset)
 		else 
 		   if( istime == uservariables[self.reveil_occ_prefix ..name_reveil ]) then
 				command_scene(self.scene_reveil_prefix..name_reveil,'On')
@@ -76,7 +76,7 @@ end
 ---------------------------------------------------------------------------
 function Reveil:reveil_travail(name_reveil)
 	if (uservariables[self.reveil_prefix ..name_reveil ] == self.heure_unset or vacances(name_reveil)) then
-			print ("PAS DE REVEIL CAR PROGRAMME A "..heure_unset)
+			--print ("PAS DE REVEIL CAR PROGRAMME A "..heure_unset)
     else 
 		 if(not jourChome() )then
              -- Reveil jours de travail
@@ -115,7 +115,7 @@ function Coucher:coucher(name_coucher)
 	
 	heure_coucher = uservariables[self.var_h_coucher]
 	if (heure_coucher == self.heure_unset ) then
-		print ("PAS DE DODO CAR PROGRAMME A ".. self.heure_unset)
+		--print ("PAS DE DODO CAR PROGRAMME A ".. self.heure_unset)
     else 
 		heure_coucher_dec = uservariables[ self.var_h_coucher_dec ]
 		if(veilleJourChome() or vacances(name_coucher))then

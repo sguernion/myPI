@@ -5,7 +5,7 @@ require 'utils_functions'
 require 'kodi_api'
 
 
-if (devicechanged['P_Kodi'] == 'Off') then
+if (devicechanged['P_KODI'] == 'Off') then
         print('Turning off Kodi')
 		kodi = Kodi.createFromConf(uservariables["config_file"])
 		kodi:halt()
@@ -13,13 +13,13 @@ if (devicechanged['P_Kodi'] == 'Off') then
         commandArray['Multimedia']='Off AFTER 150'
 end
 
-if ( devicechanged['Kodi Play/Pause'] == 'On' or devicechanged['Kodi Play/Pause'] == 'Off') then
+if ( devicechanged['D_KODI_PLAY'] == 'On' or devicechanged['D_KODI_PLAY'] == 'Off') then
 	kodi = Kodi.createFromConf(uservariables["config_file"])
 	kodi:play_pause()
 end
 
-if (devicechanged['P_Kodi'] == 'On' and uservariables["source_tv"] == 1) then
-	 commandArray['TV_SOURCE']='On'
+if (devicechanged['P_KODI'] == 'On' and uservariables["source_tv"] == 1) then
+	 commandArray['D_TV_SOURCE']='On'
 end	
 
 

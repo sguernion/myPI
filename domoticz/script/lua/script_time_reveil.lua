@@ -16,7 +16,7 @@ require 'functions_reveil'
 	local reveil_prefix = 'reveil_'
 	local reveil_occ_prefix = 'reveil_occ_'
 	local scene_reveil_prefix = 'Reveil_'
-	local chevet_prefix = 'Chevet_'
+	local chevet_prefix = 'E_CHEVET_'
 	local chevet_delai_off = 1800 -- 30 min
 
 	local reveil = Reveil.create(reveil_prefix,reveil_occ_prefix,scene_reveil_prefix,chevet_prefix,chevet_delai_off,heure_unset)
@@ -34,7 +34,7 @@ if(auto() and not absence() and presenceAtHome()) then
 	coucher.coucher('Sylvain')
 	
 	
-	if(oneDeviceHasStateAfterTime(chevet_prefix..'Sylvain','On',chevet_delai_off)) then
+	if( oneDeviceHasStateAfterTime('Scene:Coucher_General','On',chevet_delai_off) and otherdevices['Multimedia_Chanbre'] == 'On') then
 		 command('Multimedia_Chanbre','Off')
 	end
 end

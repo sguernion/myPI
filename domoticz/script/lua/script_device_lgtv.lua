@@ -6,24 +6,24 @@ require 'utils_functions'
 
 
 
-if ( devicechanged['TV_SOURCE'] == 'On' ) then
+if ( devicechanged['D_TV_SOURCE'] == 'On' ) then
 	sourceTv()
 end
 
-if ( devicechanged['TV_INFO'] == 'On' ) then
+if ( devicechanged['D_TV_INFO'] == 'On' ) then
 	irsend('KEY_INFO')
 end
 
-if ( devicechanged['TV_PGR_UP'] == 'On' ) then
+if ( devicechanged['D_TV_PGR_UP'] == 'On' ) then
 	irsend('KEY_CHANNELUP')
 end
 
-if ( devicechanged['TV_PGR_DOWN'] == 'On' ) then
+if ( devicechanged['D_TV_PGR_DOWN'] == 'On' ) then
 	irsend('KEY_CHANNELDOWN')
 end
 
-if ( devicechanged['TV_BFM'] == 'On' ) then
-	if ( devicechanged['P_Tv'] == 'Off' ) then
+if ( devicechanged['D_TV_CH_BFM'] == 'On' ) then
+	if ( devicechanged['P_TV'] == 'Off' ) then
 		irsend('KEY_POWER')
 	end
     -- if is not source tv
@@ -31,11 +31,11 @@ if ( devicechanged['TV_BFM'] == 'On' ) then
 		sourceTv()
 	end	
 	irsend('bfmtv')
-	commandArray['Source_Tv'] = 'On'
+	commandArray['D_AMPLI_S_TV'] = 'On'
 end
 
 
-if ( devicechanged['TV_POWER'] == 'On' ) then
+if ( devicechanged['D_TV_POWER'] == 'On' ) then
 	irsend('KEY_POWER')
 end
 

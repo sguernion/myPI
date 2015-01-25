@@ -3,6 +3,15 @@ package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
 require 'utils_functions'
 require 'properties'
 
+function alert_mesure(name,max_value,user,key,message)   
+	if devicechanged[name] then
+		mesure = tonumber(otherdevices_svalues[name])
+		if mesure > max_value then
+			print(name..' : '.. tostring(mesure))
+			send_sms (user,key,message)
+		end
+	end
+end
 
 local properties = Properties.create(uservariables["config_file"])
 user=properties:get('free.mobile.api.user')
@@ -13,20 +22,14 @@ if (devicechanged['ADM_BACKUP'] == 'On' ) then
 end
 
 if (not presenceAtHome()) then	
-if devicechanged['CPU_Usage'] then
-   cpu = tonumber(otherdevices_svalues['CPU_Usage'])
-   if cpu > 70 then
-		print('CPU : '.. tostring(cpu))
-		send_sms (user,key,'Attention!! CPU : pi d\'utilisation important')
-   end
-end
 	
-if devicechanged['HDD'] then
-   hdd = tonumber(otherdevices_svalues['HDD'])
-   if hdd > 60 then
-		print('HDD : '.. tostring(hdd))
-		send_sms (user,key,'Attention!! HDD : l\'espace libre diminue')
-   end
+	alert_mesure('CPU_Usage',70,user,key,'Attention!! CPU : pic d\'utilisation importante')
+	alert_mesure('HDD',60,user,key,'Attention!! HDD : l\'espace libre diminue')   
+
 end
-   end
+   
+   
+   
+
+   
 return commandArray

@@ -28,16 +28,20 @@ function basetime_difference (t1,device)
 	s = otherdevices_lastupdate[device]
 	-- returns a date time like 2013-07-11 17:23:12
 
-	year = string.sub(s, 1, 4)
-	month = string.sub(s, 6, 7)
-	day = string.sub(s, 9, 10)
-	hour = string.sub(s, 12, 13)
-	minutes = string.sub(s, 15, 16)
-	seconds = string.sub(s, 18, 19)
+	if(s)then
+		year = string.sub(s, 1, 4)
+		month = string.sub(s, 6, 7)
+		day = string.sub(s, 9, 10)
+		hour = string.sub(s, 12, 13)
+		minutes = string.sub(s, 15, 16)
+		seconds = string.sub(s, 18, 19)
 
 
-	t2 = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
-	return (os.difftime (t1, t2))
+		t2 = os.time{year=year, month=month, day=day, hour=hour, min=minutes, sec=seconds}
+		return (os.difftime (t1, t2))
+	else
+		return 0
+	end
 end
 
 function oneDeviceChangeHasState(devicePrefix,state)

@@ -6,7 +6,7 @@ require 'marantz_api'
 if(auto()) then
 
 -- Allumage automatique de la lampe quand la tv est allumée et qu'il fait nuit
-	if ((devicechanged['Nuit'] == 'On' and otherdevices['P_Tv'] == 'On') or (otherdevices['Nuit'] == 'On' and devicechanged['P_Tv'] == 'On')) then
+	if ((devicechanged['Nuit'] == 'On' and otherdevices['P_TV'] == 'On') or (otherdevices['Nuit'] == 'On' and devicechanged['P_TV'] == 'On')) then
 		command_scene('Cinema','On')
 	end
 

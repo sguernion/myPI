@@ -11,19 +11,19 @@ package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
 require 'marantz_api'
 require 'utils_functions'
 
-if ( devicechanged['Volume default'] == 'On' ) then
+if ( devicechanged['D_AMPLI_V_DEFAULT'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_volume(tostring(uservariables["volume_defaut"]-80))
 	commandArray['Variable:volume'] = tostring(uservariables["volume_defaut"])
 end
 
-if ( devicechanged['Volume up'] == 'On' ) then
+if ( devicechanged['D_AMPLI_V_UP'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:volume_up()
 	commandArray['Variable:volume'] = tostring(uservariables["volume"] +0.5)
 end
 
-if ( devicechanged['Volume Down'] == 'On' ) then
+if ( devicechanged['D_AMPLI_V_DOWN'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:volume_down()
 	commandArray['Variable:volume'] = tostring(uservariables["volume"] -0.5)
@@ -37,22 +37,22 @@ if ( devicechanged['V_VOLUME_DOWN'] == 'On' ) then
 	commandArray['Variable:volume'] = tostring(uservariables["volume"] -0.5)
 end
 
-if ( devicechanged['Source Bluetooth'] == 'On' ) then
+if ( devicechanged['D_AMPLI_S_BLUETOOTH'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('SAT/CBL')
 end
 
-if ( devicechanged['Source Wii'] == 'On' ) then
+if ( devicechanged['D_AMPLI_S_WII'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('DVD')
 end
 
-if ( devicechanged['Source Tuner'] == 'On' ) then
+if ( devicechanged['D_AMPLI_S_TUNER'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('TUNER')
 end
 
-if ( devicechanged['Source_Tv'] == 'On' ) then
+if ( devicechanged['D_AMPLI_S_TV'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('TV')
 	if (uservariables["source_tv"] == 0) then
@@ -60,26 +60,26 @@ if ( devicechanged['Source_Tv'] == 'On' ) then
 	end	
 end
 
-if ( devicechanged['Source Kodi'] == 'On' ) then
+if ( devicechanged['D_AMPLI_S_KODI'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('MPLAY')
 	if (uservariables["source_tv"] == 0) then
-		commandArray['TV_SOURCE']='On'
+		commandArray['D_TV_SOURCE']='On'
 	end	
 end
 
-if ( devicechanged['Source Web Radio'] == 'On' ) then
+if ( devicechanged['D_AMPLI_S_WEB'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('IRADIO')
 end
 
 
 
-if ( devicechanged['P_PHONE_CALL'] == 'On' or otherdevices['Amp_Mute'] == 'Off' ) then
+if ( devicechanged['P_PHONE_CALL'] == 'On' or otherdevices['D_AMPLI_S_MUTE'] == 'Off' ) then
 	commandArray['Amp_Mute'] = devicechanged['P_PHONE_CALL']
 end
 
-if ( devicechanged['P_PHONE_CALL'] == 'Off' or otherdevices['Amp_Mute'] == 'On' ) then
+if ( devicechanged['P_PHONE_CALL'] == 'Off' or otherdevices['D_AMPLI_S_MUTE'] == 'On' ) then
 	if(uservariables["amp_mute"] == 1) then
 		commandArray['Amp_Mute'] = devicechanged['P_PHONE_CALL']
 	end
@@ -87,17 +87,17 @@ end
 
 if ( devicechanged['V_MUTE'] == 'On' ) then
 	if(uservariables["amp_mute"] == 1) then
-		commandArray['Amp_Mute'] = 'Off'
+		commandArray['D_AMPLI_S_MUTE'] = 'Off'
 		commandArray['Variable:amp_mute'] = '0'
 	else
-		commandArray['Amp_Mute'] = 'On'
+		commandArray['D_AMPLI_S_MUTE'] = 'On'
 		commandArray['Variable:amp_mute'] = '1'
 	end
 end
 
 
 
-if ( devicechanged['Amp_Mute'] == 'On' or devicechanged['Amp_Mute'] == 'Off' ) then
+if ( devicechanged['D_AMPLI_S_MUTE'] == 'On' or devicechanged['D_AMPLI_S_MUTE'] == 'Off' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	if(uservariables["amp_mute"] == 0) then
 		--print('Mute')
