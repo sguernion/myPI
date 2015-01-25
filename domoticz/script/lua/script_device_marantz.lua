@@ -56,7 +56,7 @@ if ( devicechanged['D_AMPLI_S_TV'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('TV')
 	if (uservariables["source_tv"] == 0) then
-		commandArray['TV_SOURCE']='On'
+		commandArray['D_TV_SOURCE']='On'
 	end	
 end
 
@@ -75,11 +75,11 @@ end
 
 
 
-if ( devicechanged['P_PHONE_CALL'] == 'On' or otherdevices['D_AMPLI_S_MUTE'] == 'Off' ) then
+if ( devicechanged['P_PHONE_CALL'] == 'On' or otherdevices['D_AMPLI_MUTE'] == 'Off' ) then
 	commandArray['Amp_Mute'] = devicechanged['P_PHONE_CALL']
 end
 
-if ( devicechanged['P_PHONE_CALL'] == 'Off' or otherdevices['D_AMPLI_S_MUTE'] == 'On' ) then
+if ( devicechanged['P_PHONE_CALL'] == 'Off' or otherdevices['D_AMPLI_MUTE'] == 'On' ) then
 	if(uservariables["amp_mute"] == 1) then
 		commandArray['Amp_Mute'] = devicechanged['P_PHONE_CALL']
 	end
@@ -87,17 +87,17 @@ end
 
 if ( devicechanged['V_MUTE'] == 'On' ) then
 	if(uservariables["amp_mute"] == 1) then
-		commandArray['D_AMPLI_S_MUTE'] = 'Off'
+		commandArray['D_AMPLI_MUTE'] = 'Off'
 		commandArray['Variable:amp_mute'] = '0'
 	else
-		commandArray['D_AMPLI_S_MUTE'] = 'On'
+		commandArray['D_AMPLI_MUTE'] = 'On'
 		commandArray['Variable:amp_mute'] = '1'
 	end
 end
 
 
 
-if ( devicechanged['D_AMPLI_S_MUTE'] == 'On' or devicechanged['D_AMPLI_S_MUTE'] == 'Off' ) then
+if ( devicechanged['D_AMPLI_MUTE'] == 'On' or devicechanged['D_AMPLI_MUTE'] == 'Off' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	if(uservariables["amp_mute"] == 0) then
 		--print('Mute')
