@@ -1,7 +1,8 @@
 commandArray = {}
 
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
-require 'utils_functions'
+require 'functions_utils'
+require 'functions_custom'
 
 
 
@@ -31,7 +32,7 @@ if ( devicechanged['D_TV_CH_BFM'] == 'On' ) then
 		sourceTv()
 	end	
 	irsend('bfmtv')
-	commandArray['D_AMPLI_S_TV'] = 'On'
+	command('D_AMPLI_S_TV','On')
 end
 
 

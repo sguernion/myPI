@@ -1,7 +1,8 @@
 commandArray = {}
 
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
-require 'utils_functions'
+require 'functions_utils'
+require 'functions_custom'
 require 'properties'
 
 -- Script qui permet de savoir si certains appareils sont allumés et sur le reseau local

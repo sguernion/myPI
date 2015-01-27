@@ -15,8 +15,8 @@ def send_sms (user,key,message):
 	call_url('https://smsapi.free-mobile.fr/sendmsg?user='+user+'&pass='+key+'&msg='+message)
 
 	
-user = config.get('domoticz', 'free.mobile.api.user');
-key = config.get('domoticz', 'free.mobile.api.key');
+user = config.get('global', 'free.mobile.api.user');
+key = config.get('global', 'free.mobile.api.key');
 
 col=1
 

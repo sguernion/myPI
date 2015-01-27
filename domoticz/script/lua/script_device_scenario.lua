@@ -1,7 +1,8 @@
 commandArray = {}
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
-require 'utils_functions'
-require 'marantz_api'
+require 'functions_utils'
+require 'functions_custom'
+
 
 if(auto()) then
 

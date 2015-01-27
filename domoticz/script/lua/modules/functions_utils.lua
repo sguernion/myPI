@@ -1,21 +1,4 @@
 
--- 
--- Envoie d'un sms sur un mobile Free
-function send_sms (user,key,message)
-	commandArray['OpenURL']='https://smsapi.free-mobile.fr/sendmsg?user='..user..'&pass='..key..'&msg='..message
-end
-
-
-function send_vocal (message)
-	os.execute('/home/pi/domoticz/scripts/sh/speak.sh ' .. message)
-	os.execute('wait 10 ')
-end
-
-
-function irsend (command)
-	os.execute('/home/pi/domoticz/scripts/sh/irSend.sh '..command)
-end
-
 
 -- calcul du temps en seconde depuis la derniere mise a jour du capteur
 function time_difference (device)
@@ -44,6 +27,20 @@ function basetime_difference (t1,device)
 	end
 end
 
+function heure_difference (uservariable)
+	t1 = os.time()
+	h = uservariables[uservariable]
+	-- returns a date time like 17:23
+
+	hour = string.sub(s, 1, 2)
+	minutes = string.sub(s, 4, 6)
+
+
+
+	t2 = os.time{year=tonumber(os.date('%Y',t1)), month=tonumber(os.date('%m',t1)), day=tonumber(os.date('%d',t1)), hour=hour, min=minutes}
+	return (os.difftime (t1, t2))
+end
+
 function oneDeviceChangeHasState(devicePrefix,state)
 	present = false
 	for i, v in pairs(devicechanged) do
@@ -65,9 +62,9 @@ function oneDeviceHasState(devicePrefix,state)
 		if (tc:sub(1,devicePrefix:len()) == devicePrefix) then
 			--print(tc:sub(1,devicePrefix:len()) ..' '..devicePrefix.. ' '..v)
 			if(otherdevices[tc] == state) then
-			--print(tc:sub(1,devicePrefix:len()) ..' '..devicePrefix.. ' '..v)
-			present = true
-		end
+				--print(tc:sub(1,devicePrefix:len()) ..' '..devicePrefix.. ' '..v)
+				present = true
+			end
 		end
 	end
 	return present
@@ -88,20 +85,6 @@ function oneDeviceHasStateAfterTime(devicePrefix,state,diffTime)
 	return present
 end
 
-function oneDeviceHasStateAfterBaseTime(devicePrefix,state,baseTime,diffTime)
-	present = false
-	for i, v in pairs(otherdevices) do
-		tc = tostring(i)
-		v = i:sub(1,state:len())
-		difference = time_difference(tc)
-		if (tc:sub(1,devicePrefix:len()) == devicePrefix ) then
-			if(otherdevices[tc] == state and difference > diffTime) then
-				present = true
-			end
-		end
-	end
-	return present
-end
 
 function oneDeviceHasStateBetweenTime(devicePrefix,state,diffStart,diffEnd)
 	present = false
@@ -135,6 +118,8 @@ end
 		print(" ip null for device ".. device )
 	end
 end
+
+
  
 
 -- domoticz functions
@@ -149,47 +134,4 @@ end
 
 function command(command,action)
 	commandArray[command] = action
-end
-
--- Custom implementation (mobile, motion sensors...)
-function presenceAtHome()
-	return presenceSmartphone() or presenceMotion()
-end
-
--- Detect device P_Smartphone or P_Smartphone_XXX is present
-function presenceSmartphone()
-	return oneDeviceHasState('P_Smartphone','On')
-end
-
--- Detect device P_Motion or P_Motion_XXX is present
-function presenceMotion()
-	return oneDeviceHasState('P_Motion','On')
-end
-
-
-
-function auto()
-	return otherdevices['Auto'] == 'On'
-end
-
-function absence()
-	return otherdevices['Mode_Absence'] == 'On'
-end
-
-function vacances(name)
-	return otherdevices['Vacances_'..name] == 'On'
-end
-
-function devicesOff()
-	command_scene('DevicesOff','On')
-end
-
-
-function sourceTv ()
-	irsend('source')
-	if (uservariables["source_tv"] == 1) then
-		command_variable('source_tv',0)
-	else
-		command_variable('source_tv',1)
-	end	
 end

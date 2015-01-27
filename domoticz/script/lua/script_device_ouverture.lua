@@ -1,16 +1,17 @@
 commandArray = {}
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
-require 'utils_functions'
+require 'functions_utils'
+require 'functions_custom'
 
---for i, v in pairs(otherdevices) do print(i, v) end
+temporisation = 60
 
 -- indique si une fenetre ou une porte est ouverte
-if (oneDeviceHasStateAfterTime('Porte','Open',60)) then
-   commandArray['Ouverture']='On'
+if (oneDeviceHasStateAfterTime('Porte','Open',temporisation)) then
+   command('Ouverture','On')
 end 
 
 if (oneDeviceChangeHasState('Porte','Closed') and otherdevices['Ouverture'] == 'On') then
-   commandArray['Ouverture']='Off'
+   command('Ouverture','Off')
 end 
 
 

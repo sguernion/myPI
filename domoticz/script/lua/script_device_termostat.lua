@@ -17,7 +17,7 @@
 	local consigne_min = uservariables["tht_cons_eco"]  --Température minimum
 	local consigne_hors_gel = uservariables["tht_cons_hors_gel"]
 	local hysteresis = 0.5 --Valeur seuil pour éviter que le relai ne cesse de commuter dans les 2 sens
-	local sonde = 'Temp Chambre' --Nom de la sonde de température
+	local sonde = 'TEMP_PALIER' --Nom de la sonde de température
 	local thermostat = 'Calendrier Chauffage' --Nom de l'interrupteur virtuel du thermostat
 	local ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
 	local radiateur = 'Chauffage' --Nom du radiateur à allumer/éteindre

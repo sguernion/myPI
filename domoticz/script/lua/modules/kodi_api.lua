@@ -1,6 +1,7 @@
 
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
-require 'utils_functions'
+require 'functions_utils'
+require 'functions_custom'
 require 'properties'
 
 Kodi = {}
@@ -50,6 +51,10 @@ end
 
 function Kodi:play_pause()
 	self:call_method('Player.PlayPause','{"playerid": 1}')
+end
+
+function Kodi:party()
+	self:call_method('Player.Open','{ "item": { "partymode": "music" } }')
 end
 
 function Kodi:stop()
