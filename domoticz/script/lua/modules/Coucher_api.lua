@@ -42,7 +42,7 @@ function Coucher.create(var_h_coucher,var_h_coucher_dec,scene_coucher,heure_unse
    local cch = {}             -- our new object
    setmetatable(cch,Coucher)  -- make Coucher handle lookup
     cch.debug = 0
-	if(cch.debug) then
+	if(cch.debug == 1) then
    	print ("var_h_coucher:  " .. tostring(var_h_coucher))
 	print ("var_h_coucher_dec:  " .. tostring(var_h_coucher_dec))
 	print ("scene_coucher:  " .. tostring(scene_coucher))
@@ -62,7 +62,7 @@ end
 --                                                                       --
 ---------------------------------------------------------------------------
 function Coucher:coucher_travail(name_coucher)
-	if(self.debug) then
+	if(self.debug == 1) then
 	print ("var_h_coucher:  " .. tostring(self.var_h_coucher))
 	print ("var_h_coucher_dec:  " .. tostring(self.var_h_coucher_dec))
 	print ("scene_coucher:  " .. tostring(self.scene_coucher))

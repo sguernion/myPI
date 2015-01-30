@@ -11,6 +11,11 @@ if(auto()) then
 		command_scene('Cinema','On')
 	end
 
+	if (not presenceAtHome() and otherdevices['Nuit'] == 'On' and devicechanged['Porte'] == 'Open') then
+		command_scene('Cinema','On')
+	end
+	
+	
 end
 
 

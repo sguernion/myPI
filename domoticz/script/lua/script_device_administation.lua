@@ -16,8 +16,8 @@ end
 
 if (not presenceAtHome()) then	
 	
-	alert_mesure('CPU_Usage',70,user,key,'Attention!! CPU : pic d\'utilisation importante')
-	alert_mesure('HDD',60,user,key,'Attention!! HDD : l\'espace libre diminue')   
+	alert_mesure('M_DOMO_CPU',70,user,key,'Attention!! CPU : pic d\'utilisation importante')
+	alert_mesure('M_DOMO_HDD',60,user,key,'Attention!! HDD : l\'espace libre diminue')   
 
 end
    

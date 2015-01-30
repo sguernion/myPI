@@ -42,9 +42,9 @@ if(auto() and not absence() and presenceAtHome()) then
 	
 	ch:coucher_travail(username)
 	
-	
-	if( oneDeviceHasStateAfterTime('Mode Nuit','On',chevet_delai_off) and otherdevices['Multimedia_Chanbre'] == 'On') then
-		 command('Multimedia_Chanbre','Off')
+
+	if( oneDeviceHasStateAfterTime('Multimedia_Chambre','On',chevet_delai_off) and otherdevices['Mode Nuit'] == 'On') then
+		 command('Multimedia_Chambre','Off')
 	end
 end
 

@@ -16,11 +16,12 @@
 	local consigne = uservariables["tht_cons_confort"]  --Température de consigne
 	local consigne_min = uservariables["tht_cons_eco"]  --Température minimum
 	local consigne_hors_gel = uservariables["tht_cons_hors_gel"]
+	local var_tht_temp = 'tht_temperature'
 	local hysteresis = 0.5 --Valeur seuil pour éviter que le relai ne cesse de commuter dans les 2 sens
-	local sonde = 'TEMP_PALIER' --Nom de la sonde de température
-	local thermostat = 'Calendrier Chauffage' --Nom de l'interrupteur virtuel du thermostat
+	local sonde = 'T_TEMP_PALIER' --Nom de la sonde de température
+	local thermostat = 'T_CALL_CHAUFAGE' --Nom de l'interrupteur virtuel du thermostat
 	local ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
-	local radiateur = 'Chauffage' --Nom du radiateur à allumer/éteindre
+	local radiateur = 'T_CHAUFFAGE' --Nom de la chaudière à allumer/éteindre
 	--------------------------------
 	-- Fin des variables à éditer --
 	--------------------------------
@@ -39,20 +40,20 @@
 	    	if (temperature < (consigne - hysteresis) and otherdevices[radiateur]=='Off' and otherdevices[ouverture]=='Off') then
 	            print('Allumage du chauffage')
 	            commandArray[radiateur]='On'
-				commandArray['Variable:tht_temperature'] = tostring(consigne)
+				commandArray['Variable:' .. var_tht_temp] = tostring(consigne)
 		    elseif (temperature > (consigne + hysteresis)) then
 		        print('Extinction du chauffage')
 	            commandArray[radiateur]='Off'
-				commandArray['Variable:tht_temperature'] = tostring(consigne)
+				commandArray['Variable:' .. var_tht_temp] = tostring(consigne)
 		    end
 		elseif (otherdevices[thermostat]=='Off') then
 			-- phase eco
 			if (temperature < (consigne_min - hysteresis) and otherdevices[ouverture]=='Off') then
 				commandArray[radiateur]='On'
-				commandArray['Variable:tht_temperature'] = tostring(consigne_min)
+				commandArray['Variable:' .. var_tht_temp] = tostring(consigne_min)
 			elseif (temperature > (consigne_min + hysteresis)) then
 	            commandArray[radiateur]='Off'
-				commandArray['Variable:tht_temperature'] = tostring(consigne_min)
+				commandArray['Variable:' .. var_tht_temp] = tostring(consigne_min)
 		    end
 	    end
 	end

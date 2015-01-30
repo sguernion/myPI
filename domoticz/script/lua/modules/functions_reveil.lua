@@ -38,8 +38,8 @@ Reveil.__index = Reveil
 function Reveil.create(reveil_prefix,reveil_occ_prefix,scene_reveil_prefix,chevet_prefix,chevet_delai_off,heure_unset)
    local mrt = {}             -- our new object
    setmetatable(mrt,Reveil)  -- make Properties handle lookup
-    cch.debug = 0
-	if(cch.debug) then
+    mrt.debug = 0
+	if(mrt.debug == 1) then
    print ("reveil_prefix:  " .. tostring(reveil_prefix))
 	print ("reveil_occ_prefix:  " .. tostring(reveil_occ_prefix))
 	print ("scene_reveil_prefix:  " .. tostring(scene_reveil_prefix))
@@ -83,7 +83,7 @@ end
 --                                                                       --
 ---------------------------------------------------------------------------
 function Reveil:reveil_travail(name_reveil)
-	if(self.debug) then
+	if(self.debug == 1) then
 		print ("reveil_prefix:  " .. tostring(self.reveil_prefix))
 		print ("reveil_occ_prefix:  " .. tostring(self.reveil_occ_prefix))
 		print ("scene_reveil_prefix:  " .. tostring(self.scene_reveil_prefix))
