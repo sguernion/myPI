@@ -22,7 +22,7 @@ if(auto()) then
 
 end
 
-if(absence()) then
+if(absence() and not presenceAtHome()) then
 	devicesOff()
 end
 

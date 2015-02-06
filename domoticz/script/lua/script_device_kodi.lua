@@ -17,7 +17,7 @@ if ( devicechanged['D_KODI_PARTY'] == 'On' ) then
 	kodi:party()
 end
 
-if ( devicechanged['D_KODI_POWEROFF'] == 'On' ) then
+if ( devicechanged['D_KODI_POWEROFF'] == 'Off' ) then
 	kodi = Kodi.createFromConf(uservariables["config_file"])
 	kodi:halt()
 end

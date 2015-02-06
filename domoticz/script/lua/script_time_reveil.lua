@@ -4,6 +4,15 @@ require 'functions_utils'
 require 'functions_custom'
 require 'functions_reveil'
 require 'Coucher_api'
+require 'Day'
+
+
+
+local day = Day.create()
+day:initSaison()
+day:initJoursChome()	 
+
+
 
 ---------------------------------------------
 -- nommage des variables

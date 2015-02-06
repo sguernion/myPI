@@ -34,7 +34,9 @@ end
 
 -- 
 function Kodi:call_api(request)
-	commandArray['OpenURL']='http://'..self.user.. ':'.. self.pw ..'@'.. self.server ..':'.. self.port ..'/jsonrpc?request='.. request
+	url = 'http://'..self.user.. ':'.. self.pw ..'@'.. self.server ..':'.. self.port ..'/jsonrpc?request='.. request
+	print(url)
+	commandArray['OpenURL']= url
 end
 
 function Kodi:call_method(method,params)

@@ -18,10 +18,10 @@
 	local consigne_hors_gel = uservariables["tht_cons_hors_gel"]
 	local var_tht_temp = 'tht_temperature'
 	local hysteresis = 0.5 --Valeur seuil pour éviter que le relai ne cesse de commuter dans les 2 sens
-	local sonde = 'T_TEMP_PALIER' --Nom de la sonde de température
-	local thermostat = 'T_CALL_CHAUFAGE' --Nom de l'interrupteur virtuel du thermostat
+	local sonde = 'T_TH_TEMP_PALIER' --Nom de la sonde de température
+	local thermostat = 'T_TH_CMD_CHAUFAGE' --Nom de l'interrupteur virtuel du thermostat
 	local ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
-	local radiateur = 'T_CHAUFFAGE' --Nom de la chaudière à allumer/éteindre
+	local radiateur = 'T_TH_CHAUFFAGE' --Nom de la chaudière à allumer/éteindre
 	--------------------------------
 	-- Fin des variables à éditer --
 	--------------------------------

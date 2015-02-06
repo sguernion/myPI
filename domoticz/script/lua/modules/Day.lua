@@ -39,6 +39,45 @@ function Day:veilleJourChome()
   return self.veilleJourChomeReturn
 end
 
+function Day:initJoursChome()	 
+--print(string.sub(uservariables_lastupdate['jourChome'],0,10))
+
+time=os.time()
+isDay=os.date('%Y-%m-%d',time)
+if( isDay ~= string.sub(uservariables_lastupdate['jourChome'],0,10) ) then
+	
+	if(self.jourChome()) then 
+		commandArray['Variable:jourChome'] ='1'
+	else
+		commandArray['Variable:jourChome'] ='0'
+	end
+end
+
+if( isDay ~= string.sub(uservariables_lastupdate['veilleJourChome'],0,10) ) then
+	if(self.veilleJourChome()) then 
+		commandArray['Variable:veilleJourChome'] ='1'
+	else
+		commandArray['Variable:veilleJourChome'] ='0'
+	end
+end
+end
+
+function Day:initSaison()
+	time=os.time()
+	isDay=os.date('%m-%d',time)
+	if( isDay == "12-21" ) then
+		commandArray['Variable:saison'] ='Hiver'
+	end
+	if( isDay == "09-21" ) then
+		commandArray['Variable:saison'] ='Automne'
+	end
+	if( isDay == "03-21" ) then
+		commandArray['Variable:saison'] ='Printemps'
+	end
+
+end
+
+
 -- Retourne le jour de la semaine (lundi...dimanche)
 
 function Day:getJourSemaine()

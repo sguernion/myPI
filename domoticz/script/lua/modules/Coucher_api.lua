@@ -11,30 +11,6 @@ istime_s=tostring(os.date('%H:%M',time))
 hours=tonumber(os.date('%H',time))
 
 
-
-local day = Day.create()
-
----------------------------------------------------------------------------
---                                                                       --
---                                                                       --
---                                                                       --
----------------------------------------------------------------------------
-function jourChome() 
-	return day:jourChome();
-end
-
----------------------------------------------------------------------------
---                                                                       --
---                                                                       --
---                                                                       --
----------------------------------------------------------------------------
-function veilleJourChome() 
-	return day:veilleJourChome()
-end
-
-
-
-
 Coucher = {}
 Coucher.__index = Coucher
 

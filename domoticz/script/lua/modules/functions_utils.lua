@@ -135,3 +135,29 @@ end
 function command(command,action)
 	commandArray[command] = action
 end
+
+
+
+function initSaison()
+	time=os.time()
+	isDay=os.date('%m-%d',time)
+	if( isDay == "12-21" ) then
+		command_variable('saison','Hiver')
+	end
+	if( isDay == "09-21" ) then
+		command_variable('saison','Automne')
+	end
+	if( isDay == "03-21" ) then
+		command_variable('saison','Printemps')
+	end
+	 --test conditions
+	if( isDay == "02-04" ) then
+		command_variable('saison','Hiver')
+	end
+
+end
+
+
+function saison() 
+	return uservariables["saison"]
+end
