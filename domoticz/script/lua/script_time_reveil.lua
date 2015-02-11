@@ -28,7 +28,7 @@ day:initJoursChome()
 	local reveil_occ_prefix = 'reveil_occ_'
 	local scene_reveil_prefix = 'Reveil_'
 	local chevet_prefix = 'E_CHEVET_'
-	local chevet_delai_off = 1800 -- 30 min
+	local chevet_delai_off = uservariables["chevet_delai_off"] -- 1800 -- 30 min
 	
 	local heure_coucher = 'heure_coucher'
 	local heure_coucher_dec = 'heure_coucher_dec'

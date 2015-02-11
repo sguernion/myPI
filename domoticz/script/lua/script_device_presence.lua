@@ -22,7 +22,7 @@ if(auto()) then
 
 end
 
-if(absence() and not presenceAtHome()) then
+if(absence() and otherdevices['MultipriseS'] == 'On' ) then
 	devicesOff()
 end
 

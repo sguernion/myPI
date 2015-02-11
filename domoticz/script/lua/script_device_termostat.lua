@@ -1,3 +1,8 @@
+--------------------------------
+------Thermostat nonoZone par Hysteresis------
+--------------------------------	
+	
+	
 	--------------------------------
 	------ Variables à créer  ------
 	--------------------------------
@@ -39,22 +44,25 @@
 			-- phase confort
 	    	if (temperature < (consigne - hysteresis) and otherdevices[radiateur]=='Off' and otherdevices[ouverture]=='Off') then
 	            print('Allumage du chauffage')
-	            commandArray[radiateur]='On'
-				commandArray['Variable:' .. var_tht_temp] = tostring(consigne)
+				declenchenemtRadiateur(radiateur,'On',var_tht_temp,consigne)
 		    elseif (temperature > (consigne + hysteresis)) then
 		        print('Extinction du chauffage')
-	            commandArray[radiateur]='Off'
-				commandArray['Variable:' .. var_tht_temp] = tostring(consigne)
+				declenchenemtRadiateur(radiateur,'Off',var_tht_temp,consigne)
 		    end
 		elseif (otherdevices[thermostat]=='Off') then
 			-- phase eco
 			if (temperature < (consigne_min - hysteresis) and otherdevices[ouverture]=='Off') then
-				commandArray[radiateur]='On'
-				commandArray['Variable:' .. var_tht_temp] = tostring(consigne_min)
+				declenchenemtRadiateur(radiateur,'On',var_tht_temp,consigne_min)
 			elseif (temperature > (consigne_min + hysteresis)) then
-	            commandArray[radiateur]='Off'
-				commandArray['Variable:' .. var_tht_temp] = tostring(consigne_min)
+				declenchenemtRadiateur(radiateur,'Off',var_tht_temp,consigne_min)
 		    end
 	    end
 	end
+	
+	
+function declenchenemtRadiateur(radiateur,cmd,var_tht_temp,valeur_temp)
+	 commandArray[radiateur]=cmd
+	 commandArray['Variable:' .. var_tht_temp] = tostring(valeur_temp)
+end
+	
 return commandArray

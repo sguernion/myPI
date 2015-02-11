@@ -17,9 +17,13 @@ if ( devicechanged['D_KODI_PARTY'] == 'On' ) then
 	kodi:party()
 end
 
-if ( devicechanged['D_KODI_POWEROFF'] == 'Off' ) then
-	kodi = Kodi.createFromConf(uservariables["config_file"])
-	kodi:halt()
+if ( devicechanged['D_KODI_POWER'] == 'On' ) then
+	if ( otherdevices['P_KODI'] == 'On' and  otherdevices['Alim_Kodi'] == 'On') then
+		kodi = Kodi.createFromConf(uservariables["config_file"])
+		kodi:halt()
+	elseif ( otherdevices['Alim_Kodi'] == 'Off' ) then
+		command('Alim_Kodi','On')
+	end
 end
 
 if (devicechanged['P_KODI'] == 'On' and uservariables["source_tv"] == 1) then
