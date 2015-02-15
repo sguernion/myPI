@@ -46,7 +46,7 @@ time=os.time()
 isDay=os.date('%Y-%m-%d',time)
 if( isDay ~= string.sub(uservariables_lastupdate['jourChome'],0,10) ) then
 	
-	if(self.jourChome()) then 
+	if(self:jourChome()) then 
 		commandArray['Variable:jourChome'] ='1'
 	else
 		commandArray['Variable:jourChome'] ='0'
@@ -54,7 +54,7 @@ if( isDay ~= string.sub(uservariables_lastupdate['jourChome'],0,10) ) then
 end
 
 if( isDay ~= string.sub(uservariables_lastupdate['veilleJourChome'],0,10) ) then
-	if(self.veilleJourChome()) then 
+	if(self:veilleJourChome()) then 
 		commandArray['Variable:veilleJourChome'] ='1'
 	else
 		commandArray['Variable:veilleJourChome'] ='0'

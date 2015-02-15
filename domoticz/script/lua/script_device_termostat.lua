@@ -30,7 +30,10 @@
 	--------------------------------
 	-- Fin des variables à éditer --
 	--------------------------------
-	
+function declenchenemtRadiateur(radiateur,cmd,var_tht_temp,valeur_temp)
+	 commandArray[radiateur]=cmd
+	 commandArray['Variable:' .. var_tht_temp] = tostring(valeur_temp)
+end
 	commandArray = {}
 	--La sonde Oregon 'thermostat' emet toutes les 40 secondes. Ce sera approximativement la fréquence 
 	-- d'exécution de ce script.
@@ -60,9 +63,6 @@
 	end
 	
 	
-function declenchenemtRadiateur(radiateur,cmd,var_tht_temp,valeur_temp)
-	 commandArray[radiateur]=cmd
-	 commandArray['Variable:' .. var_tht_temp] = tostring(valeur_temp)
-end
+
 	
 return commandArray

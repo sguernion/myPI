@@ -44,7 +44,7 @@ function Kodi:call_method(method,params)
 	if(params  ~= nil and params  ~= '')then
 		jsonParam='"params": '..params
 	end
-	self:call_api('{"jsonrpc": "2.0", "method": "'..method..'",'..jsonParam..' "id": '.. self.id ..'}')
+	self:call_api('{"jsonrpc": "2.0", "method": "'..method..'",'..jsonParam..', "id": '.. self.id ..'}')
 end
 
 function Kodi:notification(message)

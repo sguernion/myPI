@@ -1,0 +1,14 @@
+Play;Play;Play/Pause
+Smartphone;Smartphone;Smartphone
+Server;Serveur;Serveur
+Kodi;Kodi;Kodi
+Nuit;Nuit;Nuit/Jour
+LightChevet;Chevet;Chevet
+Chaudiere;Chaudiere;Chaudiere
+Chauffage;Chauffage;Chauffage
+Ouverture;Ouverture;Ouverture
+Sapin;Sapin;Sapin
+Vmc;Vmc;Vmc
+Sarah;Sarah;Sarah
+Prise;Prise;Prises
+Ecran;Ecran;Ecran
