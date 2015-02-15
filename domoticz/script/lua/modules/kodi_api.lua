@@ -34,17 +34,19 @@ end
 
 -- 
 function Kodi:call_api(request)
-	url = 'http://'..self.user.. ':'.. self.pw ..'@'.. self.server ..':'.. self.port ..'/jsonrpc?request='.. request
+	--'..self.user.. ':'.. self.pw ..'@'
+	url = 'http://'.. self.server ..':'.. self.port ..'/jsonrpc?request='.. request
 	print(url)
 	commandArray['OpenURL']= url
+	--os.execute('curl '..url)
 end
 
 function Kodi:call_method(method,params)
 	jsonParam=''
 	if(params  ~= nil and params  ~= '')then
-		jsonParam='"params": '..params
+		jsonParam='"params": '..params ..','
 	end
-	self:call_api('{"jsonrpc": "2.0", "method": "'..method..'",'..jsonParam..', "id": '.. self.id ..'}')
+	self:call_api('{"jsonrpc": "2.0", "method": "'..method..'",'..jsonParam..' "id": '.. self.id ..'}')
 end
 
 function Kodi:notification(message)
@@ -96,7 +98,7 @@ function Kodi:reboot()
 end
 
 function Kodi:halt()
-	self:notification('shutdown')
+	--self:notification('shutdown')
 	self:call_method('System.Shutdown','')
 end
 

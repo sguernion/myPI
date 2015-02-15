@@ -10,6 +10,7 @@ function Day.create()
    setmetatable(mrt,Day)  -- make handle lookup
    mrt.jourChomeToday="NULL" -- Variable globale (date du dernier calcul) pour ne pas recalculer le résultat à chaque appel
    mrt.veilleJourChomeToday="NULL"
+   mrt.weekendToday="NULL"
    mrt.jourChomeReturn=false -- Variable globale (résulat du dernier calcul) pour ne pas recalculer le résultat à chaque appel
    mrt.veilleJourChomeReturn=false
    mrt.getJourSemaineTab={[0]="dimanche",[1]="lundi",[2]="mardi",[3]="mercredi",[4]="jeudi",[5]="vendredi",[6]="samedi"}
@@ -24,9 +25,19 @@ function Day:jourChome()
   if(today~=self.jourChomeToday) then -- Faut-il refaire le calcul ?
     local jour=self:getJourSemaine()
     self.jourChomeToday=today
-    self.jourChomeReturn=(jour=="samedi" or jour=="dimanche" or self:jourFerie())
+    self.jourChomeReturn=(self:weekend() or self:jourFerie())
   end
   return self.jourChomeReturn
+end
+
+function Day:weekend()
+  local today=os.date("%Y-%m-%d")
+  if(today~=self.weekendToday) then -- Faut-il refaire le calcul ?
+    local jour=self:getJourSemaine()
+    self.weekendToday=today
+    self.weekendReturn=(jour=="samedi" or jour=="dimanche")
+  end
+  return self.weekendReturn
 end
 
 function Day:veilleJourChome()
@@ -60,6 +71,15 @@ if( isDay ~= string.sub(uservariables_lastupdate['veilleJourChome'],0,10) ) then
 		commandArray['Variable:veilleJourChome'] ='0'
 	end
 end
+
+if( isDay ~= string.sub(uservariables_lastupdate['weekend'],0,10) ) then
+	if(self:weekend()) then 
+		commandArray['Variable:weekend'] ='1'
+	else
+		commandArray['Variable:weekend'] ='0'
+	end
+end
+
 end
 
 function Day:initSaison()
