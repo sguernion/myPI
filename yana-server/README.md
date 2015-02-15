@@ -2,8 +2,8 @@
 
 
 ## Plugins
+Détails sur [yana-plugins](https://github.com/sguernion/yana-plugins/tree/master/)
 
-### Plugin Domoticz
 
 ## Backup
 sudo /var/www/yana-server/yana_backup.sh
