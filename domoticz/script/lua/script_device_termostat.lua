@@ -1,19 +1,24 @@
---------------------------------
+commandArray = {}
+
+package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
+require 'functions_utils'
+require 'functions_custom'
+require 'Thermostat_class'
+
+----------------------------------------------
 ------Thermostat nonoZone par Hysteresis------
---------------------------------	
+----------------------------------------------
 	
 	
 	--------------------------------
 	------ Variables à créer  ------
 	--------------------------------
-	if(uservariables["tht_cons_confort"] == '' )then commandArray['Variable:tht_cons_confort'] = '20'end
-	if(uservariables["tht_cons_eco"] == '' )then commandArray['Variable:tht_cons_eco'] = '17.5'end
-	if(uservariables["tht_cons_hors_gel"] == '' )then commandArray['Variable:tht_cons_hors_gel'] = '15'end
-	if(uservariables["tht_temperature"] == '' )then commandArray['Variable:tht_temperature'] = '20'end
-	-- modes : [{'id':'off'},{'id':'auto'},{'id':'force'}]
 	-- tht_cons_confort : 20
 	-- tht_cons_eco : 17
 	-- tht_cons_hors_gel : 15
+	-- tht_manual : 20
+	-- tht_temperature : 20
+	-- tht_hysteresis = 0.5
 	--------------------------------
 	------ Variables à éditer ------
 	--------------------------------
@@ -21,45 +26,34 @@
 	local consigne = uservariables["tht_cons_confort"]  --Température de consigne
 	local consigne_min = uservariables["tht_cons_eco"]  --Température minimum
 	local consigne_hors_gel = uservariables["tht_cons_hors_gel"]
+	local manual_temp = uservariables["tht_manual"]
 	local var_tht_temp = 'tht_temperature'
-	local hysteresis = 0.5 --Valeur seuil pour éviter que le relai ne cesse de commuter dans les 2 sens
+	local hysteresis = uservariables["tht_hysteresis"] --Valeur seuil pour éviter que le relai ne cesse de commuter dans les 2 sens
+	
+	
 	local sonde = 'T_TH_TEMP_PALIER' --Nom de la sonde de température
-	local thermostat = 'T_TH_CMD_CHAUFAGE' --Nom de l'interrupteur virtuel du thermostat
-	local ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
-	local radiateur = 'T_TH_CHAUFFAGE' --Nom de la chaudière à allumer/éteindre
+	local d_cmd_thermostat = 'T_TH_CMD_CHAUFAGE' --Nom de l'interrupteur virtuel du thermostat
+	local d_ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
+	local d_chaudiere = 'T_TH_CHAUFFAGE' --Nom de la chaudière à allumer/éteindre
+	local deviceauto = 'Auto' -- mode chauffage auto
 	--------------------------------
 	-- Fin des variables à éditer --
 	--------------------------------
-function declenchenemtRadiateur(radiateur,cmd,var_tht_temp,valeur_temp)
-	 commandArray[radiateur]=cmd
-	 commandArray['Variable:' .. var_tht_temp] = tostring(valeur_temp)
-end
-	commandArray = {}
+	
+	
+	
 	--La sonde Oregon 'thermostat' emet toutes les 40 secondes. Ce sera approximativement la fréquence 
 	-- d'exécution de ce script.
 	if (devicechanged[sonde]) then
+		local thermostat = Thermostat.create(d_chaudiere,d_ouverture,consigne,consigne_min,var_tht_temp,hysteresis)
+	
 		local temperature = devicechanged[string.format('%s_Temperature', sonde)] --Temperature relevée
 	    
-		
-		--On n'agit que si le "Thermostat" est actif
-	    if (otherdevices[thermostat]=='On' ) then
-	        --print('-- Gestion du thermostat --')
-			-- phase confort
-	    	if (temperature < (consigne - hysteresis) and otherdevices[radiateur]=='Off' and otherdevices[ouverture]=='Off') then
-	            print('Allumage du chauffage')
-				declenchenemtRadiateur(radiateur,'On',var_tht_temp,consigne)
-		    elseif (temperature > (consigne + hysteresis)) then
-		        print('Extinction du chauffage')
-				declenchenemtRadiateur(radiateur,'Off',var_tht_temp,consigne)
-		    end
-		elseif (otherdevices[thermostat]=='Off') then
-			-- phase eco
-			if (temperature < (consigne_min - hysteresis) and otherdevices[ouverture]=='Off') then
-				declenchenemtRadiateur(radiateur,'On',var_tht_temp,consigne_min)
-			elseif (temperature > (consigne_min + hysteresis)) then
-				declenchenemtRadiateur(radiateur,'Off',var_tht_temp,consigne_min)
-		    end
-	    end
+		if (otherdevices[deviceauto] == 'Off') then
+			thermostat:gestionChauffeManual(temperature,manual_temp )
+		else
+			thermostat:gestionChauffe(d_cmd_thermostat,temperature )
+		end
 	end
 	
 	

@@ -15,23 +15,25 @@ Reveil = {}
 Reveil.__index = Reveil
 
 function Reveil.create(reveil_prefix,reveil_occ_prefix,scene_reveil_prefix,chevet_prefix,chevet_delai_off,heure_unset)
-   local mrt = {}             -- our new object
-   setmetatable(mrt,Reveil)  -- make Properties handle lookup
-    mrt.debug = 0
-	if(mrt.debug == 1) then
-   print ("reveil_prefix:  " .. tostring(reveil_prefix))
-	print ("reveil_occ_prefix:  " .. tostring(reveil_occ_prefix))
-	print ("scene_reveil_prefix:  " .. tostring(scene_reveil_prefix))
-	print ("chevet_prefix:  " .. tostring(chevet_prefix))
-	print ("chevet_delai_off:  " .. tostring(chevet_delai_off))
+	local mrt = {}             -- our new object
+	setmetatable(mrt,Reveil)  -- make Properties handle lookup
+    mrt.debug = isDebug()
+	if(mrt.debug) then
+		print ("--------- init Reveil ---------- " )
+		print ("reveil_prefix:  " .. tostring(reveil_prefix))
+		print ("reveil_occ_prefix:  " .. tostring(reveil_occ_prefix))
+		print ("scene_reveil_prefix:  " .. tostring(scene_reveil_prefix))
+		print ("chevet_prefix:  " .. tostring(chevet_prefix))
+		print ("chevet_delai_off:  " .. tostring(chevet_delai_off))
+		print ("--------------------------------- " )
 	end
-   mrt.reveil_prefix = reveil_prefix
-   mrt.reveil_occ_prefix = reveil_occ_prefix
-   mrt.scene_reveil_prefix = scene_reveil_prefix
-   mrt.chevet_prefix = chevet_prefix
-   mrt.chevet_delai_off = chevet_delai_off
-   mrt.heure_unset = heure_unset
-   return mrt
+	mrt.reveil_prefix = reveil_prefix
+	mrt.reveil_occ_prefix = reveil_occ_prefix
+	mrt.scene_reveil_prefix = scene_reveil_prefix
+	mrt.chevet_prefix = chevet_prefix
+	mrt.chevet_delai_off = chevet_delai_off
+	mrt.heure_unset = heure_unset
+	return mrt
 end
 
 ---------------------------------------------------------------------------
@@ -62,13 +64,6 @@ end
 --                                                                       --
 ---------------------------------------------------------------------------
 function Reveil:reveil_travail(name_reveil)
-	if(self.debug == 1) then
-		print ("reveil_prefix:  " .. tostring(self.reveil_prefix))
-		print ("reveil_occ_prefix:  " .. tostring(self.reveil_occ_prefix))
-		print ("scene_reveil_prefix:  " .. tostring(self.scene_reveil_prefix))
-		print ("chevet_prefix:  " .. tostring(self.chevet_prefix))
-		print ("chevet_delai_off:  " .. tostring(self.chevet_delai_off))
-	end
 	if (uservariables[self.reveil_prefix ..name_reveil ] == self.heure_unset or vacances(name_reveil)) then
 		if(self.debug) then
 			print ("PAS DE REVEIL CAR PROGRAMME A "..heure_unset)
@@ -78,6 +73,7 @@ function Reveil:reveil_travail(name_reveil)
              -- Reveil jours de travail
 	         if( istime == uservariables[self.reveil_prefix ..name_reveil ]) then
 		         command_scene(self.scene_reveil_prefix..name_reveil,'On')
+				 command_variable(self.reveil_prefix ..name_reveil,self.heure_unset)
 	         end
 			 
 			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',self.chevet_delai_off) ) then

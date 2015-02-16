@@ -2,8 +2,8 @@ commandArray = {}
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
 require 'functions_utils'
 require 'functions_custom'
-require 'functions_reveil'
-require 'Coucher_api'
+require 'Reveil_class'
+require 'Coucher_class'
 require 'Day'
 
 
@@ -41,8 +41,9 @@ day:initJoursChome()
 	
 --print(istime..' veilleJourChome :'..tostring(veilleJourChome()) ..' jourChome: '..tostring(jourChome()))
 if(auto() and not absence() and presenceAtHome()) then
-	decalage_coucher_fin_films('kodi_play_duration',heure_coucher_dec,heure_coucher,reveil_prefix .. username,heure_unset)
-
+	if ( otherdevices['P_KODI'] == 'On' ) then
+		decalage_coucher_fin_films('kodi_play_duration',heure_coucher_dec,heure_coucher,reveil_prefix .. username,heure_unset)
+	end
 	reveil:reveil_travail(username)
 	-- reveil occasionnel
 	reveil:reveil_occasionnel(username)

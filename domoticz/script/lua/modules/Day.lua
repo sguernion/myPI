@@ -1,6 +1,6 @@
 
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
-require 'properties'
+require 'Properties_class'
 
 Day = {}
 Day.__index = Day

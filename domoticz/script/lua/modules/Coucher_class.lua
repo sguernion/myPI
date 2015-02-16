@@ -17,18 +17,19 @@ Coucher.__index = Coucher
 function Coucher.create(var_h_coucher,var_h_coucher_dec,scene_coucher,heure_unset) --
    local cch = {}             -- our new object
    setmetatable(cch,Coucher)  -- make Coucher handle lookup
-    cch.debug = 0
-	if(cch.debug == 1) then
-   	print ("var_h_coucher:  " .. tostring(var_h_coucher))
-	print ("var_h_coucher_dec:  " .. tostring(var_h_coucher_dec))
-	print ("scene_coucher:  " .. tostring(scene_coucher))
-	print ("heure_unset:  " .. tostring(heure_unset))
+    cch.debug = isDebug()
+	if(cch.debug) then
+		print ("--------- init Coucher ---------- " )
+		print ("var_h_coucher:  " .. tostring(var_h_coucher))
+		print ("var_h_coucher_dec:  " .. tostring(var_h_coucher_dec))
+		print ("scene_coucher:  " .. tostring(scene_coucher))
+		print ("heure_unset:  " .. tostring(heure_unset))
+		print ("--------------------------------- " )
 	end
    cch.var_h_coucher = var_h_coucher
    cch.var_h_coucher_dec = var_h_coucher_dec
    cch.scene_coucher = scene_coucher
    cch.heure_unset = heure_unset
-   cch.debug = 0
    return cch
 end
 
@@ -38,37 +39,40 @@ end
 --                                                                       --
 ---------------------------------------------------------------------------
 function Coucher:coucher_travail(name_coucher)
-	if(self.debug == 1) then
-	print ("var_h_coucher:  " .. tostring(self.var_h_coucher))
-	print ("var_h_coucher_dec:  " .. tostring(self.var_h_coucher_dec))
-	print ("scene_coucher:  " .. tostring(self.scene_coucher))
-	print ("heure_unset:  " .. tostring(self.heure_unset))
-	print ("name_coucher:  " .. tostring(name_coucher))
+	if(self.debug) then
+		print ("name_coucher:  " .. tostring(name_coucher))
 	end
 	heure_coucher = uservariables[self.var_h_coucher]
 	if (heure_coucher == heure_unset ) then
 		if(self.debug) then
-		print ("PAS DE DODO CAR PROGRAMME A " .. tostring(heure_coucher))
+			print ("PAS DE DODO CAR PROGRAMME A " .. tostring(heure_coucher))
 		end
     else 
 		heure_coucher_dec = uservariables[ self.var_h_coucher_dec ]
+		if(self.debug) then
+				print ("heure_coucher : " .. tostring(heure_coucher))
+				print ("heure_coucher_dec : " .. tostring(heure_coucher_dec))
+		end
 		if(veilleJourChome() or vacances(name_coucher))then
 			-- Coucher veille de jours chomé
 		else
 			if (otherdevices['Mode Nuit'] == 'Off') then
-				if(self.debug) then
-				print ("DODO PROGRAMME A " .. tostring(heure_coucher))
-				end
 				-- Gestion de l'heure de fin d'un films (xbmc) pour le pas couper avant la fin du films
 				if( heure_coucher == heure_coucher_dec ) then
+					if(self.debug) then
+						print ("DODO PROGRAMME A " .. tostring(heure_coucher))
+					end
 					-- Coucher veille d'un jours de travail
 					if( istime == heure_coucher ) then
 						 command_scene(self.scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
 					end
 				else
+					if(self.debug) then
+						print ("DODO décalé A " .. tostring(heure_coucher_dec))
+					end
 					-- afficher une alerte en cas de dépassement de l'heure
-					if( istime == self.heure_coucher ) then
+					if( istime == heure_coucher ) then
 						 kodi = Kodi.createFromConf(uservariables["config_file"])
 						 kodi:notification('Il devrait être l\'heure de ce coucher!!!')
 						 kodi:notification('heure de dormir : '..heure_coucher_dec)

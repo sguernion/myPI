@@ -136,6 +136,10 @@ function command(command,action)
 	commandArray[command] = action
 end
 
+function commandThermostat(command,value)
+	commandArray['UpdateDevice'] = otherdevices_idx[command] ..'|0|'.. tostring(value)
+end
+
 
 
 function initSaison()
@@ -160,4 +164,12 @@ end
 
 function saison() 
 	return uservariables["saison"]
+end
+
+function isDebug() 
+	if (uservariables['SCRIPTS_DEBUG']=="false") then
+		return false
+	else
+		 return true
+	end
 end
