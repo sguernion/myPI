@@ -7,7 +7,7 @@ import ConfigParser
 
 #config
 config = ConfigParser.RawConfigParser()
-config.read('/home/pi/domoticz/scripts/lua/config.properties')
+config.read('/home/pi/domoticz/scripts/config.properties')
 
  
 # domoticz machine and port

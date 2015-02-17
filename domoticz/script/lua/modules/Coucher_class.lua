@@ -1,8 +1,8 @@
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
-require 'Day'
+require 'Day_class'
 require 'functions_utils'
 require 'functions_custom'
-require 'kodi_api'
+require 'Kodi_class'
 
 --recupere les minutes
 time=os.time()
@@ -66,6 +66,8 @@ function Coucher:coucher_travail(name_coucher)
 					if( istime == heure_coucher ) then
 						 command_scene(self.scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
+						 command_variable('multimedia_ch_delai_off',1800)
+						 command_variable('chevet_delai_off',1800)
 					end
 				else
 					if(self.debug) then
@@ -81,6 +83,8 @@ function Coucher:coucher_travail(name_coucher)
 					if( heure_coucher_dec > heure_coucher and istime == heure_coucher_dec) then
 						 command_scene(scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
+						 command_variable('multimedia_ch_delai_off',900)
+						 command_variable('chevet_delai_off',900)
 					end
 				end
 				

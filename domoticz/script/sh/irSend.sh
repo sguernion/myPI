@@ -1,5 +1,7 @@
 #!/bin/sh
 #irSend.sh
+source functions.sh
+
 
 command=$1
 

@@ -22,7 +22,7 @@ from domoticz_api import *
 
 #config
 config = ConfigParser.RawConfigParser()
-config.read('/home/pi/domoticz/scripts/lua/config.properties')
+config.read('/home/pi/domoticz/scripts/config.properties')
  
 # Domotizc switchid to toggle when Kodi machine comes online / offline
 kodi_online = "P_Kodi"

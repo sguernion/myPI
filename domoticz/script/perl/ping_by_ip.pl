@@ -9,7 +9,7 @@
    use Config::Simple;
    use feature     qw< unicode_strings >;
    # Configuration section, please update to your values
-   my $conf = "/home/pi/domoticz/scripts/lua/config.properties";
+   my $conf = "/home/pi/domoticz/scripts/config.properties";
    my $cfg;
    my $Config=&read_conf($conf);
    
