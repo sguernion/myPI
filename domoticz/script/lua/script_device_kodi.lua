@@ -3,7 +3,7 @@ commandArray = {}
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
 require 'functions_utils'
 require 'functions_custom'
-require 'kodi_api'
+require 'Kodi_class'
 
 
 

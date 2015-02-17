@@ -4,7 +4,7 @@ require 'functions_utils'
 require 'functions_custom'
 require 'Reveil_class'
 require 'Coucher_class'
-require 'Day'
+require 'Day_class'
 
 
 
@@ -29,6 +29,7 @@ day:initJoursChome()
 	local scene_reveil_prefix = 'Reveil_'
 	local chevet_prefix = 'E_CHEVET_'
 	local chevet_delai_off = uservariables["chevet_delai_off"] -- 1800 -- 30 min
+	local multimedia_ch_delai_off = uservariables["multimedia_ch_delai_off"] -- 1800 -- 30 min
 	
 	local heure_coucher = 'heure_coucher'
 	local heure_coucher_dec = 'heure_coucher_dec'
@@ -52,9 +53,9 @@ if(auto() and not absence() and presenceAtHome()) then
 	
 	ch:coucher_travail(username)
 	
-
-	if( oneDeviceHasStateAfterTime('Multimedia_Chambre','On',chevet_delai_off) and otherdevices['Mode Nuit'] == 'On') then
+	if( oneDeviceHasStateAfterTime('Multimedia_Chambre','On',multimedia_ch_delai_off) and otherdevices['Mode Nuit'] == 'On') then
 		 command('Multimedia_Chambre','Off')
+		 command_variable('chevet_delai_off',1800)
 	end
 end
 

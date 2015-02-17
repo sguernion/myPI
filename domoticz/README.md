@@ -12,7 +12,27 @@ Détails sur [Domoticz usb](http://domoticz-raspberry.xoo.it/t38-DOMOTICZ-RASPBE
 ## lirc
 Utilisation d'emetteur et recepteur infrarouge pour interagir avec nos télécommandes et domoticz.
 
-TODO
+sudo apt-get install lirc
+
+nano /etc/modules
+# add
+lirc_dev
+lirc_rpi gpio_in_pin=18 gpio_out_pin=23
+
+nano /etc/lirc/hardware.conf
+# Edit file
+LIRCD_ARGS="--uinput"
+
+LOAD_MODULES=true
+
+DEVICE="/dev/lirc0"
+MODULES="lirc_rpi"
+
+nano /boot/config.txt
+# add
+dtoverlay=lirc-rpi,gpio_in_pin=18,gpio_out_pin=23
+
+sudo reboot
 
 ## Backup
 Sinon pour declencher ça à 6H du matin, un petit

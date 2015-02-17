@@ -3,19 +3,8 @@
 # Settings
 time=15000
 #################################################
-
+source functions.sh
 command=$1
-FILE_NAME=/home/pi/domoticz/scripts/lua/config.properties
-
-read_properties()
-{
-  file="$1"
-  while IFS="=" read -r key value; do
-		case "$key" in
-		  "kodi.url") echo "$value" ;;
-		esac
-  done < "$file"
-}
 
 url=$(read_properties $FILE_NAME)
 

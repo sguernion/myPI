@@ -25,10 +25,10 @@ DESTDIR="/opt/backup"                   # used for: local
 TEMPDIR="/var/opt/"
  
 ### END OF USER CONFIGURABLE PARAMETERS
- 
- 
-DOMO_IP=192.168.0.17
-DOMO_PORT=8080
+source functions.sh
+DOMO_IP=$(read_properties $FILE_NAME "domoticz.ip")
+DOMO_PORT=$(read_properties $FILE_NAME "domoticz.port")
+
  
 TIMESTAMP=`/bin/date +%Y%m%d%H%M%S`
 BACKUPFILE="domoticz_$TIMESTAMP.db"

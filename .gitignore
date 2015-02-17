@@ -38,7 +38,7 @@ nosetests.xml
 
 # domoticz script
 config.properties
-script_device_halt_raspbox.lua
-
-
-domoticz/web/PiHomeDashScreen
+script_device_alarm.lua
+domoticz/meanjs
+domoticz/domoticz-data
+domoticz/web

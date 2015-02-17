@@ -9,7 +9,7 @@ import ConfigParser
 
 #config
 config = ConfigParser.RawConfigParser()
-config.read('/home/pi/domoticz/scripts/lua/config.properties')
+config.read('/home/pi/domoticz/scripts/config.properties')
 
 def send_sms (user,key,message):
 	call_url('https://smsapi.free-mobile.fr/sendmsg?user='+user+'&pass='+key+'&msg='+message)

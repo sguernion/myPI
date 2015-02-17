@@ -11,7 +11,7 @@ from domoticz_api import *
 
 #config
 config = ConfigParser.RawConfigParser()
-config.read('/home/pi/domoticz/scripts/lua/config.properties')
+config.read('/home/pi/domoticz/scripts/config.properties')
 
  # Kodi machine and port
 kodi_host = config.get('kodi', 'kodi.host');
