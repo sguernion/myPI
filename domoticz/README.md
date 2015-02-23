@@ -15,12 +15,12 @@ Utilisation d'emetteur et recepteur infrarouge pour interagir avec nos télécom
 sudo apt-get install lirc
 
 nano /etc/modules
-# add
+*add
 lirc_dev
 lirc_rpi gpio_in_pin=18 gpio_out_pin=23
 
 nano /etc/lirc/hardware.conf
-# Edit file
+*Edit file
 LIRCD_ARGS="--uinput"
 
 LOAD_MODULES=true
@@ -29,7 +29,7 @@ DEVICE="/dev/lirc0"
 MODULES="lirc_rpi"
 
 nano /boot/config.txt
-# add
+*add
 dtoverlay=lirc-rpi,gpio_in_pin=18,gpio_out_pin=23
 
 sudo reboot
