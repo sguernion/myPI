@@ -35,7 +35,7 @@ require 'Thermostat_class'
 	local d_cmd_thermostat = 'T_TH_CMD_CHAUFAGE' --Nom de l'interrupteur virtuel du thermostat
 	local d_ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
 	local d_chaudiere = 'T_TH_CHAUFFAGE' --Nom de la chaudière à allumer/éteindre
-	local deviceauto = 'Auto' -- mode chauffage auto
+	local deviceauto = 'T_TH_AUTO' -- mode chauffage auto
 	--------------------------------
 	-- Fin des variables à éditer --
 	--------------------------------
