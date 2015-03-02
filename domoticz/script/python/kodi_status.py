@@ -26,8 +26,7 @@ config.read('/home/pi/domoticz/scripts/config.properties')
  
 # Domotizc switchid to toggle when Kodi machine comes online / offline
 kodi_online = "P_Kodi"
- 
- 
+
 # Interval between checks to see if Kodi is available in seconds
 ping_interval = 10
  

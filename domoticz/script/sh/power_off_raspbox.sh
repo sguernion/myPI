@@ -7,5 +7,5 @@ source functions.sh
 
 
 ip=$(read_properties $FILE_NAME "server.RaspBox.ip")
- 
-sudo -u pi sh -c 'ssh pi@$ip /sbin/halt'
+#echo $ip
+sudo -u pi sh -c 'ssh pi@'$ip' /sbin/halt'

@@ -13,7 +13,7 @@ debug = 1
 
 # Domoticz uservariable
 uservarid_kodi_play_duration = config.get('domoticz', 'idx.v_kodi_play_duration');
-kodi_play_duration = = config.get('domoticz', 'name.v_kodi_play_duration');
+kodi_play_duration = config.get('domoticz', 'name.v_kodi_play_duration');
 kodi_play_duration_type = config.get('domoticz', 'type.v_kodi_play_duration');
 
 # Do not change anything beyond this line.

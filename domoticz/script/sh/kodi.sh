@@ -6,7 +6,7 @@ time=15000
 source functions.sh
 command=$1
 
-url=$(read_properties $FILE_NAME)
+url=$(read_properties $FILE_NAME "kodi.url")
 
 
 #url=http://$user:$pw@$host:$port/jsonrpc

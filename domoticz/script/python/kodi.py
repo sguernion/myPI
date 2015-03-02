@@ -33,4 +33,15 @@ elif command=='shutdown':
 elif command=='subtitle':
      kodi_send(1,"Player.SetSubtitle","{}")		 
 elif command=='party':
-     kodi_send(1,"Player.Open",'{ "item": { "partymode": "music" } }')		 
+     kodi_send(1,"Player.Open",'{"item":{"partymode":"music"}}')		 
+elif command=='vscan':
+     kodi_send(1,"VideoLibrary.Scan",'{}')		 
+elif command=='ascan':
+     kodi_send(1,"AudioLibrary.Scan",'{}')		 
+elif command=='vclean':
+     kodi_send(1,"VideoLibrary.Clean",'{}')		 
+elif command=='aclean':
+     kodi_send(1,"AudioLibrary.Clean",'{}')		 
+		 	 
+	 
+	 

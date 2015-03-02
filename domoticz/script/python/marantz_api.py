@@ -11,8 +11,6 @@ config = ConfigParser.RawConfigParser()
 config.read('/home/pi/domoticz/scripts/config.properties')
 server = config.get('marantz', 'marantz.host');
 port = config.get('marantz', 'marantz.port');
-#local caches
-
 
 # Variables
 

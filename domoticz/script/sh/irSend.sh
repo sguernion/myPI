@@ -1,5 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
 #irSend.sh
+
 source functions.sh
 
 
@@ -26,4 +28,3 @@ case $command in
 		irsend SEND_ONCE lgtv $command
 	;;
 esac
- 

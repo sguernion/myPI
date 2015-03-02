@@ -26,8 +26,9 @@ kodi_time = config.get('kodi', 'kodi.notification.time');
 switchid_kodi_playing = config.get('domoticz', 'idx.kodi_playing');
 
 # Variables
-debug = 0
-
+debug = 1
+ON ="On"
+OFF ="Off"
 
 ###################################################
 #
@@ -48,34 +49,35 @@ def is_json(myjson):
 def process_method(method):
     print method
     if method == "Player.OnPause": 
-         if get_state_idx(switchid_kodi_playing) == "On" : set_state_idx(switchid_kodi_playing,'Off') 
+         if get_state_idx(switchid_kodi_playing) == ON : set_state_idx(switchid_kodi_playing,OFF) 
     if method == "Player.OnPlay": 
-         if get_state_idx(switchid_kodi_playing) == "Off" : set_state_idx(switchid_kodi_playing,'On') 
+         if get_state_idx(switchid_kodi_playing) == OFF : set_state_idx(switchid_kodi_playing,ON) 
     if method == "Player.OnStop": 
-         if get_state_idx(switchid_kodi_playing) == "On" : set_state_idx(switchid_kodi_playing,'Off') 
+         if get_state_idx(switchid_kodi_playing) == ON : set_state_idx(switchid_kodi_playing,OFF) 
 
 def process_result(result):
     try:
         if "playerid" in result:
-            if get_state_idx(switchid_kodi_playing) == "Off" : set_state_idx (switchid_kodi_playing, 'On')
+            if get_state_idx(switchid_kodi_playing) == OFF : set_state_idx (switchid_kodi_playing, ON)
     except Exception,e:
         print e
 
 def getJson(url,username, password):
-     base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
-     request = urllib2.Request(url)
-     request.add_header("Authorization", "Basic %s" % base64string)   
-     req = urlopen(request)
-     res = req.read()
-     data = loads(res)
-     if debug == 1:
-         print data
-     return data
+    base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
+    request = urllib2.Request(url)
+    request.add_header("Authorization", "Basic %s" % base64string)   
+    req = urlopen(request)
+    res = req.read()
+    data = loads(res)
+    if debug == 1:
+        print data
+    return data
 
 def kodi_request(request):
-     if debug == 1:
-         print request
-     return getJson('http://'+ kodi_host +':'+str(kodi_port)+'/jsonrpc?request='+request,kodi_password,kodi_username)
+    rurl = 'http://'+ kodi_host +':'+str(kodi_port)+'/jsonrpc?request='+request
+    if debug == 1:
+        print rurl
+    return getJson(rurl,kodi_password,kodi_username)
 
 def kodi_send(id,method,params):
 	return kodi_request('{"jsonrpc":"2.0","method":"' + method + '","params":' + params +',"id":'+ str(id) +'}')

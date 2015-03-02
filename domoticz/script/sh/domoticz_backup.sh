@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source functions.sh
 ### Backup script v0.3 beta
 ### Please be sure all dependencies are satisfied.
 ### Needed packages:
@@ -25,7 +25,6 @@ DESTDIR="/opt/backup"                   # used for: local
 TEMPDIR="/var/opt/"
  
 ### END OF USER CONFIGURABLE PARAMETERS
-source functions.sh
 DOMO_IP=$(read_properties $FILE_NAME "domoticz.ip")
 DOMO_PORT=$(read_properties $FILE_NAME "domoticz.port")
 
@@ -53,12 +52,12 @@ echo "backup Mode $MODE"
 case $MODE in
   scp)
     /usr/bin/sshpass -p $PASSWORD /usr/bin/scp -P $PORT $TEMPDIR$BACKUPFILEGZ $USERNAME@$SERVER:$WHERE
-	/usr/bin/sshpass -p $PASSWORD /usr/bin/scp -P $PORT $TEMPDIR$BACKUP_SCRIPT_FILEGZ $USERNAME@$SERVER:$WHERE
+    /usr/bin/sshpass -p $PASSWORD /usr/bin/scp -P $PORT $TEMPDIR$BACKUP_SCRIPT_FILEGZ $USERNAME@$SERVER:$WHERE
   ;;
  
   ftp)
     curl -s --disable-epsv -v -T"$TEMPDIR$BACKUPFILEGZ" -u"$USERNAME:$PASSWORD" "ftp://$SERVER/"
-	curl -s --disable-epsv -v -T"$TEMPDIR$BACKUP_SCRIPT_FILEGZ" -u"$USERNAME:$PASSWORD" "ftp://$SERVER/"
+    curl -s --disable-epsv -v -T"$TEMPDIR$BACKUP_SCRIPT_FILEGZ" -u"$USERNAME:$PASSWORD" "ftp://$SERVER/"
   ;;
  
   local)
@@ -75,7 +74,7 @@ case $MODE in
  
   dropbox)
     /opt/bin/dropbox_uploader.sh upload $TEMPDIR$BACKUPFILEGZ /$BACKUPFILEGZ
-	/opt/bin/dropbox_uploader.sh upload $TEMPDIR$BACKUP_SCRIPT_FILEGZ /$BACKUP_SCRIPT_FILEGZ
+    /opt/bin/dropbox_uploader.sh upload $TEMPDIR$BACKUP_SCRIPT_FILEGZ /$BACKUP_SCRIPT_FILEGZ
   ;;
  
 esac

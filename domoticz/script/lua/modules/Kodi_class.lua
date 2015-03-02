@@ -44,9 +44,9 @@ end
 function Kodi:call_method(method,params)
 	jsonParam=''
 	if(params  ~= nil and params  ~= '')then
-		jsonParam='"params": '..params ..','
+		jsonParam='"params":'..params ..','
 	end
-	self:call_api('{"jsonrpc": "2.0", "method": "'..method..'",'..jsonParam..' "id": '.. self.id ..'}')
+	self:call_api('{"jsonrpc":"2.0","method":"'..method..'",'..jsonParam..'"id":'.. self.id ..'}')
 end
 
 function Kodi:notification(message)
@@ -54,15 +54,15 @@ function Kodi:notification(message)
 end
 
 function Kodi:play_pause()
-	self:call_method('Player.PlayPause','{"playerid": 1}')
+	self:call_method('Player.PlayPause','{"playerid":1}')
 end
 
 function Kodi:party()
-	self:call_method('Player.Open','{ "item": { "partymode": "music" } }')
+	self:call_method('Player.Open','{"item":{"partymode":"music"}}')
 end
 
 function Kodi:stop()
-	self:call_method('Player.Stop','{"playerid": 1}')
+	self:call_method('Player.Stop','{"playerid":1}')
 end
 
 function Kodi:home()
@@ -97,6 +97,27 @@ function Kodi:reboot()
 	self:call_method('System.Reboot','')
 end
 
+function Kodi:videoScan()
+	self:call_method('VideoLibrary.Scan','')
+end
+
+function Kodi:audioScan()
+	self:call_method('AudioLibrary.Scan','')
+end
+
+function Kodi:audioClean()
+	self:call_method('VideoLibrary.Clean','')
+end
+
+function Kodi:audioClean()
+	self:call_method('AudioLibrary.Clean','')
+end
+
+function Kodi:subtitle()
+	self:call_method('layer.SetSubtitle','')
+end
+
+	
 function Kodi:halt()
 	--self:notification('shutdown')
 	self:call_method('System.Shutdown','')

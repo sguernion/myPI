@@ -53,9 +53,7 @@ function Coucher:coucher_travail(name_coucher)
 				print ("heure_coucher : " .. tostring(heure_coucher))
 				print ("heure_coucher_dec : " .. tostring(heure_coucher_dec))
 		end
-		if(veilleJourChome() or vacances(name_coucher))then
-			-- Coucher veille de jours chomé
-		else
+		if(not veilleJourChome() or not vacances(name_coucher))then
 			if (otherdevices['Mode Nuit'] == 'Off') then
 				-- Gestion de l'heure de fin d'un films (xbmc) pour le pas couper avant la fin du films
 				if( heure_coucher == heure_coucher_dec ) then
@@ -80,8 +78,8 @@ function Coucher:coucher_travail(name_coucher)
 						 kodi:notification('heure de dormir : '..heure_coucher_dec)
 					end
 					-- Coucher veille d'un jours de travail
-					if( heure_coucher_dec > heure_coucher and istime == heure_coucher_dec) then
-						 command_scene(scene_coucher,'On')
+					if( istime == heure_coucher_dec) then
+						 command_scene(self.scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
 						 command_variable('multimedia_ch_delai_off',900)
 						 command_variable('chevet_delai_off',900)

@@ -17,11 +17,6 @@ password = config.get('domoticz', 'domoticz.pwd');
 username = config.get('domoticz', 'domoticz.user');
 
 
-
-#local caches
-state_cache_dir = "/home/pi/domoticz/state/"
-cached_states = {'day','away','daylight'}
-
 # Variables
 switch_map = {}
 scene_map = {}
@@ -59,16 +54,8 @@ def call_url(url):
 	res = req.read()
 	return res
 	
-def get_cached_state(name):
-	file = open(state_cache_dir + name, "r")
-	state = df.read()
-	print "Cached state is: " + state
-	return state
 
 def get_state(name):
-	if name in cached_states:
-		return get_cached_state(name)
-		
 	idx = get_switch_id(name)
 	if idx:
 		return get_state_idx(idx)
