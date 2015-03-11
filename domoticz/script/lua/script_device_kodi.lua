@@ -57,6 +57,11 @@ if ( devicechanged['D_KODI_VIDEO_SCAN'] == 'On' ) then
 	kodi:videoScan()
 end
 
+if ( devicechanged['D_KODI_VIDEO_CLEAN'] == 'On' ) then
+	kodi = Kodi.createFromConf(uservariables["config_file"])
+	kodi:videoClean()
+end
+
 if ( devicechanged['D_KODI_AUDIO_SCAN'] == 'On' ) then
 	kodi = Kodi.createFromConf(uservariables["config_file"])
 	kodi:audioScan()
@@ -64,7 +69,7 @@ end
 
 if ( devicechanged['D_KODI_SUBTITLE'] == 'On' ) then
 	kodi = Kodi.createFromConf(uservariables["config_file"])
-	kodi:audioScan()
+	kodi:subtitle()
 end
 
 if ( devicechanged['D_KODI_POWER'] == 'On' ) then

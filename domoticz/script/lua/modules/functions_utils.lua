@@ -124,21 +124,6 @@ end
 
 -- domoticz functions
 
-function command_scene(scene,action)
-	command('Scene:'..scene,action)
-end
-
-function command_variable(variable,valeur)
-	command('Variable:'..variable,tostring(valeur))
-end
-
-function command(command,action)
-	commandArray[command] = action
-end
-
-function commandThermostat(command,value)
-	commandArray['UpdateDevice'] = otherdevices_idx[command] ..'|0|'.. tostring(value)
-end
 
 
 

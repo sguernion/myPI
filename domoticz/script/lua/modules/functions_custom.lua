@@ -16,6 +16,10 @@ function command(command,action)
 end
 
 
+function commandThermostat(command,value)
+	commandArray['UpdateDevice'] = otherdevices_idx[command] ..'|0|'.. tostring(value)
+end
+
 
 -- Custom implementation (mobile, motion sensors...)
 function presenceAtHome()

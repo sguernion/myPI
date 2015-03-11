@@ -105,7 +105,7 @@ function Kodi:audioScan()
 	self:call_method('AudioLibrary.Scan','')
 end
 
-function Kodi:audioClean()
+function Kodi:videoClean()
 	self:call_method('VideoLibrary.Clean','')
 end
 
