@@ -16,4 +16,13 @@ end
 
 
 
+if(auto()) then
+	if ( devicechanged['Nuit'] == 'On' )then
+		command('VOLET_GENERALE','Closed')
+	else
+		command('VOLET_GENERALE','Open')
+	end
+end
+
+
 return commandArray

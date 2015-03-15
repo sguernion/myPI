@@ -16,29 +16,32 @@ if ( devicechanged['D_AMPLI_V_DEFAULT'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_volume(tostring(uservariables["volume_defaut"]-80))
 	command_variable('volume',uservariables["volume_defaut"])
+	command('VOLUME',tostring(uservariables["volume_defaut"]-80))
 end
 
-if ( devicechanged['D_AMPLI_V_UP'] == 'On' ) then
+if ( devicechanged['D_AMPLI_VUP'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:volume_up()
 	command_variable('volume',uservariables["volume"] +0.5)
+	command('VOLUME',tostring(uservariables["volume"] +0.5-80))
 end
 
-if ( devicechanged['D_AMPLI_V_DOWN'] == 'On' ) then
+if ( devicechanged['D_AMPLI_VDOWN'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:volume_down()
 	command_variable('volume',uservariables["volume"] -0.5)
+	command('VOLUME',tostring(uservariables["volume"] -0.5-80))
 end
 
-if ( devicechanged['V_VOLUME_UP'] == 'On' ) then
+if ( devicechanged['V_VOLUMEUP'] == 'On' ) then
 	command_variable('volume',uservariables["volume"] +0.5)
 end
 
-if ( devicechanged['V_VOLUME_DOWN'] == 'On' ) then
+if ( devicechanged['V_VOLUMEDOWN'] == 'On' ) then
 	command_variable('volume',uservariables["volume"] -0.5)
 end
 
-if ( devicechanged['D_AMPLI_S_BLUETOOTH'] == 'On' ) then
+if ( devicechanged['D_AMPLI_S_BTH'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('SAT/CBL')
 end
@@ -72,6 +75,17 @@ end
 if ( devicechanged['D_AMPLI_S_WEB'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:change_source('IRADIO')
+end
+
+if ( devicechanged['D_AMPLI_POWER'] == 'On' ) then
+	marantz = Marantz.createFromConf(uservariables["config_file"])
+	if(otherdevices['P_AMPLI'] == 'Off') then
+		marantz:power_on()
+		command('P_AMPLI','Off')
+	else
+		marantz:power_off()
+	end
+	
 end
 
 

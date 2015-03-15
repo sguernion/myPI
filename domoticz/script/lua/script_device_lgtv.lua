@@ -26,11 +26,11 @@ if ( devicechanged['D_TV_INFO'] == 'On' ) then
 	irsend('KEY_INFO')
 end
 
-if ( devicechanged['D_TV_PGR_UP'] == 'On' ) then
+if ( devicechanged['D_TV_PGRUP'] == 'On' ) then
 	irsend('KEY_CHANNELUP')
 end
 
-if ( devicechanged['D_TV_PGR_DOWN'] == 'On' ) then
+if ( devicechanged['D_TV_PGRDOWN'] == 'On' ) then
 	irsend('KEY_CHANNELDOWN')
 end
 
