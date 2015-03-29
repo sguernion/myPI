@@ -9,6 +9,7 @@ time=os.time()
 istime=os.date('%H:%M',time)
 istime_s=tostring(os.date('%H:%M',time))
 hours=tonumber(os.date('%H',time))
+defaut_delai_off=30
 
 
 Coucher = {}
@@ -64,8 +65,8 @@ function Coucher:coucher_travail(name_coucher)
 					if( istime == heure_coucher ) then
 						 command_scene(self.scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
-						 command_variable('multimedia_ch_delai_off',1800)
-						 command_variable('chevet_delai_off',1800)
+						 command_variable('multimedia_ch_delai_off',defaut_delai_off)
+						 command_variable('chevet_delai_off',defaut_delai_off)
 					end
 				else
 					if(self.debug) then
@@ -78,11 +79,11 @@ function Coucher:coucher_travail(name_coucher)
 						 kodi:notification('heure de dormir : '..heure_coucher_dec)
 					end
 					-- Coucher veille d'un jours de travail
-					if( istime == heure_coucher_dec) then
+					if( istime == heure_coucher_dec and heure_coucher_dec ~= heure_unset) then
 						 command_scene(self.scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
-						 command_variable('multimedia_ch_delai_off',900)
-						 command_variable('chevet_delai_off',900)
+						 command_variable('multimedia_ch_delai_off',(defaut_delai_off/2))
+						 command_variable('chevet_delai_off',(defaut_delai_off/2))
 					end
 				end
 				

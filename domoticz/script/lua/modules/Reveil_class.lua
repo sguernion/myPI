@@ -51,7 +51,7 @@ function Reveil:reveil_occasionnel(name_reveil)
 				command_variable(self.reveil_prefix ..name_reveil,self.heure_unset)
 			end
 			
-			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',self.chevet_delai_off) ) then
+			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',to_seconde(self.chevet_delai_off)) ) then
 				 command(self.chevet_prefix..name_reveil,'Off')
 			end
 		end
@@ -76,7 +76,7 @@ function Reveil:reveil_travail(name_reveil)
 		         command_scene(self.scene_reveil_prefix..name_reveil,'On')
 	         end
 			 
-			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',self.chevet_delai_off) ) then
+			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',to_seconde(self.chevet_delai_off)) ) then
 				 command(self.chevet_prefix..name_reveil,'Off')
 			end
 	     end

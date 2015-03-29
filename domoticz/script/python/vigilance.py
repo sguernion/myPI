@@ -18,7 +18,7 @@ def send_sms (user,key,message):
 	
 user = config.get('global', 'free.mobile.api.user');
 key = config.get('global', 'free.mobile.api.key');
-departement=35
+departement="35"
 idx_device_vigilance=8
 
 col=1

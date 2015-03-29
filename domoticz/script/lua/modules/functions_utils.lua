@@ -1,5 +1,27 @@
 
 
+function to_seconde (minute)
+	return minute * 60
+end
+
+function time_difference_between (device,delai_min,delai_max)
+	t1 = os.time()
+	difference = basetime_difference (t1,device)
+	return difference > delai_min and difference < delai_max
+end
+
+function oneDeviceTime_difference_between(devicePrefix,delai_min,delai_max)
+	match = false
+	for i, v in pairs(otherdevices) do
+		tc = tostring(i)
+		
+		if (tc:sub(1,devicePrefix:len()) == devicePrefix and match == false) then
+				match = time_difference_between (tc,delai_min,delai_max)
+		end
+	end
+	return match
+end
+
 -- calcul du temps en seconde depuis la derniere mise a jour du capteur
 function time_difference (device)
 	t1 = os.time()

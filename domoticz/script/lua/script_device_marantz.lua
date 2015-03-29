@@ -12,33 +12,36 @@ require 'Marantz_class'
 require 'functions_utils'
 require 'functions_custom'
 
+local db_max = 80
+local vol_inc = 0.5
+
 if ( devicechanged['D_AMPLI_V_DEFAULT'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
-	marantz:change_volume(tostring(uservariables["volume_defaut"]-80))
+	marantz:change_volume(tostring(uservariables["volume_defaut"]-db_max))
 	command_variable('volume',uservariables["volume_defaut"])
-	command('VOLUME',tostring(uservariables["volume_defaut"]-80))
+	command('VOLUME',tostring(uservariables["volume_defaut"]-db_max))
 end
 
 if ( devicechanged['D_AMPLI_VUP'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:volume_up()
-	command_variable('volume',uservariables["volume"] +0.5)
-	command('VOLUME',tostring(uservariables["volume"] +0.5-80))
+	command_variable('volume',uservariables["volume"] +vol_inc)
+	command('VOLUME',tostring(uservariables["volume"] +vol_inc-db_max))
 end
 
 if ( devicechanged['D_AMPLI_VDOWN'] == 'On' ) then
 	marantz = Marantz.createFromConf(uservariables["config_file"])
 	marantz:volume_down()
-	command_variable('volume',uservariables["volume"] -0.5)
-	command('VOLUME',tostring(uservariables["volume"] -0.5-80))
+	command_variable('volume',uservariables["volume"] -vol_inc)
+	command('VOLUME',tostring(uservariables["volume"] -vol_inc-db_max))
 end
 
 if ( devicechanged['V_VOLUMEUP'] == 'On' ) then
-	command_variable('volume',uservariables["volume"] +0.5)
+	command_variable('volume',uservariables["volume"] +vol_inc)
 end
 
 if ( devicechanged['V_VOLUMEDOWN'] == 'On' ) then
-	command_variable('volume',uservariables["volume"] -0.5)
+	command_variable('volume',uservariables["volume"] -vol_inc)
 end
 
 if ( devicechanged['D_AMPLI_S_BTH'] == 'On' ) then

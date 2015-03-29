@@ -9,9 +9,12 @@ require 'Day_class'
 
 
 local day = Day.create()
-day:initSaison()
-day:initJoursChome()	 
-
+local today=os.date("%Y-%m-%d")
+if( today ~= string.sub(uservariables_lastupdate['jour'],0,10) ) then
+	day:initSaison()
+	day:initJoursChome()
+	day:initJour()
+end
 
 
 ---------------------------------------------
@@ -28,8 +31,9 @@ day:initJoursChome()
 	local reveil_occ_prefix = 'reveil_occ_'
 	local scene_reveil_prefix = 'Reveil_'
 	local chevet_prefix = 'E_CHEVET_'
-	local chevet_delai_off = uservariables["chevet_delai_off"] -- 1800 -- 30 min
-	local multimedia_ch_delai_off = uservariables["multimedia_ch_delai_off"] -- 1800 -- 30 min
+	local chevet_delai_off = uservariables["chevet_delai_off"]  -- 30 min
+	local multimedia_ch_delai_off = uservariables["multimedia_ch_delai_off"]  -- 30 min
+	local defaut_delai_off=30
 	
 	local heure_coucher = 'heure_coucher'
 	local heure_coucher_dec = 'heure_coucher_dec'
@@ -53,9 +57,9 @@ if(auto() and not absence() and presenceAtHome()) then
 	
 	ch:coucher_travail(username)
 	
-	if( oneDeviceHasStateAfterTime('Multimedia_Chambre','On',multimedia_ch_delai_off) and otherdevices['Mode Nuit'] == 'On') then
+	if( oneDeviceHasStateAfterTime('Multimedia_Chambre','On',to_seconde(multimedia_ch_delai_off)) and otherdevices['Mode Nuit'] == 'On') then
 		 command('Multimedia_Chambre','Off')
-		 command_variable('multimedia_ch_delai_off',1800)
+		 command_variable('multimedia_ch_delai_off',defaut_delai_off)
 	end
 end
 

@@ -13,7 +13,7 @@ function Day.create()
    mrt.weekendToday="NULL"
    mrt.jourChomeReturn=false -- Variable globale (résulat du dernier calcul) pour ne pas recalculer le résultat à chaque appel
    mrt.veilleJourChomeReturn=false
-   mrt.getJourSemaineTab={[0]="dimanche",[1]="lundi",[2]="mardi",[3]="mercredi",[4]="jeudi",[5]="vendredi",[6]="samedi"}
+   mrt.getJourSemaineTab={[0]="Dimanche",[1]="Lundi",[2]="Mardi",[3]="Mercredi",[4]="Jeudi",[5]="Vendredi",[6]="Samedi"}
    return mrt
 end
 
@@ -35,7 +35,7 @@ function Day:weekend()
   if(today~=self.weekendToday) then -- Faut-il refaire le calcul ?
     local jour=self:getJourSemaine()
     self.weekendToday=today
-    self.weekendReturn=(jour=="samedi" or jour=="dimanche")
+    self.weekendReturn=(jour=="Samedi" or jour=="Dimanche")
   end
   return self.weekendReturn
 end
@@ -45,7 +45,7 @@ function Day:veilleJourChome()
   if(today~=self.veilleJourChomeToday) then -- Faut-il refaire le calcul ?
     local jour=self:getJourSemaine()
     self.veilleJourChomeToday=today
-    self.veilleJourChomeReturn=(jour=="vendredi" or jour=="samedi")
+    self.veilleJourChomeReturn=(jour=="Vendredi" or jour=="Samedi")
   end
   return self.veilleJourChomeReturn
 end
@@ -97,6 +97,9 @@ function Day:initSaison()
 
 end
 
+function Day:initJour()
+	commandArray['Variable:jour'] = self:getJourSemaine()
+end
 
 -- Retourne le jour de la semaine (lundi...dimanche)
 

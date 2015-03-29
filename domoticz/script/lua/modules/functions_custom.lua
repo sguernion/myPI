@@ -54,9 +54,16 @@ function devicesOff()
 	command_scene('DevicesOff','On')
 end
 
--- 
+
 -- Envoie d'un sms sur un mobile Free
-function send_sms (user,key,message)
+-- 
+--	Configuration du fichier config.properties
+--	free.mobile.api.user=xxxx
+--  free.mobile.api.key=xxxxxx
+--
+function send_sms (properties,message)
+	user=properties:get('free.mobile.api.user')
+	key=properties:get('free.mobile.api.key')
 	commandArray['OpenURL']='https://smsapi.free-mobile.fr/sendmsg?user='..user..'&pass='..key..'&msg='..message
 end
 
@@ -81,14 +88,27 @@ function sourceTv ()
 end
 
 
-function alert_mesure(name,max_value,user,key,message)   
+function alert_mesure(name,max_value,properties,message)   
 	if devicechanged[name] then
 		mesure = tonumber(otherdevices_svalues[name])
 		if mesure > max_value then
 			print(name..' : '.. tostring(mesure))
-			send_sms (user,key,message)
+			send_sms (properties,message)
 		end
 	end
+end
+
+function domoticz_reboot(properties)
+	ip=properties:get('domoticz.ip')
+	port=properties:get('domoticz.port')
+    os.execute('curl -s -i -H "Accept: application/json" "http://' .. ip ..':'.. port ..'/json.htm?type=command&param=system_reboot"')
+end
+
+
+function alimOff_AfterDeviceShutdown(device,alim_device,time_min,time_max)
+		if (otherdevices[device] == 'Off' and otherdevices[alim_device] == 'On' and oneDeviceTime_difference_between(device,time_min,time_max)) then
+			command(alim_device,'Off')
+		end
 end
 
 ---------------------------------------------------------------------------

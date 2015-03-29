@@ -12,3 +12,5 @@ Vmc;Vmc;Vmc
 Sarah;Sarah;Sarah
 Prise;Prise;Prises
 Ecran;Ecran;Ecran
+Nas;Nas;Nas
+Ampli;Ampli;Amplificateur
