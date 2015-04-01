@@ -67,6 +67,7 @@ function Coucher:coucher_travail(name_coucher)
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
 						 command_variable('multimedia_ch_delai_off',defaut_delai_off)
 						 command_variable('chevet_delai_off',defaut_delai_off)
+						 command_variable('phase','coucher')
 					end
 				else
 					if(self.debug) then
@@ -84,6 +85,7 @@ function Coucher:coucher_travail(name_coucher)
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
 						 command_variable('multimedia_ch_delai_off',(defaut_delai_off/2))
 						 command_variable('chevet_delai_off',(defaut_delai_off/2))
+						 command_variable('phase','coucher')
 					end
 				end
 				
@@ -177,6 +179,7 @@ function Coucher:coucher_abs(name_coucher)
 					-- Coucher veille d'un jours de travail
 					if( istime == heure_coucher ) then
 						 command('Mode Nuit','On')
+						 command_variable('phase','coucher')
 					end
 				else
 					if(self.debug) then
@@ -185,6 +188,7 @@ function Coucher:coucher_abs(name_coucher)
 					-- Coucher veille d'un jours de travail
 					if( istime == heure_coucher_dec and heure_coucher_dec ~= heure_unset) then
 						 command('Mode Nuit','On')
+						 command_variable('phase','coucher')
 					end
 				end
 				

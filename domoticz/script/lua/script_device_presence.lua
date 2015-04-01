@@ -17,6 +17,7 @@ if(auto()) then
 		(devicechanged['Mode Nuit'] == 'Off' and oneDeviceHasState('P_Smartphone','On'))) then
 		   print('presence Wifi Go Home')
 		   command_scene('Presence','On')
+		   command_variable('phase','retour')
 	elseif (not presenceAtHome() and oneDeviceTime_difference_between('P_Smartphone',delai_min,delai_max)) then
 		   devicesOff()
 	end

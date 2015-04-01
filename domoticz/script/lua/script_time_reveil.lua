@@ -63,6 +63,12 @@ if(auto() and not absence() and presenceAtHome()) then
 	end
 end
 
+time=os.time()
+	istime=os.date('%H:%M',time)
+	if( istime == '20:00') then
+		command_variable('phase','soiree')
+	end
+
 if(auto() and ( absence() or not presenceAtHome())) then
 	ch:coucher_abs(name_coucher)
 end
