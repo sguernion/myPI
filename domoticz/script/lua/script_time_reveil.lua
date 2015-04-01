@@ -63,4 +63,7 @@ if(auto() and not absence() and presenceAtHome()) then
 	end
 end
 
+if(auto() and ( absence() or not presenceAtHome())) then
+	ch:coucher_abs(name_coucher)
+end
 return commandArray

@@ -150,3 +150,45 @@ function decalage_coucher_fin_films (kodi_play_dur_name,heure_coucher_dec_name,v
 		command_variable(heure_coucher_dec_name,shour..':'..sminutes)
 	end
 end
+
+
+function Coucher:coucher_abs(name_coucher)
+	if(self.debug) then
+		print ("name_coucher:  " .. tostring(name_coucher))
+	end
+	heure_coucher = uservariables[self.var_h_coucher]
+	if (heure_coucher == heure_unset ) then
+		if(self.debug) then
+			print ("PAS DE DODO CAR PROGRAMME A " .. tostring(heure_coucher))
+		end
+    else 
+		heure_coucher_dec = uservariables[ self.var_h_coucher_dec ]
+		if(self.debug) then
+				print ("heure_coucher : " .. tostring(heure_coucher))
+				print ("heure_coucher_dec : " .. tostring(heure_coucher_dec))
+		end
+		if(not veilleJourChome() or not vacances(name_coucher))then
+			if (otherdevices['Mode Nuit'] == 'Off') then
+				-- Gestion de l'heure de fin d'un films (xbmc) pour le pas couper avant la fin du films
+				if( heure_coucher == heure_coucher_dec ) then
+					if(self.debug) then
+						print ("DODO PROGRAMME A " .. tostring(heure_coucher))
+					end
+					-- Coucher veille d'un jours de travail
+					if( istime == heure_coucher ) then
+						 command('Mode Nuit','On')
+					end
+				else
+					if(self.debug) then
+						print ("DODO décalé A " .. tostring(heure_coucher_dec))
+					end
+					-- Coucher veille d'un jours de travail
+					if( istime == heure_coucher_dec and heure_coucher_dec ~= heure_unset) then
+						 command('Mode Nuit','On')
+					end
+				end
+				
+			end
+		end
+	end
+end

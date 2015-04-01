@@ -1,0 +1,22 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+branches:
+  only:
+  - master
+
+  
+before_script:
+
+install: true
+  
+script: ls  
+
+after_success:
+  # Prepare ZIP icons archive
+  - cd domoticz/www/images/ICONS/
+  - ZIPNAME=ICONS-`date +"%Y%m%d"`-$TRAVIS_BRANCH-${TRAVIS_COMMIT:0:10}.zip
+  - zip -r $ZIPNAME *
+  - chmod 666 $ZIPNAME
