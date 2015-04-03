@@ -12,12 +12,13 @@ if(auto()) then
 		devicesOff()
 	end
 
-
-	if ((oneDeviceChangeHasState('P_Smartphone','On') and otherdevices['Mode Nuit'] == 'Off')  or  
-		(devicechanged['Mode Nuit'] == 'Off' and oneDeviceHasState('P_Smartphone','On'))) then
+	if (oneDeviceChangeHasState('P_Smartphone','On') and otherdevices['Mode Nuit'] == 'Off') then
 		   print('presence Wifi Go Home')
 		   command_scene('Presence','On')
 		   command_variable('phase','retour')
+	elseif (devicechanged['Mode Nuit'] == 'Off' and oneDeviceHasState('P_Smartphone','On')) then
+		   print('presence : Levée')
+		   command_scene('Presence','On')
 	elseif (not presenceAtHome() and oneDeviceTime_difference_between('P_Smartphone',delai_min,delai_max)) then
 		   devicesOff()
 	end

@@ -60,6 +60,7 @@ if(auto() and not absence() and presenceAtHome()) then
 	if( oneDeviceHasStateAfterTime('Multimedia_Chambre','On',to_seconde(multimedia_ch_delai_off)) and otherdevices['Mode Nuit'] == 'On') then
 		 command('Multimedia_Chambre','Off')
 		 command_variable('multimedia_ch_delai_off',defaut_delai_off)
+		 command_variable('phase','nuit')
 	end
 end
 
