@@ -39,7 +39,9 @@ function Thermostat:declenchenemtChaudiere(cmd,valeur_temp)
 	if(self.debug) then
 		print ("switch ".. self.d_chaudiere .. " to  " .. cmd .." temp : ".. tostring(valeur_temp))
 	end
-	command(self.d_chaudiere,cmd)
+	if(otherdevices[self.d_chaudiere]~=cmd) then
+		command(self.d_chaudiere,cmd)
+	end
 	command_variable(self.var_tht_temp,valeur_temp)
 	
 end

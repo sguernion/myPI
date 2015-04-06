@@ -9,6 +9,9 @@ import os
 sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
 from domoticz_api import *
 
+api = DomoticzApi()
+debug = api.debug()
+
 #config
 config = ConfigParser.RawConfigParser()
 config.read('/home/pi/domoticz/scripts/config.properties')
@@ -23,12 +26,16 @@ kodi_title = config.get('kodi', 'kodi.notification.title');
 kodi_time = config.get('kodi', 'kodi.notification.time');
 
 
-switchid_kodi_playing = config.get('domoticz', 'idx.kodi_playing');
+configIdx = ConfigParser.RawConfigParser()
+configIdx.read('/home/pi/domoticz/scripts/domoticz.properties')
+switchid_kodi_playing = configIdx.get('switchs', 'idx.D_KODI_PLAY');
 
 # Variables
-debug = 1
+
 ON ="On"
 OFF ="Off"
+
+
 
 ###################################################
 #
@@ -49,16 +56,16 @@ def is_json(myjson):
 def process_method(method):
     print method
     if method == "Player.OnPause": 
-         if get_state_idx(switchid_kodi_playing) == ON : set_state_idx(switchid_kodi_playing,OFF) 
+         if api.get_state_idx(switchid_kodi_playing) == ON : api.set_state_idx(switchid_kodi_playing,OFF) 
     if method == "Player.OnPlay": 
-         if get_state_idx(switchid_kodi_playing) == OFF : set_state_idx(switchid_kodi_playing,ON) 
+         if api.get_state_idx(switchid_kodi_playing) == OFF : api.set_state_idx(switchid_kodi_playing,ON) 
     if method == "Player.OnStop": 
-         if get_state_idx(switchid_kodi_playing) == ON : set_state_idx(switchid_kodi_playing,OFF) 
+         if api.get_state_idx(switchid_kodi_playing) == ON : api.set_state_idx(switchid_kodi_playing,OFF) 
 
 def process_result(result):
     try:
         if "playerid" in result:
-            if get_state_idx(switchid_kodi_playing) == OFF : set_state_idx (switchid_kodi_playing, ON)
+            if api.get_state_idx(switchid_kodi_playing) == OFF : api.set_state_idx (switchid_kodi_playing, ON)
     except Exception,e:
         print e
 

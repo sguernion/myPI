@@ -6,6 +6,7 @@ import os
 sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
 from domoticz_api import *
 
+api = DomoticzApi()
 
 guirlande = '54' # guirlande noel
 mode = '55' # mode noel
@@ -13,11 +14,11 @@ mode = '55' # mode noel
 var_mode = 1
 
 def powerOn(name):
-     set_state_idx(name,'On')
+     api.set_state_idx(name,'On')
      return
 
 def powerOff(name):
-     set_state_idx(name,'Off')
+     api.set_state_idx(name,'Off')
      return
 	 
 def clignote(led,second=0.2):

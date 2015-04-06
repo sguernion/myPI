@@ -6,23 +6,23 @@ import os
 sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
 from marantz_api import *
 
+marantz = MarantzApi()
 
-
-command + sys.argv[1]
+command = sys.argv[1]
 
 if command=='volume_up':
-     volume_up()
+     marantz.volume_up()
 elif command=='volume_down':
-     volume_down()
+     marantz.volume_down()
 elif command=='source':
-     change_source(sys.argv[2])
+     marantz.change_source(sys.argv[2])
 elif command=='volume_set':
-     change_volume(sys.argv[2])
+     marantz.change_volume(sys.argv[2])
 elif command=='power_off':
-     call_api('PutZone_OnOff%2FOFF')
+     marantz.call_api('PutZone_OnOff%2FOFF')
 elif command=='power_on':
-     call_api('PutZone_OnOff%2FON')
+     marantz.call_api('PutZone_OnOff%2FON')
 elif command=='mute_off':
-     call_api('PutVolumeMute%2Foff')
+     marantz.call_api('PutVolumeMute%2Foff')
 elif command=='mute_on':
-     call_api('PutVolumeMute%2Fon')
+     marantz.call_api('PutVolumeMute%2Fon')

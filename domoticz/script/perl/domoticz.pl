@@ -15,7 +15,11 @@
 	# Configuration section, please update to your values
    my $conf = "/home/pi/domoticz/scripts/config.properties";
    my $cfg;
+   my $host;
+   my $idx;
+   my $cmd;
    my $Config=&read_conf($conf);
+   my $ConfigIdx=&read_conf("/home/pi/domoticz/scripts/domoticz.properties");
    
    # ip and port of your Domoticz server 
    my $url = $Config->{"default.domoticz.url"}; 
@@ -23,37 +27,45 @@
    
 switch ( $command ) {
 	case "volume_up" {
-		my $idx_vol_up = $Config->{"default.idx.vol.up"}; 
+		my $idx_vol_up = $ConfigIdx->{"switchs.idx.D_AMPLI_VUP"}; 
 		#print $url.'type=command&param=switchlight&idx='.$idx_vol_up.'&switchcmd=On';
-		get($url.'type=command&param=switchlight&idx='.$idx_vol_up.'&switchcmd=On');
+		setSwitch($url,$idx_vol_up,"On");
 	}
 	case "volume_down" {
-		my $idx_vol_down = $Config->{"default.idx.vol.down"};
-		get($url."type=command&param=switchlight&idx=".$idx_vol_down."&switchcmd=On");
+		my $idx_vol_down = $ConfigIdx->{"switchs.idx.D_AMPLI_VDOWN"};
+		setSwitch($url,$idx_vol_down,"On");
 	}
 	case "mute_on" {
-		my $idx_vol_mute = $Config->{"default.idx.mute"}; 
-		get($url."type=command&param=switchlight&idx=".$idx_vol_mute."&switchcmd=On");
+		my $idx_vol_mute = $ConfigIdx->{"switchs.idx.D_AMPLI_MUTE"}; 
+		setSwitch($url,$idx_vol_mute,"On");
 	}
 	# update variable
 	case "source" {
-		my $idx_v_source = $Config->{"default.idx.v_source"}; 
-		get($url."type=command&param=switchlight&idx=".$idx_v_source."&switchcmd=On");
+		my $idx_v_source = $ConfigIdx->{"switchs.idx.V_SOURCE"}; 
+		setSwitch($url,$idx_v_source,"On");
 	}
 	case "v_volume_up" {
-		my $idx_v_volume_up = $Config->{"default.idx.v_volume.up"};  
-		 get($url."type=command&param=switchlight&idx=".$idx_v_volume_up."&switchcmd=On");
+		my $idx_v_volume_up = $ConfigIdx->{"switchs.idx.V_VOLUMEUP"};  
+		 setSwitch($url,$idx_v_volume_up,"On");
 	}
 	case "v_volume_down" {
-		my $idx_v_volume_down = $Config->{"default.idx.v_volume.down"};
-		get($url."type=command&param=switchlight&idx=".$idx_v_volume_down."&switchcmd=On");
+		my $idx_v_volume_down = $ConfigIdx->{"switchs.idx.V_VOLUMEDOWN"};
+		setSwitch($url,$idx_v_volume_down,"On");
 	}
 	case "v_mute_on" {
-		my $idx_v_mute = $Config->{"default.idx.v_mute"}; 
-		get($url."type=command&param=switchlight&idx=".$idx_v_mute."&switchcmd=On");
+		my $idx_v_mute = $ConfigIdx->{"switchs.idx.V_MUTE"}; 
+		setSwitch($url,$idx_v_mute,"On");
 	}
 }
 
+
+ sub setSwitch {
+	my $host=$_[0];
+	my $idx=$_[1];
+	my $cmd=$_[2];
+	get($host."type=command&param=switchlight&idx=".$idx."&switchcmd=".$cmd);
+ 
+ }
 
  sub read_conf {
 	my $conf=$_[0];

@@ -54,7 +54,7 @@ function Coucher:coucher_travail(name_coucher)
 				print ("heure_coucher : " .. tostring(heure_coucher))
 				print ("heure_coucher_dec : " .. tostring(heure_coucher_dec))
 		end
-		if(not veilleJourChome() or not vacances(name_coucher))then
+		if(not veilleJourChome() and not vacances(name_coucher))then
 			if (otherdevices['Mode Nuit'] == 'Off') then
 				-- Gestion de l'heure de fin d'un films (xbmc) pour le pas couper avant la fin du films
 				if( heure_coucher == heure_coucher_dec ) then

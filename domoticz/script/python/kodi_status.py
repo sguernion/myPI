@@ -31,9 +31,10 @@ kodi_online = "P_Kodi"
 ping_interval = 10
  
  
+ 
 # Do not change anything beyond this line.
 #___________________________________________________________________________________________________
- 
+api = DomoticzApi()
 if int(subprocess.check_output('ps x | grep \'' + sys.argv[0] + '\' | grep -cv grep', shell=True)) > 2 :
     print datetime.datetime.now().strftime("%H:%M:%S") + "- script already running. exiting."
     sys.exit(0)
@@ -42,7 +43,7 @@ if int(subprocess.check_output('ps x | grep \'' + sys.argv[0] + '\' | grep -cv g
  
 def domoticzstatus (switchid):
     status = ""
-    state = get_state(switchid)
+    state = api.get_state(switchid)
     if state == "On": 
          status = 1
     if state == "Off": 
@@ -74,7 +75,7 @@ while 1==1:
             if previous_kodi_state != "connected": 
                 print datetime.datetime.now().strftime("%H:%M:%S") + "- Connected to Kodi"
                 sendmessagetokodi(kodimachine, "Connection established")
-            if domoticzstatus(kodi_online) == 0: set_state(kodi_online, 'On')
+            if domoticzstatus(kodi_online) == 0: api.set_state(kodi_online, 'On')
              
             print datetime.datetime.now().strftime("%H:%M:%S") + "- Sending request for player status"
             result = kodi_send(1,"Player.GetActivePlayers",'{}')
@@ -86,12 +87,12 @@ while 1==1:
                 if len(json_data.get("result", {})) > 0:
                      process_result(json_data.get("result", {})[0])
                 else:
-				    set_state_idx (switchid_kodi_playing, 'Off')
+				    api.set_state_idx (switchid_kodi_playing, 'Off')
             #asyncore.loop(timeout=5.0)
             #kodimachine = KODIClient(kodi_host, kodi_port)
     if current_device_ping_state == 1 and previous_device_ping_state != 1:
         print datetime.datetime.now().strftime("%H:%M:%S") + "- Kodi machine offline"
-        if domoticzstatus(kodi_online) == 1: set_state(kodi_online, 'Off')
+        if domoticzstatus(kodi_online) == 1: api.set_state(kodi_online, 'Off')
  
     previous_device_ping_state = current_device_ping_state
     if current_device_ping_state == 0: previous_kodi_state = kodimachine.connection_state

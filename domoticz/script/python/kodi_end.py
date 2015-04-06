@@ -9,12 +9,8 @@ sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
 from kodi_api import *
 from domoticz_api import *
 
-debug = 1
-
-# Domoticz uservariable
-uservarid_kodi_play_duration = config.get('domoticz', 'idx.v_kodi_play_duration');
-kodi_play_duration = config.get('domoticz', 'name.v_kodi_play_duration');
-kodi_play_duration_type = config.get('domoticz', 'type.v_kodi_play_duration');
+api = DomoticzApi()
+debug = api.debug()
 
 # Do not change anything beyond this line.
 #___________________________________________________________________________________________________
@@ -36,8 +32,8 @@ def get_video_end():
          return "0"+duration[0:-3]
 
 
-def update_video_end(kodi_play_duration,play_duration,play_duration_type):
+def update_video_end(kodi_play_duration):
      duration = get_video_end()
-     update_uservariable(kodi_play_duration,play_duration,play_duration_type,duration)
+     api.update_uservariable(kodi_play_duration,duration)
 		 
-update_video_end(uservarid_kodi_play_duration,kodi_play_duration,kodi_play_duration_type)
+update_video_end('kodi_play_duration')
