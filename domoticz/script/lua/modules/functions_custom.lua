@@ -16,8 +16,8 @@ function command(command,action)
 end
 
 
-function commandThermostat(command,value)
-	commandArray['UpdateDevice'] = otherdevices_idx[command] ..'|0|'.. tostring(value)
+function commandValue(idx,value)
+	commandArray['UpdateDevice'] = idx ..'|0|'.. tostring(value)
 end
 
 

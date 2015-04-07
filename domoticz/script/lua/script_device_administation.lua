@@ -12,6 +12,11 @@ if (devicechanged['ADM_BACKUP'] == 'On' ) then
 	os.execute('/home/pi/domoticz/scripts/sh/domoticz_backup.sh &')
 end
 
+if (devicechanged['PHASE_TESTS'] == 'On' ) then
+	commandValue(55,'test');
+end
+
+
 if (not presenceAtHome()) then	
 	alert_mesure('M_DOMO_CPU',70,properties,'Attention!! CPU : pic d\'utilisation importante')
 	alert_mesure('M_DOMO_HDD',60,properties,'Attention!! HDD : l\'espace libre diminue')   
