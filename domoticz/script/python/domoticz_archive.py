@@ -60,7 +60,22 @@ def put_url(session,url,jsonData):
 	#	print r.json
 	return r
 
-def updateLog(dds_url,url,switch,urlSuffix):
+def updateLogSwitch(dds_url,url,switch):
+	response3 = json.loads(api.call_api(url+str(switch['idx'])))
+	if response3['status'] != 'ERR' :
+		print 'update switch log'
+		if 'result' in response3:
+			existLog = get_url(s,dds_url+'/deviceLog/'+str(switch['idx'])+'/logs')
+			for log in response3['result']:
+				#print existLog.content
+				if existLog.status_code == 200:
+					#print str(log['idx'])+" "+str(existLog.json['idx'])+" = "+str(int(log['idx']) > int(existLog.json['idx']))
+					if existLog.content == '' or int(log['idx']) > int(existLog.json['idx']):
+						dataLogfull ={"Data": str(log['Data']),"Date": str(log['Date']),"Level": str(log['Level']),"Status": str(log['Status']),"idx": str(log['idx'])}
+						print 'create switch log '+log['Date']
+						post_url(s,dds_url+'/deviceLog/'+str(switch['idx'])+'/logs/',dataLogfull)
+	
+def updateLogSensor(dds_url,url,switch,urlSuffix):
 	response3 = json.loads(api.call_api(url+str(switch['idx'])+urlSuffix))
 	if response3['status'] != 'ERR' :
 		print 'update switch log'
@@ -70,18 +85,12 @@ def updateLog(dds_url,url,switch,urlSuffix):
 				#print existLog.content
 				if existLog.status_code == 200:
 					#print str(log['idx'])+" "+str(existLog.json['idx'])+" = "+str(int(log['idx']) > int(existLog.json['idx']))
-					if str(switch['Type']) == 'Lighting 2' or str(switch['Type']) == 'Scene':
-						if existLog.content == '' or int(log['idx']) > int(existLog.json['idx']):
-							dataLogfull ={"Data": str(log['Data']),"Date": str(log['Date']),"Level": str(log['Level']),"Status": str(log['Status']),"idx": str(log['idx'])}
-							print 'create switch log '+log['Date']
-							post_url(s,dds_url+'/deviceLog/'+str(switch['idx'])+'/logs/',dataLogfull)
-					else:
-						if existLog.content == '' or str(log['d']) > str(existLog.json['d']):
-							dataLogfull ={"Status": str(log['te']),"Date": str(log['d'])}
-							print 'create switch log '+log['d']
-							post_url(s,dds_url+'/deviceLog/'+str(switch['idx'])+'/logs/',dataLogfull)
+					if existLog.content == '' or str(log['d']) > str(existLog.json['d']):
+						dataLogfull ={"Status": str(log['te']),"Date": str(log['d'])}
+						print 'create switch log '+log['d']
+						post_url(s,dds_url+'/deviceLog/'+str(switch['idx'])+'/logs/',dataLogfull)
 	
-
+	
 result = post_url(s,dds_url+'/auth/signin',{"username":dds_user,"password":dds_pass})
 print result
 response = json.loads(api.call_api('type=devices&filter=all&used=true&order=Name'))
@@ -106,9 +115,9 @@ for switch in response['result']:
 		post_url(s,dds_url+'/devices/',data)
 
 	if str(switch['Type']) == 'Lighting 2' or str(switch['Type']) == 'Scene':
-		updateLog(dds_url,'type=lightlog&idx=',switch,'')
+		updateLogSwitch(dds_url,'type=lightlog&idx=',switch)
 			
 	else:
-		updateLog(dds_url,'type=graph&sensor=temp&idx=',switch,'&range=day')
+		updateLogSensor(dds_url,'type=graph&sensor=temp&idx=',switch,'&range=day')
 		
 

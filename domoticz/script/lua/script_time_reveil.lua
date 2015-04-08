@@ -70,6 +70,10 @@ time=os.time()
 		 commandValue(55,'soiree')
 	end
 
+	if( istime == '09:00' and not jourChome()) then
+		 commandValue(55,'travail')
+	end
+	
 if(auto() and ( absence() or not presenceAtHome())) then
 	ch:coucher_abs(name_coucher)
 end
