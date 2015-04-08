@@ -49,11 +49,12 @@ function Reveil:reveil_occasionnel(name_reveil)
 		   if( istime == uservariables[self.reveil_occ_prefix ..name_reveil ]) then
 				command_scene(self.scene_reveil_prefix..name_reveil,'On')
 				command_variable(self.reveil_prefix ..name_reveil,self.heure_unset)
-				command_variable('phase','lever')
+				commandValue(55,'reveil')
 			end
 			
 			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',to_seconde(self.chevet_delai_off)) ) then
 				 command(self.chevet_prefix..name_reveil,'Off')
+				 commandValue(55,'lever')
 			end
 		end
 	end
@@ -75,11 +76,12 @@ function Reveil:reveil_travail(name_reveil)
              -- Reveil jours de travail
 	         if( istime == uservariables[self.reveil_prefix ..name_reveil ]) then
 		         command_scene(self.scene_reveil_prefix..name_reveil,'On')
-				 command_variable('phase','lever')
+				 commandValue(55,'reveil')
 	         end
 			 
 			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',to_seconde(self.chevet_delai_off)) ) then
 				 command(self.chevet_prefix..name_reveil,'Off')
+				 commandValue(55,'lever')
 			end
 	     end
 	end
