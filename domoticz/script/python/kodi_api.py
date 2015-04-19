@@ -10,7 +10,7 @@ sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
 from domoticz_api import *
 
 api = DomoticzApi()
-debug = api.debug()
+debug = 1
 
 #config
 config = ConfigParser.RawConfigParser()
@@ -76,13 +76,13 @@ def getJson(url,username, password):
     req = urlopen(request)
     res = req.read()
     data = loads(res)
-    if debug == 1:
+    if debug:
         print data
     return data
 
 def kodi_request(request):
     rurl = 'http://'+ kodi_host +':'+str(kodi_port)+'/jsonrpc?request='+request
-    if debug == 1:
+    if debug:
         print rurl
     return getJson(rurl,kodi_password,kodi_username)
 
@@ -124,7 +124,7 @@ class KODIClient (asynchat.async_chat):
  
     def found_terminator(self):
         msg = ''.join(self.buffer)
-        if debug == 1:
+        if debug:
              print 'Received : ', msg
         self.buffer = []
  

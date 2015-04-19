@@ -105,4 +105,4 @@ class DomoticzApi:
 		self.call_api('type=command&param=updateuservariable&idx='+str(idx_var)+'&vname='+name+'&vtype='+str(type_var)+'&vvalue='+str(value))
 	
 	def debug(self):
-		return self.debug
+		return self.debug == 1

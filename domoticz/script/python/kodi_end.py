@@ -9,8 +9,6 @@ sys.path.append(os.path.abspath("/home/pi/domoticz/scripts"))
 from kodi_api import *
 from domoticz_api import *
 
-api = DomoticzApi()
-debug = api.debug()
 
 # Do not change anything beyond this line.
 #___________________________________________________________________________________________________
