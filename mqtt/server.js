@@ -1,0 +1,1 @@
+var domoticz = require('./domoticz.js');

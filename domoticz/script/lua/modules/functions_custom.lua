@@ -1,5 +1,6 @@
 package.path = package.path..";/home/pi/domoticz/scripts/lua/modules/?.lua"
 require 'functions_utils'
+require 'Properties_class'
 
 -- custom functions
 
@@ -16,8 +17,11 @@ function command(command,action)
 end
 
 
-function commandValue(idx,value)
-	commandArray['UpdateDevice'] = idx ..'|0|'.. tostring(value)
+function commandValue(name,value)
+	local properties = Properties.create(uservariables["domoticz_file"])
+	deviceIndex = properties:get('idx.'..name)
+	print(name..' '..deviceIndex..' = '..tostring(value))
+	commandArray['UpdateDevice'] = deviceIndex ..'|0|'.. tostring(value)
 end
 
 

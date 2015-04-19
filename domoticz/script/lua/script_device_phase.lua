@@ -4,14 +4,9 @@ require 'functions_utils'
 require 'functions_custom'
 
 if(auto()) then
+	if(devicechanged['PHASE']) then
+		command_variable('phase',otherdevices_svalues['PHASE'])
 
-if (devicechanged['PHASE'] ~= 'test' and devicechanged['PHASE'] ~= nil) then
-	print ("PHASE "..devicechanged['PHASE'])
-	command_variable('phase',devicechanged['PHASE'])
-end
-
-
-
-
+	end	
 end	
 return commandArray

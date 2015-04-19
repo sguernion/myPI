@@ -43,3 +43,5 @@ script_device_alarm.lua
 domoticz/meanjs
 domoticz/domoticz-data
 domoticz/web
+
+node_modules

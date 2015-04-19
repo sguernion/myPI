@@ -5,8 +5,7 @@ function to_seconde (minute)
 end
 
 function time_difference_between (device,delai_min,delai_max)
-	t1 = os.time()
-	difference = basetime_difference (t1,device)
+	difference = basetime_difference (device)
 	return difference > delai_min and difference < delai_max
 end
 
@@ -24,15 +23,17 @@ end
 
 -- calcul du temps en seconde depuis la derniere mise a jour du capteur
 function time_difference (device)
-	t1 = os.time()
-	return basetime_difference (t1,device)
+	return basetime_difference (device)
 end
 
-function basetime_difference (t1,device)
+function basetime_difference (device)
 	t1 = os.time()
 	s = otherdevices_lastupdate[device]
 	-- returns a date time like 2013-07-11 17:23:12
+	return tdifference (t1,s)
+end
 
+function tdifference (t1,s)
 	if(s)then
 		year = string.sub(s, 1, 4)
 		month = string.sub(s, 6, 7)
@@ -48,6 +49,7 @@ function basetime_difference (t1,device)
 		return 0
 	end
 end
+
 
 function heure_difference (uservariable)
 	t1 = os.time()
@@ -175,6 +177,14 @@ end
 
 function isDebug() 
 	if (uservariables['SCRIPTS_DEBUG']=="false") then
+		return false
+	else
+		 return true
+	end
+end
+
+function mqtt_enable() 
+	if (uservariables['mqtt_enable']=="false") then
 		return false
 	else
 		 return true

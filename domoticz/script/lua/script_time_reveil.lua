@@ -4,18 +4,9 @@ require 'functions_utils'
 require 'functions_custom'
 require 'Reveil_class'
 require 'Coucher_class'
-require 'Day_class'
+require 'Properties_class'
 
-
-
-local day = Day.create()
-local today=os.date("%Y-%m-%d")
-if( today ~= string.sub(uservariables_lastupdate['jour'],0,10) ) then
-	day:initSaison()
-	day:initJoursChome()
-	day:initJour()
-end
-
+local properties = Properties.create(uservariables["config_file"])
 
 ---------------------------------------------
 -- nommage des variables
@@ -39,40 +30,35 @@ end
 	local heure_coucher_dec = 'heure_coucher_dec'
 	local scene_coucher = 'Coucher_General'
 	
-	local username = 'Sylvain'
-
 	local reveil = Reveil.create(reveil_prefix,reveil_occ_prefix,scene_reveil_prefix,chevet_prefix,chevet_delai_off,heure_unset)
 	local ch = Coucher.create(heure_coucher,heure_coucher_dec,scene_coucher,heure_unset) --
 	
 --print(istime..' veilleJourChome :'..tostring(veilleJourChome()) ..' jourChome: '..tostring(jourChome()))
 if(auto() and not absence() and presenceAtHome()) then
-	if ( otherdevices['P_KODI'] == 'On' ) then
-		decalage_coucher_fin_films('kodi_play_duration',heure_coucher_dec,heure_coucher,reveil_prefix .. username,heure_unset)
+	
+
+	for i,username in pairs(properties:getArray('reveil.usernames')) do 
+		if (server  ~= nil and server  ~= '') then
+			--print(username)
+			if ( otherdevices['P_KODI'] == 'On' ) then
+				decalage_coucher_fin_films('kodi_play_duration',heure_coucher_dec,heure_coucher,reveil_prefix .. username,heure_unset)
+			end
+
+			reveil:reveil_travail(username)
+			-- reveil occasionnel
+			reveil:reveil_occasionnel(username)
+					
+			ch:coucher_travail(username)
+		end
 	end
-	reveil:reveil_travail(username)
-	-- reveil occasionnel
-	reveil:reveil_occasionnel(username)
-	
-	
-	
-	ch:coucher_travail(username)
-	
+
 	if( oneDeviceHasStateAfterTime('Multimedia_Chambre','On',to_seconde(multimedia_ch_delai_off)) and otherdevices['Mode Nuit'] == 'On') then
 		 command('Multimedia_Chambre','Off')
 		 command_variable('multimedia_ch_delai_off',defaut_delai_off)
-		 commandValue(55,'nuit')
+		 commandValue('PHASE','nuit')
 	end
 end
 
-time=os.time()
-	istime=os.date('%H:%M',time)
-	if( istime == '20:00') then
-		 commandValue(55,'soiree')
-	end
-
-	if( istime == '09:00' and not jourChome()) then
-		 commandValue(55,'travail')
-	end
 	
 if(auto() and ( absence() or not presenceAtHome())) then
 	ch:coucher_abs(name_coucher)

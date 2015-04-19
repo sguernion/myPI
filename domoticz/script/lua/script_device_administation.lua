@@ -13,7 +13,7 @@ if (devicechanged['ADM_BACKUP'] == 'On' ) then
 end
 
 if (devicechanged['PHASE_TESTS'] == 'On' ) then
-	commandValue(55,'test');
+	commandValue('PHASE','test');
 end
 
 
