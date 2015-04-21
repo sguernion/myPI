@@ -45,3 +45,4 @@ domoticz/domoticz-data
 domoticz/web
 
 node_modules
+configuration.js

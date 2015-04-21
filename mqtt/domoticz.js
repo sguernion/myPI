@@ -7,16 +7,12 @@ Actions that Domoticz should perform can be triggered by publishing to /actions/
 See also topic http://www.domoticz.com/forum/viewtopic.php?f=5&t=838
 */
 
-var	Domoticz_HID = '3'; 										//Hardware ID of dummy in Domoticz
-	Domoticz_IP = '192.168.0.17';								//IP address of Domoticz (127.0.0.1 for same machine)
-	Domoticz_Port = '8080';										//Port of Domoticz
-
 var mqtt = require('mqtt');
 var url = require('url');
 var http = require('http');
 var request = require('request');
 
-client = mqtt.createClient(1883, 'localhost');
+client = mqtt.createClient(configuration.mqtt_port, configuration.mqtt_ip);
 
 // the lua-script in domoticz pushes all events to port 5001. This function will publish them on the mqtt bus
 http.createServer(function (req, res) {
@@ -25,7 +21,7 @@ http.createServer(function (req, res) {
 	
 	console.log('publish: '+'/events/domoticz'+url.parse(req.url).pathname, url.parse(req.url).query);
 	client.publish('/events/domoticz'+url.parse(req.url).pathname, url.parse(req.url).query);	
-}).listen(5001, 'localhost');
+}).listen(5001, '192.168.0.15');
 
 /* here we subscribe to topic /actions/domoticz in mqtt. Parseble messages which are published here will be sent to Domoticz
 open a new SSH window and type 'mosquitto_sub -v -t /#' to test
@@ -50,9 +46,9 @@ explanation:	last number in topic should be idx-number. Payload is svalue.
 client.subscribe('/actions/domoticz/#');
 client.on('message', function (topic, message) {
   console.log('Received: '+ topic + ' ' + message);
-  var url = 'http://'+Domoticz_IP+':'+Domoticz_Port;
+  var url = 'http://'+configuration.Domoticz_IP+':'+configuration.Domoticz_Port;
   
-  var hid = Domoticz_HID;
+  var hid = configuration.Domoticz_HID;
   var svalue = 0;
   var nvalue = 0;
   var idx = 0;

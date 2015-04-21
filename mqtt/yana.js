@@ -7,21 +7,21 @@ var url = require('url');
 var http = require('http');
 var request = require('request');
 
-client = mqtt.createClient(1883, 'localhost');
+client = mqtt.createClient(configuration.mqtt_port, configuration.mqtt_ip);
 
 
 client.subscribe('/actions/yana/#');
 client.on('message', function (topic, message) {
   console.log('Received: '+ topic + ' ' + message);
-  var url = 'http://'+yana_IP+':'+yana_Port+'/yana-server/action.php';
+  var url = 'http://'+configuration.yana_IP+':'+configuration.yana_Port+'/yana-server/action.php';
   
 
       
   try {
     var payload = JSON.parse(message);  
-    var command;
-    var query;
-    var confidence;
+    var command='';
+    var query='';
+    var confidence='';
 
 	if (payload !=  null) {
 	  console.log('JSON Payload');
@@ -37,9 +37,8 @@ client.on('message', function (topic, message) {
 	
 
 
-	   url = url + "?"+query+"&confidence="+confidence;  
-	  };
-    }
+	   url = url + "?"+query+'&token='+configuration.yana_token;  
+	}    
    
 	request(url, function(error, response, body){
 	console.log("Sending request");
