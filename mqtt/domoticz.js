@@ -1,3 +1,5 @@
+var configuration = require('./configuration.js');
+
 /*
 this script will act as a device-driver for Domoticz. 
 Events in Domoticz are published to topics beneath /events/domoticz/# 
