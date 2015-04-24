@@ -51,7 +51,11 @@ function absence()
 end
 
 function vacances(name)
-	return otherdevices['Vacances_' .. name] == 'On'
+	if(name ~= nil ) then
+		return otherdevices['Vacances_' .. name] == 'On'
+	else
+		return false
+	end
 end
 
 function devicesOff()

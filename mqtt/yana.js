@@ -1,5 +1,5 @@
 
-var configuration = require('./configuration.js');
+var cfg = require('./configuration.js');
 
 
 var mqtt = require('mqtt');
@@ -7,13 +7,13 @@ var url = require('url');
 var http = require('http');
 var request = require('request');
 
-client = mqtt.createClient(configuration.mqtt_port, configuration.mqtt_ip);
+client = mqtt.createClient(cfg.mqtt_port, cfg.mqtt_ip);
 
 
 client.subscribe('/actions/yana/#');
 client.on('message', function (topic, message) {
   console.log('Received: '+ topic + ' ' + message);
-  var url = 'http://'+configuration.yana_IP+':'+configuration.yana_Port+'/yana-server/action.php';
+  var url = 'http://'+cfg.yana_IP+':'+cfg.yana_Port+'/yana-server/action.php';
   
 
       
@@ -37,7 +37,7 @@ client.on('message', function (topic, message) {
 	
 
 
-	   url = url + "?"+query+'&token='+configuration.yana_token;  
+	   url = url + "?"+query+'&token='+cfg.yana_token;  
 	}    
    
 	request(url, function(error, response, body){
