@@ -24,7 +24,7 @@ local properties = Properties.create(uservariables["config_file"])
 	local chevet_prefix = 'E_CHEVET_'
 	local chevet_delai_off = uservariables["chevet_delai_off"]  -- 30 min
 	local multimedia_ch_delai_off = uservariables["multimedia_ch_delai_off"]  -- 30 min
-	local defaut_delai_off=30
+	local defaut_delai_off= uservariables["defaut_delai_off"]  -- 30 min
 	
 	local heure_coucher = 'heure_coucher'
 	local heure_coucher_dec = 'heure_coucher_dec'
@@ -39,8 +39,8 @@ if(auto() and not absence() and presenceAtHome()) then
 
 	for i,username in pairs(properties:getArray('reveil.usernames')) do 
 		if (username  ~= nil and tostring(username)  ~= '' and tostring(username)  ~= ' ') then
-			print('-'..username..'-')
-			if ( otherdevices['P_KODI'] == 'On' ) then
+			--print('-'..username..'-')
+			if ( otherdevices['P_KODI'] == 'On' and  otherdevices['D_KODI_PLAY'] == 'On' ) then
 				decalage_coucher_fin_films('kodi_play_duration',heure_coucher_dec,heure_coucher,reveil_prefix .. username,heure_unset)
 			end
 
@@ -61,6 +61,6 @@ end
 
 	
 if(auto() and ( absence() or not presenceAtHome())) then
-	ch:coucher_abs(name_coucher)
+	ch:coucher_abs()
 end
 return commandArray
