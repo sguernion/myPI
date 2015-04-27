@@ -154,10 +154,8 @@ function decalage_coucher_fin_films (kodi_play_dur_name,heure_coucher_dec_name,v
 end
 
 
-function Coucher:coucher_abs(name_coucher)
-	if(self.debug) then
-		print ("name_coucher:  " .. tostring(name_coucher))
-	end
+function Coucher:coucher_abs()
+	
 	heure_coucher = uservariables[self.var_h_coucher]
 	if (heure_coucher == heure_unset ) then
 		if(self.debug) then
@@ -169,7 +167,7 @@ function Coucher:coucher_abs(name_coucher)
 				print ("heure_coucher : " .. tostring(heure_coucher))
 				print ("heure_coucher_dec : " .. tostring(heure_coucher_dec))
 		end
-		if(not veilleJourChome() or not vacances(name_coucher))then
+		if(not veilleJourChome())then
 			if (otherdevices['Mode Nuit'] == 'Off') then
 				-- Gestion de l'heure de fin d'un films (xbmc) pour le pas couper avant la fin du films
 				if( heure_coucher == heure_coucher_dec ) then
