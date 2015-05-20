@@ -1,6 +1,7 @@
 #!/bin/bash
 
 FILE_NAME=/home/pi/domoticz/scripts/config.properties
+IDX_FILE_NAME=/home/pi/domoticz/scripts/domoticz.properties
 
 
 read_properties()

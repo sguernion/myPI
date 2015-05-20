@@ -4,7 +4,7 @@ source functions.sh
 command=$1
 
 ampliIp=$(read_properties $FILE_NAME "server.Ampli.ip")
-ampliIdx=$(read_properties $FILE_NAME "server.Ampli.idx")
+ampliIdx=$(read_properties $IDX_FILE_NAME "server.Ampli.idx")
 
 url='http://'$ampliIp'/MainZone/index.put.asp?cmd0='
 

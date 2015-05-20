@@ -100,8 +100,20 @@ function alert_mesure(name,max_value,properties,message)
 	if devicechanged[name] then
 		mesure = tonumber(otherdevices_svalues[name])
 		if mesure > max_value then
-			print(name..' : '.. tostring(mesure))
+			--print(name..' : '.. tostring(mesure))
 			send_sms (properties,message)
+		end
+	end
+end
+
+function alert_mesure(name,max_value,properties,message,cpt_name,cpt_max)  
+	local cpt_alert = uservariables[cpt_name]
+	if devicechanged[name] then
+		mesure = tonumber(otherdevices_svalues[name])
+		if( mesure > max_value and cpt_alert < cpt_max ) then
+			--print(name..' : '.. tostring(mesure))
+			send_sms (properties,message)
+			command_variable(cpt_name,cpt_alert +1)
 		end
 	end
 end

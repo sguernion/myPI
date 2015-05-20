@@ -1,36 +1,26 @@
 #!/bin/bash
 ################################################
-
+source  /home/pi/domoticz/scripts/sh/functions.sh
 command=$1
 
-FILE_NAME=/home/pi/domoticz/scripts/config.properties
+domoticzIp=$(read_properties $FILE_NAME "domoticz.ip")
+port=$(read_properties $FILE_NAME "domoticz.port")
+idx_vol_mute=$(read_properties $IDX_FILE_NAME "idx.D_AMPLI_MUTE")
+idx_vol_up=$(read_properties $IDX_FILE_NAME "idx.D_AMPLI_VUP")
+idx_vol_down=$(read_properties $IDX_FILE_NAME "idx.D_AMPLI_VDOWN")
+idx_v_mute=$(read_properties $IDX_FILE_NAME "idx.V_MUTE")
+idx_v_source=$(read_properties $IDX_FILE_NAME "idx.V_SOURCE")
+idx_v_volume_up=$(read_properties $IDX_FILE_NAME "idx.V_VOLUMEUP")
+idx_v_volume_down=$(read_properties $IDX_FILE_NAME "idx.V_VOLUMEDOWN")
 
-read_properties()
-{
-  file="$1"
-  while IFS="=" read -r key value; do
-    case "$key" in
-      "domoticz.ip") domoticzIp="$value" ;;
-      "domoticz.port") port="$value" ;;
-	  "idx.mute") idx_vol_mute="$value" ;;
-	  "idx.vol.up") idx_vol_up="$value" ;;
-	  "idx.vol.down") idx_vol_down="$value" ;;
-	  "idx.v_mute") idx_v_mute="$value" ;;
-	  "idx.v_source") idx_v_source="$value" ;;
-	  "idx.v_volume.up") idx_v_volume_up="$value" ;;
-	  "idx.v_volume.down") idx_v_volume_down="$value" ;;
-    esac
-  done < "$file"
-}
-
-read_properties $FILE_NAME
-
+#url=$(read_properties $FILE_NAME "domoticz.url")
+#echo $url
 url='http://192.168.0.17:8080/json.htm?'
-
 
 case $command in
 	volume_up)
-	curl $url'type=command&param=switchlight&idx='$idx_vol_up'&switchcmd=On'
+	commandUrl=$url'type=command&param=switchlight&idx='$idx_vol_up'&switchcmd=On'
+	curl $commandUrl
 	;;
 	volume_down)
 	curl $url'type=command&param=switchlight&idx='$idx_vol_down'&switchcmd=On'

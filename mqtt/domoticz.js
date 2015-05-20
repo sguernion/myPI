@@ -1,4 +1,8 @@
 var configuration = require('./configuration.js');
+var mqtt = require('mqtt');
+var url = require('url');
+var http = require('http');
+var request = require('request');
 
 /*
 this script will act as a device-driver for Domoticz. 
@@ -6,22 +10,8 @@ Events in Domoticz are published to topics beneath /events/domoticz/#
 Actions that Domoticz should perform can be triggered by publishing to /actions/domoticz/#
 See also topic http://www.domoticz.com/forum/viewtopic.php?f=5&t=838
 */
-
-var mqtt = require('mqtt');
-var url = require('url');
-var http = require('http');
-var request = require('request');
-
 client = mqtt.createClient(configuration.mqtt_port, configuration.mqtt_ip);
 
-// the lua-script in domoticz pushes all events to port 5001. This function will publish them on the mqtt bus
-http.createServer(function (req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end('Response from Node.js \n');
-	
-	console.log('publish: '+'/events/domoticz'+url.parse(req.url).pathname, url.parse(req.url).query);
-	client.publish('/events/domoticz'+url.parse(req.url).pathname, url.parse(req.url).query);	
-}).listen(5001, '192.168.0.15');
 
 /* here we subscribe to topic /actions/domoticz in mqtt. Parseble messages which are published here will be sent to Domoticz
 open a new SSH window and type 'mosquitto_sub -v -t /#' to test

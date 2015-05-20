@@ -21,11 +21,14 @@ user = config.get('global', 'free.mobile.api.user');
 key = config.get('global', 'free.mobile.api.key');
 departement="35"
 idx_device_vigilance=8
+idx_device_inondation=122
 
 col=1
+floodcol=1
 
 color=api.call_url("http://api.domogeek.fr/vigilance/"+departement+"/color")
 risk=api.call_url("http://api.domogeek.fr/vigilance/"+departement+"/risk")
+flood=api.call_url("http://api.domogeek.fr/vigilance/"+departement+"/flood")
 
 if color == "vert":
 	col=1
@@ -37,5 +40,15 @@ elif color == "rouge":
 	col=4
 	send_sms (user,key,'Vigilance : Attention risque Rouge')
 
+if flood == "vert":
+	floodcol=1
+elif flood == "jaune":
+	floodcol=2
+elif flood == "orange":
+	floodcol=3
+elif flood == "rouge":
+	floodcol=4
+	send_sms (user,key,'Vigilance Innondation : Attention risque Rouge')
 
 api.set_udevice_state_idx(idx_device_vigilance,col,risk);
+api.set_udevice_state_idx(idx_device_inondation,floodcol,risk);

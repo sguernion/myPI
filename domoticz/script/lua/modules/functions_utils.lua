@@ -4,6 +4,11 @@ function to_seconde (minute)
 	return minute * 60
 end
 
+
+function to_moctet (octet)
+	return ( octet / 1024 ) / 1024
+end
+
 function time_difference_between (device,delai_min,delai_max)
 	difference = basetime_difference (device)
 	return difference > delai_min and difference < delai_max
