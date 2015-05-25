@@ -13,7 +13,7 @@ if(auto()) then
 
 	-- Allumage automatique de la lampe lorsqu'il fait nuit et la porte d'entrée vient de s'ouvrir
 	if (not presenceAtHome() and oneDeviceChangeHasState('Porte','Open')) then
-		if (devicechanged['P_LUX_SALLE'] < 100 and otherdevices['Nuit'] == 'On') then
+		if (devicechanged['P_LUX_SALLE'] < 100 or otherdevices['Nuit'] == 'On') then
 			command_scene('Retour','On')
 		end
 		commandValue('PHASE','retour');

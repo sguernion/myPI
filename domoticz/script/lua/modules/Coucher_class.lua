@@ -66,7 +66,6 @@ function Coucher:coucher_travail(name_coucher)
 						 command_scene(self.scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
 						 command_variable('multimedia_ch_delai_off',defaut_delai_off)
-						 command_variable('chevet_delai_off',defaut_delai_off)
 						 commandValue('PHASE','coucher')
 					end
 				else
@@ -84,7 +83,6 @@ function Coucher:coucher_travail(name_coucher)
 						 command_scene(self.scene_coucher,'On')
 						 command_variable(self.var_h_coucher_dec,heure_coucher)
 						 command_variable('multimedia_ch_delai_off',(defaut_delai_off/2))
-						 command_variable('chevet_delai_off',(defaut_delai_off/2))
 						 commandValue('PHASE','coucher')
 					end
 				end

@@ -6,7 +6,6 @@ require 'functions_custom'
 if(auto()) then
 	if(devicechanged['PHASE']) then
 		command_variable('phase',otherdevices_svalues['PHASE'])
-
 	end	
 end	
 return commandArray

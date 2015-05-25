@@ -53,7 +53,6 @@ function Reveil:reveil_occasionnel(name_reveil)
 			end
 			
 			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',to_seconde(self.chevet_delai_off)) ) then
-				 command(self.chevet_prefix..name_reveil,'Off')
 				 commandValue('PHASE','lever')
 			end
 		end
@@ -80,7 +79,6 @@ function Reveil:reveil_travail(name_reveil)
 	         end
 			 
 			if (oneDeviceHasStateAfterTime(self.chevet_prefix..name_reveil,'On',to_seconde(self.chevet_delai_off)) ) then
-				 command(self.chevet_prefix..name_reveil,'Off')
 				 commandValue('PHASE','lever')
 			end
 	     end
