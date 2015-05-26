@@ -15,7 +15,6 @@ local properties = Properties.create(uservariables["config_file"])
 -- Nommage de la scene de reveil
 -- scene_reveil_prefix : 'Reveil_'
 -- Nommage du swith du chevet
--- chevet_prefix : 'Chevet_'
 ----------------------------------------------
 	local heure_unset = uservariables["heure_unset"] -- "00:00" -- Valeur qui permet d'indiquer qu'une heure n'est pas initialisée
 	local reveil_prefix = 'reveil_'

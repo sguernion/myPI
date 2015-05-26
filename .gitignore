@@ -46,3 +46,5 @@ domoticz/web
 
 node_modules
 configuration.js
+
+*~
