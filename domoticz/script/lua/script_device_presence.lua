@@ -23,11 +23,33 @@ if(auto()) then
 		   devicesOff()
 	end
 
+	-- lumiere d'appoint lors d'un deplacement la nuit dans le séjour
+	if ( otherdevices['Mode Nuit'] == 'On') then
+		if ( devicechanged['P_GENERALE_MOTION'] == 'On' and otherdevices['E_LAMPE_SEJOUR'] == 'Off') then
+			command('E_LAMPE_SEJOUR','On')
+		end
+
+		if ( devicechanged['P_GENERALE_MOTION'] == 'Off' and otherdevices['E_LAMPE_SEJOUR'] == 'On') then
+			command('E_LAMPE_SEJOUR','Off')
+		end
+	end
+
 end
 
 if(absence() and otherdevices['MultipriseS'] == 'On' ) then
 	devicesOff()
 end
+
+-- va permetre de lisser la dectection de mouvement
+if (oneDeviceChangeHasState('P_MOTION','On')) then
+	command('P_GENERALE_MOTION','On')
+end
+
+-- si aucun mouvement depuis 5 min, on repasse a Off
+if (oneDeviceHasStateAfterTime('P_GENERALE_MOTION','On',300)) then
+	command('P_GENERALE_MOTION','Off')
+end
+
 
 
 return commandArray

@@ -37,7 +37,7 @@ end
 
 -- Detect device P_MOTION or P_MOTION_XXX is present
 function presenceMotion()
-	return oneDeviceHasStateAfterTime('P_MOTION','On',300)
+	return oneDeviceHasStateAfterTime('P_GENERALE_MOTION','On',300)
 end
 
 

@@ -36,23 +36,25 @@ require 'Thermostat_class'
 	local d_ouverture = 'Ouverture' --Non de l'interrupteur qui indique si une ouverture est ouverte
 	local d_chaudiere = 'T_TH_CHAUFFAGE' --Nom de la chaudière à allumer/éteindre
 	local deviceauto = 'T_TH_AUTO' -- mode chauffage auto
+	local d_thermostat = 'T_TH_MARCHE' -- thermostat activé
 	--------------------------------
 	-- Fin des variables à éditer --
 	--------------------------------
 	
 	
+	if(otherdevices[d_thermostat] == 'On') then
+		--La sonde Oregon 'thermostat' emet toutes les 40 secondes. Ce sera approximativement la fréquence 
+		-- d'exécution de ce script.
+		if (devicechanged[sonde]) then
+			local thermostat = Thermostat.create(d_chaudiere,d_ouverture,consigne,consigne_min,var_tht_temp,hysteresis)
 	
-	--La sonde Oregon 'thermostat' emet toutes les 40 secondes. Ce sera approximativement la fréquence 
-	-- d'exécution de ce script.
-	if (devicechanged[sonde]) then
-		local thermostat = Thermostat.create(d_chaudiere,d_ouverture,consigne,consigne_min,var_tht_temp,hysteresis)
-	
-		local temperature = devicechanged[string.format('%s_Temperature', sonde)] --Temperature relevée
-	    
-		if (otherdevices[deviceauto] == 'Off') then
-			thermostat:gestionChauffeManual(temperature,manual_temp )
-		else
-			thermostat:gestionChauffe(d_cmd_thermostat,temperature )
+			local temperature = devicechanged[string.format('%s_Temperature', sonde)] --Temperature relevée
+		    
+			if (otherdevices[deviceauto] == 'Off') then
+				thermostat:gestionChauffeManual(temperature,manual_temp )
+			else
+				thermostat:gestionChauffe(d_cmd_thermostat,temperature )
+			end
 		end
 	end
 	
