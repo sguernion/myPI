@@ -35,7 +35,7 @@ function presenceSmartphone()
 	return oneDeviceHasState('P_Smartphone','On')
 end
 
--- Detect device P_MOTION or P_MOTION_XXX is present
+-- Detect device P_GENERALE_MOTION is present
 function presenceMotion()
 	return oneDeviceHasStateAfterTime('P_GENERALE_MOTION','On',300)
 end
@@ -119,9 +119,13 @@ function alert_mesure(name,max_value,properties,message,cpt_name,cpt_max)
 end
 
 function domoticz_reboot(properties)
+	domoticz_query(properties,'type=command&param=system_reboot')
+end
+
+function domoticz_query(properties,query)
 	ip=properties:get('domoticz.ip')
 	port=properties:get('domoticz.port')
-    os.execute('curl -s -i -H "Accept: application/json" "http://' .. ip ..':'.. port ..'/json.htm?type=command&param=system_reboot"')
+    os.execute('curl -s -i -H "Accept: application/json" "http://' .. ip ..':'.. port ..'/json.htm?'.. query ..'"')
 end
 
 

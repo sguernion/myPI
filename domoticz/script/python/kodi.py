@@ -23,25 +23,22 @@ elif command=='back':
 elif command=='play':
      response = kodi_send(1,'Player.GetActivePlayers','{}')
      playerid = response['result'][0]['playerid']
-     kodi_send(1,"Player.PlayPause",'{"playerid":'+ str(playerid)+'}')	 
+     kodi_send(1,"Player.PlayPause",'{"playerid":'+ str(playerid)+'}')
 elif command=='stop_player':
      response = kodi_send(1,'Player.GetActivePlayers','{}')
      playerid = response['result'][0]['playerid']
-     kodi_send(1,"Player.Back",'{"playerid":'+ str(playerid)+'}')	 
+     kodi_send(1,"Player.Back",'{"playerid":'+ str(playerid)+'}')
 elif command=='shutdown':
-     kodi_send(1,"System.Shutdown","{}")	 
+     kodi_send(1,"System.Shutdown","{}")
 elif command=='subtitle':
-     kodi_send(1,"Player.SetSubtitle","{}")		 
+     kodi_send(1,"Player.SetSubtitle","{}")
 elif command=='party':
-     kodi_send(1,"Player.Open",'{"item":{"partymode":"music"}}')		 
+     kodi_send(1,"Player.Open",'{"item":{"partymode":"music"}}')
 elif command=='vscan':
-     kodi_send(1,"VideoLibrary.Scan",'{}')		 
+     kodi_send(1,"VideoLibrary.Scan",'{}')
 elif command=='ascan':
-     kodi_send(1,"AudioLibrary.Scan",'{}')		 
+     kodi_send(1,"AudioLibrary.Scan",'{}')
 elif command=='vclean':
-     kodi_send(1,"VideoLibrary.Clean",'{}')		 
+     kodi_send(1,"VideoLibrary.Clean",'{}')
 elif command=='aclean':
-     kodi_send(1,"AudioLibrary.Clean",'{}')		 
-		 	 
-	 
-	 
+     kodi_send(1,"AudioLibrary.Clean",'{}')
