@@ -44,7 +44,7 @@ function Coucher:coucher_travail(name_coucher)
 		print ("name_coucher:  " .. tostring(name_coucher))
 	end
 	heure_coucher = uservariables[self.var_h_coucher]
-	if (heure_coucher == heure_unset ) then
+	if (heure_coucher == heure_unset or vacances(name_coucher)) then
 		if(self.debug) then
 			print ("PAS DE DODO CAR PROGRAMME A " .. tostring(heure_coucher))
 		end

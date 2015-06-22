@@ -36,4 +36,6 @@ if (to_moctet (bdd_size) > 15 )then
 	send_sms (properties,'Attention!! Augmentation de la taille de la base de données!!')
 end
 
+
+
 return commandArray

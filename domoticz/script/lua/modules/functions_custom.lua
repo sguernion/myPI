@@ -116,6 +116,11 @@ function alert_mesure(name,max_value,properties,message,cpt_name,cpt_max)
 			command_variable(cpt_name,cpt_alert +1)
 		end
 	end
+	
+	local today=os.date("%Y-%m-%d")
+	if( today ~= string.sub(uservariables_lastupdate[cpt_name],0,10) and cpt_alert > cpt_max ) then
+		command_variable(cpt_name,0)
+	end
 end
 
 function domoticz_reboot(properties)

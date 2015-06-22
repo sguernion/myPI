@@ -8,7 +8,7 @@ require 'Day_class'
 
 local day = Day.create()
 local today=os.date("%Y-%m-%d")
-if( today ~= string.sub(uservariables_lastupdate['jour'],0,10) ) then
+if( today ~= getDayVar('jour') ) then
 	day:initSaison()
 	day:initJoursChome()
 	day:initJour()

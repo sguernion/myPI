@@ -32,6 +32,8 @@ def get_video_end():
 
 def update_video_end(kodi_play_duration):
      duration = get_video_end()
+     if duration is None:
+         duration = "00:00"
      api.update_uservariable(kodi_play_duration,duration)
-		 
+
 update_video_end('kodi_play_duration')

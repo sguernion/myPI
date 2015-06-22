@@ -195,3 +195,19 @@ function mqtt_enable()
 		 return true
 	end
 end
+
+function getDayVar(var_name) 
+	return string.sub(uservariables_lastupdate[var_name],0,10)
+end
+
+function getTimeVar(var_name) 
+	return string.sub(uservariables_lastupdate[var_name],12,19)
+end
+
+function getHourVar(var_name) 
+	return string.sub(uservariables_lastupdate[var_name],12,13)
+end
+
+function getMinuteVar(var_name) 
+	return string.sub(uservariables_lastupdate[var_name],15,16)
+end
