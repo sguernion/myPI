@@ -101,7 +101,7 @@ end
 function decalage_coucher_fin_films (kodi_play_dur_name,heure_coucher_dec_name,var_h_coucher,var_h_reveil,heure_unset)
 	if (uservariables[kodi_play_dur_name] == heure_unset ) then
 		-- aucun decalage, reset heure coucher
-		-- seulement si on a paas dépaassé l'heure de couché
+		-- seulement si on a pas dépassé l'heure de couché
 		t_minutes=tonumber(os.date('%M',os.time()))
  		hours=tonumber(os.date('%H',os.time()))
  		nhour =  tonumber(string.sub(uservariables[var_h_coucher], 0, 2))
