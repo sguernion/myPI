@@ -31,7 +31,7 @@ TIMESTAMP=`/bin/date +%Y%m%d%H%M%S`
 
 
 
-XBMC_PATH="/home/pi/.xbmc"
+XBMC_PATH="/home/osmc/.kodi"
 # le nom du fichier de backup des scripts xbmc_backup_AAMMJJHHMMSS
 BACKUP_FILE="xbmc_backup_"
 
@@ -39,7 +39,7 @@ BACKUP_FILE="xbmc_backup_"
 BACKUP_FILEGZ="$BACKUP_FILE$TIMESTAMP.gz"
 cd $XBMC_PATH
 cd ..
-tar zcvf /var/tmp/$BACKUP_FILEGZ .xbmc/ --exclude='addons/*' --exclude='addons *' --exclude='temp/*' --exclude='temp *' --exclude='Thumbnails/*' --exclude='Thumbnails *'
+tar zcvf /var/tmp/$BACKUP_FILEGZ .kodi/ --exclude='addons/*' --exclude='addons *' --exclude='temp/*' --exclude='temp *' --exclude='Thumbnails/*' --exclude='Thumbnails *'
  
 echo "backup Mode $MODE"
 ## TODO stop xbmc

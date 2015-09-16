@@ -21,13 +21,28 @@ end
 function Kodi.createFromConf(config)
    local mrt = {}             -- our new object
    setmetatable(mrt,Kodi)  -- make kodi handle lookup
+   local name = 'kodi'
    properties = Properties.create(config)
-   mrt.server = properties:get('kodi.host')
-   mrt.port = properties:get('kodi.port')
-   mrt.pw = properties:get('kodi.pw')
-   mrt.user = properties:get('kodi.user')
-   mrt.title = properties:get('kodi.notification.title')
-   mrt.image = properties:get('kodi.notification.image')
+   mrt.server = properties:get(name..'.host')
+   mrt.port = properties:get(name..'.port')
+   mrt.pw = properties:get(name..'.pw')
+   mrt.user = properties:get(name..'.user')
+   mrt.title = properties:get(name..'.notification.title')
+   mrt.image = properties:get(name..'.notification.image')
+   mrt.id = 1
+   return mrt
+end
+
+function Kodi.createFrom(name,config)
+   local mrt = {}             -- our new object
+   setmetatable(mrt,Kodi)  -- make kodi handle lookup
+   properties = Properties.create(config)
+   mrt.server = properties:get(name..'.host')
+   mrt.port = properties:get(name..'.port')
+   mrt.pw = properties:get(name..'.pw')
+   mrt.user = properties:get(name..'.user')
+   mrt.title = properties:get(name..'.notification.title')
+   mrt.image = properties:get(name..'.notification.image')
    mrt.id = 1
    return mrt
 end
@@ -36,7 +51,7 @@ end
 function Kodi:call_api(request)
 	--'..self.user.. ':'.. self.pw ..'@'
 	url = 'http://'.. self.server ..':'.. self.port ..'/jsonrpc?request='.. request
-	print(url)
+	LOG:info(url)
 	commandArray['OpenURL']= url
 	--os.execute('curl '..url)
 end
