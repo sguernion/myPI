@@ -13,7 +13,7 @@ end
 function power()
 	if ( otherdevices['P_TV'] == 'Off' ) then
 		irsend('KEY_POWER')
-		sleep(15)
+		command('P_TV','On')
 	end
 end
 
@@ -104,8 +104,17 @@ if ( devicechanged['D_TV_CH_6TER'] == 'On' ) then
 end
 
 if ( devicechanged['D_TV_POWER'] == 'On' ) then
-	irsend('KEY_POWER')
+	power()
 end
+
+if ( devicechanged['D_TV_POWER_OFF'] == 'On' ) then
+	if ( otherdevices['P_TV'] == 'On' ) then
+		irsend('KEY_POWER')
+		command('P_TV','Off')
+	end
+end
+
+
 
 if ( devicechanged['V_SOURCE'] == 'On' ) then
 	if (uservariables["source_tv"] == 1) then

@@ -168,6 +168,9 @@ function initSaison()
 	if( isDay == "03-21" ) then
 		command_variable('saison','Printemps')
 	end
+	if( isDay == "06-21" ) then
+		command_variable('saison','Ete')
+	end
 	 --test conditions
 	if( isDay == "02-04" ) then
 		command_variable('saison','Hiver')
@@ -194,6 +197,10 @@ function mqtt_enable()
 	else
 		 return true
 	end
+end
+
+function trim(s)
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 function getDayVar(var_name) 

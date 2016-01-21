@@ -37,9 +37,9 @@ if(auto() and not absence() and presenceAtHome()) then
 	
 
 	for i,username in pairs(properties:getArray('reveil.usernames')) do 
-		if (username  ~= nil and tostring(username)  ~= '' and tostring(username)  ~= ' ') then
+		if (username  ~= nil and trim(tostring(username))  ~= '') then
 			--print('-'..username..'-')
-			if ( otherdevices['P_KODI'] == 'On' and  otherdevices['D_KODI_PLAY'] == 'On' ) then
+			if ( otherdevices['P_KODI'] == 'On' ) then
 				decalage_coucher_fin_films('kodi_play_duration',heure_coucher_dec,heure_coucher,reveil_prefix .. username,heure_unset)
 			end
 
