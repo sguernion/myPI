@@ -24,6 +24,9 @@ class DomoticzApi:
 		# Variables
 		self.switch_map = {}
 		self.scene_map = {}
+		
+	def get_conf(self,section,name):
+		return self.config.get(section, name);
 
 	def get_switch_id(self,name_s):
 		if len(self.switch_map) == 0:
@@ -47,13 +50,14 @@ class DomoticzApi:
 			return self.scene_map[name_s]
 
 	def call_api(self,text):
-		return self.call_url('http://' + self.server + ':' + self.port + '/json.htm?' + str(text))
+		return self.call_url('http://' + self.server + ':' + self.port + '/json.htm?' + str(text),"","")
 	
-	def call_url(self,url):
+	def call_url(self,url,username,password):
 		#print url
 		request = urllib2.Request(url)
-		#base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
-		#request.add_header("Authorization", "Basic %s" % base64string)   
+		#if len(username) != 0 and len(password) != 0:
+		#	base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
+		#	request.add_header("Authorization", "Basic %s" % base64string)   
 		req= urllib2.urlopen(request)
 		res = req.read()
 		return res
@@ -106,3 +110,17 @@ class DomoticzApi:
 	
 	def debug(self):
 		return self.debug == 1
+	
+	def createVirtualDevice(self,materialIdx,sensortype,name,switchtype):
+		self.call_api("type=createvirtualsensor&idx="+str(materialIdx)+"&sensortype="+str(sensortype))
+		idx = self.getUnusedDevice(materialIdx,'Lighting 2')
+		self.call_api("type=setused&idx="+str(idx)+"&name="+name+"&used=true&maindeviceidx=&switchtype="+str(switchtype))
+		self.call_api("type=setused&idx="+str(idx)+"&name="+name+"&used=true&maindeviceidx=")
+
+	def getUnusedDevice(self,materialIdx,type):
+		response = json.loads(self.call_api('type=devices&displayhidden=1&used=false' ))
+		#print response
+		if len(response['result']) > 0:
+			for result in response['result']:
+				if result['HardwareID'] == materialIdx and result['Type'] == type:
+					return result['idx']

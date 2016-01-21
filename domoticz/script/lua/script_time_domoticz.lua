@@ -12,19 +12,24 @@ if( today ~= getDayVar('jour') ) then
 	day:initSaison()
 	day:initJoursChome()
 	day:initJour()
+	day:initSaintJour()
 end
 
 
 
-time=os.time()
-	istime=os.date('%H:%M',time)
-	if( istime == '20:00') then
-		 commandValue('PHASE','soiree')
-	end
+if( isTime('20:00')) then
+ commandValue('PHASE','soiree')
+end
 
-	if( istime == '09:00' and not jourChome()) then
-		 commandValue('PHASE','travail')
-	end
+if( isTime('09:00') and not jourChome()) then
+ commandValue('PHASE','travail')
+end
+
+if( isTime('02:00')) then
+ command_variable('cpt_alert_cpu',0)
+ command_variable('cpt_alert_mem',0)
+ command_variable('cpt_alert_hdd',0)
+end
 
 
 return commandArray
